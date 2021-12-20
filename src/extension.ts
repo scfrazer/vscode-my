@@ -1,26 +1,23 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+import { QuickEdit } from './quickEdit';
+
 export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vscode-my" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vscode-my.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from vscode-my!');
-	});
+	function registerMyCommand(commandId: string, run: (...args: any[]) => void): void {
+		context.subscriptions.push(vscode.commands.registerCommand('vscode-my.' + commandId, run));
+	}
 
-	context.subscriptions.push(disposable);
+	const quickEdit = new QuickEdit();
+
+	registerMyCommand('jumpToBracket', function (_args) { quickEdit.jumpToBracket(); });
+	registerMyCommand('selectExpressionLeft', function (_args) { quickEdit.selectExpressionLeft(); });
+	registerMyCommand('selectExpressionRight', function (_args) { quickEdit.selectExpressionRight(); });
+	registerMyCommand('deleteExpressionLeft', function (_args) { quickEdit.deleteExpressionLeft(); });
+	registerMyCommand('deleteExpressionRight', function (_args) { quickEdit.deleteExpressionRight(); });
+	registerMyCommand('previousParagraph', function (args) { quickEdit.previousParagraph(args); });
+	registerMyCommand('nextParagraph', function (args) { quickEdit.nextParagraph(args); });
+	registerMyCommand('addCursorsToLineStarts', function (_args) { quickEdit.addCursorsToLineStarts(); });
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

@@ -1,8 +1,12 @@
 {
-  "name": "vscode-my",
+	"name": "vscode-my",
 	"displayName": "vscode-my",
 	"description": "My personal commands",
 	"version": "0.0.1",
+	"publisher": "scfrazer",
+	"repository": {
+		"url": "https://github.com/scfrazer/vscode-my"
+	},
 	"engines": {
 		"vscode": "^1.63.0"
 	},
@@ -10,14 +14,132 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:vscode-my.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "vscode-my.helloWorld",
-				"title": "Hello World"
+				"command": "vscode-my.jumpToBracket",
+				"title": "My: Jump to matching bracket"
+			},
+			{
+				"command": "vscode-my.selectExpressionLeft",
+				"title": "My: Select expression left"
+			},
+			{
+				"command": "vscode-my.selectExpressionRight",
+				"title": "My: Select expression right"
+			},
+			{
+				"command": "vscode-my.deleteExpressionLeft",
+				"title": "My: Delete expression left"
+			},
+			{
+				"command": "vscode-my.deleteExpressionRight",
+				"title": "My: Delete expression right"
+			},
+			{
+				"command": "vscode-my.previousParagraph",
+				"title": "My: Previous paragraph"
+			},
+			{
+				"command": "vscode-my.nextParagraph",
+				"title": "My: Next paragraph"
+			},
+			{
+				"command": "vscode-my.addCursorsToLineStarts",
+				"title": "My: Add cursors to line starts"
+			}
+		],
+		"keybindings": [
+			{
+				"key": "ctrl+shift+\\",
+				"command": "vscode-my.jumpToBracket",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+up",
+				"command": "vscode-my.previousParagraph",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+shift+up",
+				"command": "vscode-my.previousParagraph",
+				"args": {
+					"select": true
+				},
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+down",
+				"command": "vscode-my.nextParagraph",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+shift+down",
+				"command": "vscode-my.nextParagraph",
+				"args": {
+					"select": true
+				},
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+left",
+				"command": "cursorWordStartLeft"
+			},
+			{
+				"key": "ctrl+shift+left",
+				"command": "vscode-my.selectExpressionLeft",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+right",
+				"command": "cursorWordStartRight"
+			},
+			{
+				"key": "ctrl+shift+right",
+				"command": "vscode-my.selectExpressionRight",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+alt+left",
+				"command": "cursorWordPartStartLeft"
+			},
+			{
+				"key": "ctrl+shift+alt+left",
+				"command": "cursorWordPartStartLeftSelect"
+			},
+			{
+				"key": "ctrl+alt+right",
+				"command": "cursorWordPartRight"
+			},
+			{
+				"key": "ctrl+shift+alt+right",
+				"command": "cursorWordPartRightSelect"
+			},
+			{
+				"key": "ctrl+shift+backspace",
+				"command": "deleteWordPartLeft"
+			},
+			{
+				"key": "ctrl+shift+delete",
+				"command": "deleteWordPartRight"
+			},
+			{
+				"key": "ctrl+backspace",
+				"command": "vscode-my.deleteExpressionLeft",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+delete",
+				"command": "vscode-my.deleteExpressionRight",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "alt+shift+i",
+				"command": "vscode-my.addCursorsToLineStarts",
+				"when": "editorTextFocus"
 			}
 		]
 	},
