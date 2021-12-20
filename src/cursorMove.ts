@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { MatchingPair } from './matchingPair';
 
-export class QuickEdit {
+export class CursorMove {
 
     private _matchingPair = new MatchingPair();
 
@@ -177,20 +177,5 @@ export class QuickEdit {
             editor.selection = new vscode.Selection(newPosition, newPosition);
         }
         await vscode.commands.executeCommand<void>("revealLine", { lineNumber: lineNum });
-    }
-
-    public addCursorsToLineStarts() {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        let firstLine = editor.selection.start.line;
-        let lastLine = editor.selection.end.line;
-        let selections: Array<vscode.Selection> = [];
-        for (let lineNum = firstLine; lineNum < lastLine; lineNum += 1) {
-            let position = new vscode.Position(lineNum, 0);
-            selections.push(new vscode.Selection(position, position));
-        }
-        editor.selections = selections;
     }
 }

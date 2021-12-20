@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 
-import { QuickEdit } from './quickEdit';
+import { CursorMove } from './cursorMove';
+import { Misc } from './misc';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -8,16 +9,17 @@ export function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(vscode.commands.registerCommand('vscode-my.' + commandId, run));
 	}
 
-	const quickEdit = new QuickEdit();
+	const cursorMove = new CursorMove();
+	const misc = new Misc();
 
-	registerMyCommand('jumpToBracket', function (_args) { quickEdit.jumpToBracket(); });
-	registerMyCommand('selectExpressionLeft', function (_args) { quickEdit.selectExpressionLeft(); });
-	registerMyCommand('selectExpressionRight', function (_args) { quickEdit.selectExpressionRight(); });
-	registerMyCommand('deleteExpressionLeft', function (_args) { quickEdit.deleteExpressionLeft(); });
-	registerMyCommand('deleteExpressionRight', function (_args) { quickEdit.deleteExpressionRight(); });
-	registerMyCommand('previousParagraph', function (args) { quickEdit.previousParagraph(args); });
-	registerMyCommand('nextParagraph', function (args) { quickEdit.nextParagraph(args); });
-	registerMyCommand('addCursorsToLineStarts', function (_args) { quickEdit.addCursorsToLineStarts(); });
+	registerMyCommand('jumpToBracket', function (_args) { cursorMove.jumpToBracket(); });
+	registerMyCommand('selectExpressionLeft', function (_args) { cursorMove.selectExpressionLeft(); });
+	registerMyCommand('selectExpressionRight', function (_args) { cursorMove.selectExpressionRight(); });
+	registerMyCommand('deleteExpressionLeft', function (_args) { cursorMove.deleteExpressionLeft(); });
+	registerMyCommand('deleteExpressionRight', function (_args) { cursorMove.deleteExpressionRight(); });
+	registerMyCommand('previousParagraph', function (args) { cursorMove.previousParagraph(args); });
+	registerMyCommand('nextParagraph', function (args) { cursorMove.nextParagraph(args); });
+	registerMyCommand('addCursorsToLineStarts', function (_args) { misc.addCursorsToLineStarts(); });
 }
 
 export function deactivate() { }
