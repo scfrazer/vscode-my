@@ -12,7 +12,10 @@ export function activate(context: vscode.ExtensionContext) {
 	const cursorMove = new CursorMove();
 	const misc = new Misc();
 
+	registerMyCommand('wordLeft', function (_args) { cursorMove.wordLeft(); });
 	registerMyCommand('wordRight', function (_args) { cursorMove.wordRight(); });
+	registerMyCommand('expressionLeft', function (_args) { cursorMove.expressionLeft(); });
+	registerMyCommand('expressionRight', function (_args) { cursorMove.expressionRight(); });
 	registerMyCommand('selectExpressionLeft', function (_args) { cursorMove.selectExpressionLeft(); });
 	registerMyCommand('selectExpressionRight', function (_args) { cursorMove.selectExpressionRight(); });
 	registerMyCommand('deleteExpressionLeft', function (_args) { cursorMove.deleteExpressionLeft(); });

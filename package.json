@@ -20,8 +20,20 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "vscode-my.wordLeft",
+				"title": "My: Move cursor a word left"
+			},
+			{
 				"command": "vscode-my.wordRight",
 				"title": "My: Move cursor a word right"
+			},
+			{
+				"command": "vscode-my.expressionLeft",
+				"title": "My: Move cursor an expression left"
+			},
+			{
+				"command": "vscode-my.expressionRight",
+				"title": "My: Move cursor an expression right"
 			},
 			{
 				"command": "vscode-my.selectExpressionLeft",
@@ -55,11 +67,22 @@
 		"keybindings": [
 			{
 				"key": "ctrl+left",
-				"command": "cursorWordStartLeft"
+				"command": "vscode-my.wordLeft",
+				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
 				"key": "ctrl+right",
 				"command": "vscode-my.wordRight",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+alt+left",
+				"command": "vscode-my.expressionLeft",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+alt+right",
+				"command": "vscode-my.expressionRight",
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
@@ -122,20 +145,20 @@
 				"command": "cursorWordPartRight"
 			},
 			{
-				"key": "shift+alt+,",
-				"command": "workbench.action.navigateBack"
-			},
-			{
-				"key": "shift+alt+.",
-				"command": "workbench.action.navigateForward"
-			},
-			{
 				"key": "ctrl+shift+backspace",
 				"command": "deleteWordPartLeft"
 			},
 			{
 				"key": "ctrl+shift+delete",
 				"command": "deleteWordPartRight"
+			},
+			{
+				"key": "alt+,",
+				"command": "workbench.action.navigateBack"
+			},
+			{
+				"key": "alt+.",
+				"command": "workbench.action.navigateForward"
 			}
 		]
 	},

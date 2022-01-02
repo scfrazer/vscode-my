@@ -6,16 +6,37 @@ export class CursorMove {
 
     private _matchingPair = new MatchingPair();
 
-    public async wordLeft() { }  // TODO
+    public async wordLeft() {
+        this._updateSelections(this._wordPositionLeft, false);
+    }
 
     public async wordRight() {
+        this._updateSelections(this._wordPositionRight, false);
+    }
+
+    private _updateSelections(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined, select: boolean) {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
         }
         const document = editor.document;
         editor.selections = editor.selections.map((selection) => {
-            const newPosition = this._wordPositionRight(document, selection.active);
+            const newPosition = positionFunction(document, selection.active);
+            if (newPosition === undefined) {
+                return selection;
+            }
+            return (new vscode.Selection((select || !selection.isEmpty) ? selection.anchor : newPosition, newPosition));
+        });
+    }
+
+    public async expressionLeft() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        editor.selections = editor.selections.map((selection) => {
+            const newPosition = this._expressionPositionLeft(document, selection.active);
             if (newPosition === undefined) {
                 return selection;
             }
@@ -23,11 +44,22 @@ export class CursorMove {
         });
     }
 
-    public async expressionLeft() { }  // TODO
+    public async expressionRight() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        editor.selections = editor.selections.map((selection) => {
+            const newPosition = this._expressionPositionRight(document, selection.active);
+            if (newPosition === undefined) {
+                return selection;
+            }
+            return (new vscode.Selection(selection.isEmpty ? newPosition : selection.anchor, newPosition));
+        });
+    }
 
-    public async expressionRight() { }  // TODO
-
-    public async selectExpressionLeft() {
+    public async selectExpressionLeft() {  // TODO
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -49,7 +81,7 @@ export class CursorMove {
         }
     }
 
-    public async selectExpressionRight() {
+    public async selectExpressionRight() {  // TODO
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -71,8 +103,7 @@ export class CursorMove {
         }
     }
 
-    public async deleteExpressionLeft() {
-        // TODO: deleteExpressionLeft -- Ctrl+Backspace
+    public async deleteExpressionLeft() {  // TODO
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -94,8 +125,7 @@ export class CursorMove {
         }
     }
 
-    public async deleteExpressionRight() {
-        // TODO: deleteExpressionRight -- Ctrl+Delete
+    public async deleteExpressionRight() {  // TODO
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -119,56 +149,6 @@ export class CursorMove {
             await vscode.commands.executeCommand<void>("deleteWordRight");
         }
     }
-
-    private _wordPositionLeft() { }  // TODO
-
-    private _wordPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
-
-        const lastLineNum = document.lineCount - 1;
-        let lineNum = startPosition.line;
-        let colNum = startPosition.character;
-
-        let line = document.lineAt(lineNum).text;
-        let insideWord = this._isWordChar(line[colNum]);
-        colNum += 1;
-
-        let found = false;
-        while (!found) {
-            const lineLen = line.length;
-            for (let idx = colNum; idx < lineLen; idx += 1) {
-                if (insideWord) {
-                    if (!this._isWordChar(line[idx])) {
-                        insideWord = false;
-                    }
-                    continue;
-                }
-                else {
-                    if (this._isWordChar(line[idx])) {
-                        found = true;
-                        colNum = idx;
-                        break;
-                    }
-                }
-            }
-            if (!found) {
-                if (lineNum === lastLineNum) {
-                    return undefined;
-                }
-                colNum = 0;
-                lineNum += 1;
-                line = document.lineAt(lineNum).text;
-            }
-        }
-
-        if (found) {
-            return (new vscode.Position(lineNum, colNum));
-        }
-        return undefined;
-    }
-
-    private _expressionPositionLeft() { }  // TODO
-
-    private _expressionPositionRight() { }  // TODO
 
     public async previousParagraph(args: any = {}) {
         const editor = vscode.window.activeTextEditor;
@@ -234,8 +214,102 @@ export class CursorMove {
         await vscode.commands.executeCommand<void>("revealLine", { lineNumber: lineNum });
     }
 
-    private _isWordChar(char: string): boolean {
-        const charCode = char.charCodeAt(0);
+    private _wordPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+
+        let lineNum = startPosition.line;
+        let colNum = startPosition.character;
+
+        let line = document.lineAt(lineNum).text;
+        let insideWord = false;
+
+        let found = false;
+        while (!found) {
+            for (let idx = colNum - 1; idx >= 0; idx -= 1) {
+                if (insideWord) {
+                    if (!CursorMove._isWordCharCode(line.charCodeAt(idx))) {
+                        found = true;
+                        colNum = idx + 1;
+                        break;
+                    }
+                }
+                else if (CursorMove._isWordCharCode(line.charCodeAt(idx))) {
+                    insideWord = true;
+                }
+            }
+            if (!found) {
+                if (insideWord) {
+                    found = true;
+                    colNum = 0;
+                }
+                else {
+                    if (lineNum === 0) {
+                        return undefined;
+                    }
+                    lineNum -= 1;
+                    line = document.lineAt(lineNum).text;
+                    insideWord = false;
+                    colNum = line.length;
+                }
+            }
+        }
+
+        if (found) {
+            return (new vscode.Position(lineNum, colNum));
+        }
+        return undefined;
+    }
+
+    private _wordPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+
+        const lastLineNum = document.lineCount - 1;
+        let lineNum = startPosition.line;
+        let colNum = startPosition.character;
+
+        let line = document.lineAt(lineNum).text;
+        let insideWord = CursorMove._isWordCharCode(line.charCodeAt(colNum));
+        colNum += 1;
+
+        let found = false;
+        while (!found) {
+            const lineLen = line.length;
+            for (let idx = colNum; idx < lineLen; idx += 1) {
+                if (insideWord) {
+                    if (!CursorMove._isWordCharCode(line.charCodeAt(idx))) {
+                        insideWord = false;
+                    }
+                }
+                else if (CursorMove._isWordCharCode(line.charCodeAt(idx))) {
+                    found = true;
+                    colNum = idx;
+                    break;
+                }
+            }
+            if (!found) {
+                if (lineNum === lastLineNum) {
+                    return undefined;
+                }
+                colNum = 0;
+                lineNum += 1;
+                insideWord = false;
+                line = document.lineAt(lineNum).text;
+            }
+        }
+
+        if (found) {
+            return (new vscode.Position(lineNum, colNum));
+        }
+        return undefined;
+    }
+
+    private _expressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {  // TODO
+        return undefined;
+    }
+
+    private _expressionPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {  // TODO
+        return undefined;
+    }
+
+    private static _isWordCharCode(charCode: number): boolean {
         return (
             (charCode >= 97 && charCode <= 122)    // a-z
             || (charCode >= 65 && charCode <= 90)  // A-Z
