@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 export class Misc {
 
-    public addCursorsToLineStarts() {
+    public static addCursorsToLineStarts() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;

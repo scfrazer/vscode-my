@@ -4,25 +4,23 @@ import { Language } from './language';
 
 export class MatchingPair {
 
-    public quotes: Array<string> = ['\'', '"'];
-    public openers: Array<string> = ['[', '(', '{'];
-    public closers: Array<string> = [']', ')', '}'];
+    public static quotes: Array<string> = ['\'', '"'];
+    public static openers: Array<string> = ['[', '(', '{'];
+    public static closers: Array<string> = [']', ')', '}'];
 
-    private _language = new Language();
-
-    public matchPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
-        return this.matchPosition(document, startPosition, false);
+    public static matchPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+        return MatchingPair.matchPosition(document, startPosition, false);
     }
 
-    public matchPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
-        return this.matchPosition(document, startPosition, true);
+    public static matchPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+        return MatchingPair.matchPosition(document, startPosition, true);
     }
 
-    public matchPosition(document: vscode.TextDocument, startPosition: vscode.Position, goingRight: boolean): vscode.Position | undefined {
+    public static matchPosition(document: vscode.TextDocument, startPosition: vscode.Position, goingRight: boolean): vscode.Position | undefined {
 
         const lastLineNum = (goingRight) ? document.lineCount - 1 : 0;
-        const commentDelimiters = this._language.getCommentDelimiters(document.languageId);
-        const pairRe = this._getPairRe(document.languageId);
+        const commentDelimiters = Language.getCommentDelimiters(document.languageId);
+        const pairRe = MatchingPair._getPairRe(document.languageId);
 
         // Iterate over lines looking for quotes/openers/closers
         let lineNum = startPosition.line;
@@ -84,7 +82,7 @@ export class MatchingPair {
 
                 if (insideQuotes) {
                     if (char === currentQuoteChar) {
-                        if (this._charIsEscaped(colNum, str)) {
+                        if (MatchingPair._charIsEscaped(colNum, str)) {
                             continue;
                         }
                         insideQuotes = false;
@@ -97,14 +95,14 @@ export class MatchingPair {
                     continue;
                 }
 
-                if (this.quotes.includes(char)) {
+                if (MatchingPair.quotes.includes(char)) {
                     insideQuotes = true;
                     currentQuoteChar = char;
                     stackDepth += 1;
                     continue;
                 }
 
-                if (this.openers.includes(char)) {
+                if (MatchingPair.openers.includes(char)) {
                     if (goingRight) {
                         stackDepth += 1;
                         continue;
@@ -118,7 +116,7 @@ export class MatchingPair {
                     }
                 }
 
-                if (this.closers.includes(char)) {
+                if (MatchingPair.closers.includes(char)) {
                     if (goingRight) {
                         stackDepth -= 1;
                         found = (stackDepth === 0);
@@ -145,22 +143,22 @@ export class MatchingPair {
         return undefined;
     }
 
-    private _getPairRe(languageId: string) {
-        const commentDelimiters = this._language.getCommentDelimiters(languageId);
+    private static _getPairRe(languageId: string) {
+        const commentDelimiters = Language.getCommentDelimiters(languageId);
         let pairReStr = '[\\[\\](){}\'"]';
         if (commentDelimiters?.singleLine !== undefined) {
-            let str = this._escapeRegExp(commentDelimiters.singleLine);
+            let str = MatchingPair._escapeRegExp(commentDelimiters.singleLine);
             pairReStr += `|${str}`;
         }
         if (commentDelimiters?.blockStart !== undefined && commentDelimiters?.blockEnd !== undefined) {
-            let startStr = this._escapeRegExp(commentDelimiters.blockStart);
-            let endStr = this._escapeRegExp(commentDelimiters.blockEnd);
+            let startStr = MatchingPair._escapeRegExp(commentDelimiters.blockStart);
+            let endStr = MatchingPair._escapeRegExp(commentDelimiters.blockEnd);
             pairReStr += `|${startStr}|${endStr}`;
         }
         return new RegExp(pairReStr, 'g');
     }
 
-    private _charIsEscaped(startingCol: number, str: string): boolean {
+    private static _charIsEscaped(startingCol: number, str: string): boolean {
         let numBackslashes = 0;
         for (let pos = startingCol - 1; pos >= 0; pos -= 1) {
             if (str[pos] === '\\') {
@@ -172,7 +170,7 @@ export class MatchingPair {
         return (numBackslashes % 2 === 1);
     }
 
-    private _escapeRegExp(str: string): string {
+    private static _escapeRegExp(str: string): string {
         return str.replace(/[.*+?^${}()|[\]\/\\]/g, '\\$&'); // $& means the whole matched string
     }
 }

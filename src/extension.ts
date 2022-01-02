@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { CursorMove } from './cursorMove';
+import { CursorMove } from './CursorMove';
 import { Misc } from './misc';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -9,20 +9,17 @@ export function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(vscode.commands.registerCommand('vscode-my.' + commandId, run));
 	}
 
-	const cursorMove = new CursorMove();
-	const misc = new Misc();
-
-	registerMyCommand('wordLeft', function (_args) { cursorMove.wordLeft(); });
-	registerMyCommand('wordRight', function (_args) { cursorMove.wordRight(); });
-	registerMyCommand('expressionLeft', function (_args) { cursorMove.expressionLeft(); });
-	registerMyCommand('expressionRight', function (_args) { cursorMove.expressionRight(); });
-	registerMyCommand('selectExpressionLeft', function (_args) { cursorMove.selectExpressionLeft(); });
-	registerMyCommand('selectExpressionRight', function (_args) { cursorMove.selectExpressionRight(); });
-	registerMyCommand('deleteExpressionLeft', function (_args) { cursorMove.deleteExpressionLeft(); });
-	registerMyCommand('deleteExpressionRight', function (_args) { cursorMove.deleteExpressionRight(); });
-	registerMyCommand('previousParagraph', function (args) { cursorMove.previousParagraph(args); });
-	registerMyCommand('nextParagraph', function (args) { cursorMove.nextParagraph(args); });
-	registerMyCommand('addCursorsToLineStarts', function (_args) { misc.addCursorsToLineStarts(); });
+	registerMyCommand('wordLeft', function (_args) { CursorMove.wordLeft(); });
+	registerMyCommand('wordRight', function (_args) { CursorMove.wordRight(); });
+	registerMyCommand('expressionLeft', function (_args) { CursorMove.expressionLeft(); });
+	registerMyCommand('expressionRight', function (_args) { CursorMove.expressionRight(); });
+	registerMyCommand('selectExpressionLeft', function (_args) { CursorMove.selectExpressionLeft(); });
+	registerMyCommand('selectExpressionRight', function (_args) { CursorMove.selectExpressionRight(); });
+	registerMyCommand('deleteExpressionLeft', function (_args) { CursorMove.deleteExpressionLeft(); });
+	registerMyCommand('deleteExpressionRight', function (_args) { CursorMove.deleteExpressionRight(); });
+	registerMyCommand('previousParagraph', function (args) { CursorMove.previousParagraph(args); });
+	registerMyCommand('nextParagraph', function (args) { CursorMove.nextParagraph(args); });
+	registerMyCommand('addCursorsToLineStarts', function (_args) { Misc.addCursorsToLineStarts(); });
 }
 
 export function deactivate() { }

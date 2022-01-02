@@ -7,7 +7,7 @@ export interface CommentDelimiters {
 
 export class Language {
 
-    public getCommentDelimiters(language: string): CommentDelimiters | undefined {
+    public static getCommentDelimiters(language: string): CommentDelimiters | undefined {
         switch (language) {
 
             case "c":
