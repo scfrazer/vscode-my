@@ -11,49 +11,80 @@ export class MatchingPair {
     private _language = new Language();
 
     public matchPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+        return this.matchPosition(document, startPosition, false);
+    }
 
-        const pairRe = new RegExp('[\\[\\](){}\'"]', 'g');
+    public matchPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+        return this.matchPosition(document, startPosition, true);
+    }
+
+    public matchPosition(document: vscode.TextDocument, startPosition: vscode.Position, goingRight: boolean): vscode.Position | undefined {
+
+        const lastLineNum = (goingRight) ? document.lineCount - 1 : 0;
+        const commentDelimiters = this._language.getCommentDelimiters(document.languageId);
+        const pairRe = this._getPairRe(document.languageId);
 
         // Iterate over lines looking for quotes/openers/closers
         let lineNum = startPosition.line;
         let colNum = 0;
-        let scanningToStartPosition = true;
+        let firstIteration = true;
         let insideQuotes = false;
         let currentQuoteChar = '';
+        let insideBlockComment = false;
         let stackDepth = 0;
         let found = false;
         while (!found) {
 
-            // Iterate backwards over matches
+            // Get matches and remove irrelevant ones
             const str = document.lineAt(lineNum).text;
-            const matches = Array.from(str.matchAll(pairRe)).reverse();
-            for (const match of matches) {
-
-                // Skip anything after start position
-                if (!match?.index) {
+            const unfilteredMatches = str.matchAll(pairRe);
+            let matches: Array<RegExpMatchArray> = [];
+            for (const match of unfilteredMatches) {
+                if (match?.index === undefined) {
                     continue;
                 }
-                else if (scanningToStartPosition) {
-                    scanningToStartPosition = (match.index > startPosition.character);
-                    if (scanningToStartPosition) {
+                if (!insideBlockComment) {
+                    if (commentDelimiters?.singleLine !== undefined && match[0] === commentDelimiters.singleLine) {
+                        break;
+                    }
+                }
+                else {
+                    // TODO Handle block comments
+                }
+                if (firstIteration) {
+                    if (goingRight) {
+                        if (match.index < startPosition.character) {
+                            continue;
+                        }
+                    }
+                    else if (match.index > startPosition.character) {
                         continue;
                     }
+                }
+                matches.push(match);
+            }
+            if (matches.length === 0) {
+                if (firstIteration) {
+                    return undefined;
+                }
+            }
+            else if (!goingRight) {
+                matches = matches.reverse();
+            }
+            firstIteration = false;
+
+            // Iterate over matches
+            for (const match of matches) {
+
+                if (match?.index === undefined) {
+                    continue;
                 }
                 colNum = match.index;
                 const char = match[0];
 
-                // Currently inside quotes?
                 if (insideQuotes) {
                     if (char === currentQuoteChar) {
-                        let numBackslashes = 0;
-                        for (let pos = colNum - 1; pos >= 0; pos -= 1) {
-                            if (str[pos] === '\\') {
-                                numBackslashes += 1;
-                                continue;
-                            }
-                            break;
-                        }
-                        if (numBackslashes % 2 === 1) {
+                        if (this._charIsEscaped(colNum, str)) {
                             continue;
                         }
                         insideQuotes = false;
@@ -66,7 +97,6 @@ export class MatchingPair {
                     continue;
                 }
 
-                // Start quotes?
                 if (this.quotes.includes(char)) {
                     insideQuotes = true;
                     currentQuoteChar = char;
@@ -74,133 +104,75 @@ export class MatchingPair {
                     continue;
                 }
 
-                // Closer?
-                if (this.closers.includes(char)) {
-                    stackDepth += 1;
-                    continue;
+                if (this.openers.includes(char)) {
+                    if (goingRight) {
+                        stackDepth += 1;
+                        continue;
+                    }
+                    else {
+                        stackDepth -= 1;
+                        found = (stackDepth === 0);
+                        if (found) {
+                            break;
+                        }
+                    }
                 }
 
-                // Opener?
-                if (this.openers.includes(char)) {
-                    stackDepth -= 1;
-                    found = (stackDepth === 0);
-                    if (found) {
-                        break;
+                if (this.closers.includes(char)) {
+                    if (goingRight) {
+                        stackDepth -= 1;
+                        found = (stackDepth === 0);
+                        if (found) {
+                            break;
+                        }
+                    }
+                    else {
+                        stackDepth += 1;
+                        continue;
                     }
                 }
             }
 
-            // Found it or at EOF
-            if (found || (lineNum === 0)) {
+            if (found || (lineNum === lastLineNum)) {
                 break;
             }
-
-            // Go to previous line in file
-            lineNum -= 1;
+            lineNum += (goingRight) ? 1 : -1;
         }
 
-        // Done
         if (found) {
             return new vscode.Position(lineNum, colNum);
         }
         return undefined;
     }
 
-    public matchPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
-
-        const lastLineNum = document.lineCount - 1;
-        const commentDelimiters = this._language.getCommentDelimiters(document.languageId);
-        const pairRe = new RegExp('[\\[\\](){}\'"]', 'g');
-
-        // Iterate over lines looking for quotes/openers/closers
-        let lineNum = startPosition.line;
-        let colNum = 0;
-        let scanningToStartPosition = true;
-        let insideQuotes = false;
-        let currentQuoteChar = '';
-        let stackDepth = 0;
-        let found = false;
-        while (!found) {
-
-            // Iterate over matches
-            const str = document.lineAt(lineNum).text;
-            const matches = str.matchAll(pairRe);
-            for (const match of matches) {
-
-                // Skip anything before start position
-                if (!match?.index) {
-                    continue;
-                }
-                else if (scanningToStartPosition) {
-                    scanningToStartPosition = (match.index < startPosition.character);
-                    if (scanningToStartPosition) {
-                        continue;
-                    }
-                }
-                colNum = match.index;
-                const char = match[0];
-
-                // Currently inside quotes?
-                if (insideQuotes) {
-                    if (char === currentQuoteChar) {
-                        let numBackslashes = 0;
-                        for (let pos = colNum - 1; pos >= 0; pos -= 1) {
-                            if (str[pos] === '\\') {
-                                numBackslashes += 1;
-                                continue;
-                            }
-                            break;
-                        }
-                        if (numBackslashes % 2 === 1) {
-                            continue;
-                        }
-                        insideQuotes = false;
-                        stackDepth -= 1;
-                        found = (stackDepth === 0);
-                        if (found) {
-                            break;
-                        }
-                    }
-                    continue;
-                }
-
-                // Start quotes?
-                if (this.quotes.includes(char)) {
-                    insideQuotes = true;
-                    currentQuoteChar = char;
-                    stackDepth += 1;
-                    continue;
-                }
-
-                // Opener?
-                if (this.openers.includes(char)) {
-                    stackDepth += 1;
-                    continue;
-                }
-
-                // Closer?
-                if (this.closers.includes(char)) {
-                    stackDepth -= 1;
-                    found = (stackDepth === 0);
-                    if (found) {
-                        break;
-                    }
-                }
-            }
-
-            // Found it or at EOF
-            if (found || (lineNum === lastLineNum)) {
-                break;
-            }
-
-            // Go to next line in file
-            lineNum += 1;
+    private _getPairRe(languageId: string) {
+        const commentDelimiters = this._language.getCommentDelimiters(languageId);
+        let pairReStr = '[\\[\\](){}\'"]';
+        if (commentDelimiters?.singleLine !== undefined) {
+            let str = this._escapeRegExp(commentDelimiters.singleLine);
+            pairReStr += `|${str}`;
         }
-
-        // Done
-        if (found) {
-            return new vscode.Position(lineNum, colNum);
+        if (commentDelimiters?.blockStart !== undefined && commentDelimiters?.blockEnd !== undefined) {
+            let startStr = this._escapeRegExp(commentDelimiters.blockStart);
+            let endStr = this._escapeRegExp(commentDelimiters.blockEnd);
+            pairReStr += `|${startStr}|${endStr}`;
         }
-        return undefined;
+        return new RegExp(pairReStr, 'g');
+    }
+
+    private _charIsEscaped(startingCol: number, str: string): boolean {
+        let numBackslashes = 0;
+        for (let pos = startingCol - 1; pos >= 0; pos -= 1) {
+            if (str[pos] === '\\') {
+                numBackslashes += 1;
+                continue;
+            }
+            break;
+        }
+        return (numBackslashes % 2 === 1);
+    }
+
+    private _escapeRegExp(str: string): string {
+        return str.replace(/[.*+?^${}()|[\]\/\\]/g, '\\$&'); // $& means the whole matched string
     }
 }
