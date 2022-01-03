@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 
 import { Language } from './language';
+import { CharCode } from './charCode';
 
 export class MatchingPair {
 
@@ -91,14 +92,14 @@ export class MatchingPair {
                     continue;
                 }
 
-                if (MatchingPair.isQuotesCharCode(matchStr.charCodeAt(0))) {
+                if (CharCode.isQuotes(matchStr.charCodeAt(0))) {
                     insideQuotes = true;
                     currentQuoteStr = matchStr;
                     stackDepth += 1;
                     continue;
                 }
 
-                if (MatchingPair.isOpenerCharCode(matchStr.charCodeAt(0))) {
+                if (CharCode.isOpener(matchStr.charCodeAt(0))) {
                     if (goingRight) {
                         stackDepth += 1;
                         continue;
@@ -112,7 +113,7 @@ export class MatchingPair {
                     }
                 }
 
-                if (MatchingPair.isCloserCharCode(matchStr.charCodeAt(0))) {
+                if (CharCode.isCloser(matchStr.charCodeAt(0))) {
                     if (goingRight) {
                         stackDepth -= 1;
                         found = (stackDepth === 0);
@@ -137,29 +138,6 @@ export class MatchingPair {
             return new vscode.Position(lineNum, colNum);
         }
         return undefined;
-    }
-
-    public static isOpenerCharCode(charCode: number): boolean {
-        return (
-            (charCode === 40)      // Open paren
-            || (charCode === 91)   // Open bracket
-            || (charCode === 123)  // Open brace
-        );
-    }
-
-    public static isCloserCharCode(charCode: number): boolean {
-        return (
-            (charCode === 41)      // Close paren
-            || (charCode === 93)   // Close bracket
-            || (charCode === 125)  // Close brace
-        );
-    }
-
-    public static isQuotesCharCode(charCode: number): boolean {
-        return (
-            (charCode === 39)     // Single quote
-            || (charCode === 34)  // Double quote
-        );
     }
 
     private static _getPairRe(languageId: string) {
