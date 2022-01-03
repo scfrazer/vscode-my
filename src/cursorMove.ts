@@ -242,7 +242,68 @@ export class CursorMove {
         return undefined;
     }
 
-    private static _expressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {  // TODO
+    private static _expressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+
+        let lineNum = startPosition.line;
+        let colNum = startPosition.character - 1;
+
+        let lineText;
+        if (colNum < 0) {
+            if (lineNum === 0) {
+                return undefined;
+            }
+            lineNum -= 1;
+            lineText = document.lineAt(lineNum).text;
+            colNum = lineText.length;
+        }
+        else {
+            lineText = document.lineAt(lineNum).text;
+        }
+        if (CharCode.isCloser(lineText.charCodeAt(colNum)) || CharCode.isQuotes(lineText.charCodeAt(colNum))) {
+            return (MatchingPair.matchPositionLeft(document, startPosition));
+        }
+        if (CharCode.isOpener(lineText.charCodeAt(colNum))) {
+            return undefined;
+        }
+
+        let insideWord = CharCode.isWord(lineText.charCodeAt(colNum));
+
+        let found = false;
+        while (!found) {
+            for (let idx = colNum - 1; idx >= 0; idx -= 1) {
+                const charCode = lineText.charCodeAt(idx);
+                if (insideWord) {
+                    if (!CharCode.isWord(lineText.charCodeAt(idx))) {
+                        found = true;
+                        colNum = idx + 1;
+                        break;
+                    }
+                }
+                else if (CharCode.isWord(charCode) || CharCode.isQuotes(charCode) || CharCode.isOpener(charCode) || CharCode.isCloser(charCode)) {
+                    found = true;
+                    colNum = idx + 1;
+                    break;
+                }
+            }
+            if (!found) {
+                if (insideWord) {
+                    found = true;
+                    colNum = 0;
+                }
+                else {
+                    if (lineNum === 0) {
+                        return undefined;
+                    }
+                    lineNum -= 1;
+                    lineText = document.lineAt(lineNum).text;
+                    colNum = lineText.length;
+                }
+            }
+        }
+
+        if (found) {
+            return (new vscode.Position(lineNum, colNum));
+        }
         return undefined;
     }
 
@@ -275,7 +336,7 @@ export class CursorMove {
                         break;
                     }
                 }
-                else if (CharCode.isWord(charCode) || CharCode.isQuotes(charCode) || CharCode.isOpener(charCode)) {
+                else if (CharCode.isWord(charCode) || CharCode.isQuotes(charCode) || CharCode.isOpener(charCode) || CharCode.isCloser(charCode)) {
                     found = true;
                     colNum = idx;
                     break;
