@@ -35,9 +35,9 @@ export class CursorMove {
         }
         const document = editor.document;
         const startPosition = editor.selection.active;
-        const str = document.lineAt(startPosition.line).text;
-        const char = str[startPosition.character - 1];
-        if (MatchingPair.quotes.includes(char) || MatchingPair.closers.includes(char)) {
+        const lineText = document.lineAt(startPosition.line).text;
+        const charStr = lineText[startPosition.character - 1];
+        if (MatchingPair.isQuotesCharCode(charStr.charCodeAt(0)) || MatchingPair.isCloserCharCode(charStr.charCodeAt(0))) {
             const matchPosition = MatchingPair.matchPositionLeft(document, startPosition);
             if (matchPosition !== undefined) {
                 const newPosition = new vscode.Position(matchPosition.line, matchPosition.character);
@@ -57,12 +57,12 @@ export class CursorMove {
         }
         const document = editor.document;
         const startPosition = editor.selection.active;
-        const str = document.lineAt(startPosition.line).text;
-        const char = str[startPosition.character];
-        if (/\s/.test(char)) {
+        const lineText = document.lineAt(startPosition.line).text;
+        const charStr = lineText[startPosition.character];
+        if (/\s/.test(charStr)) {
             await vscode.commands.executeCommand<void>("deleteWordStartRight");
         }
-        else if (MatchingPair.quotes.includes(char) || MatchingPair.openers.includes(char)) {
+        else if (MatchingPair.isQuotesCharCode(charStr.charCodeAt(0)) || MatchingPair.isOpenerCharCode(charStr.charCodeAt(0))) {
             const matchPosition = MatchingPair.matchPositionRight(document, startPosition);
             if (matchPosition !== undefined) {
                 const newPosition = new vscode.Position(matchPosition.line, matchPosition.character + 1);
@@ -159,20 +159,20 @@ export class CursorMove {
         let lineNum = startPosition.line;
         let colNum = startPosition.character;
 
-        let line = document.lineAt(lineNum).text;
+        let lineText = document.lineAt(lineNum).text;
         let insideWord = false;
 
         let found = false;
         while (!found) {
             for (let idx = colNum - 1; idx >= 0; idx -= 1) {
                 if (insideWord) {
-                    if (!CursorMove._isWordCharCode(line.charCodeAt(idx))) {
+                    if (!CursorMove._isWordCharCode(lineText.charCodeAt(idx))) {
                         found = true;
                         colNum = idx + 1;
                         break;
                     }
                 }
-                else if (CursorMove._isWordCharCode(line.charCodeAt(idx))) {
+                else if (CursorMove._isWordCharCode(lineText.charCodeAt(idx))) {
                     insideWord = true;
                 }
             }
@@ -186,9 +186,9 @@ export class CursorMove {
                         return undefined;
                     }
                     lineNum -= 1;
-                    line = document.lineAt(lineNum).text;
+                    lineText = document.lineAt(lineNum).text;
                     insideWord = false;
-                    colNum = line.length;
+                    colNum = lineText.length;
                 }
             }
         }
@@ -205,20 +205,20 @@ export class CursorMove {
         let lineNum = startPosition.line;
         let colNum = startPosition.character;
 
-        let line = document.lineAt(lineNum).text;
-        let insideWord = CursorMove._isWordCharCode(line.charCodeAt(colNum));
+        let lineText = document.lineAt(lineNum).text;
+        let insideWord = CursorMove._isWordCharCode(lineText.charCodeAt(colNum));
         colNum += 1;
 
         let found = false;
         while (!found) {
-            const lineLen = line.length;
+            const lineLen = lineText.length;
             for (let idx = colNum; idx < lineLen; idx += 1) {
                 if (insideWord) {
-                    if (!CursorMove._isWordCharCode(line.charCodeAt(idx))) {
+                    if (!CursorMove._isWordCharCode(lineText.charCodeAt(idx))) {
                         insideWord = false;
                     }
                 }
-                else if (CursorMove._isWordCharCode(line.charCodeAt(idx))) {
+                else if (CursorMove._isWordCharCode(lineText.charCodeAt(idx))) {
                     found = true;
                     colNum = idx;
                     break;
@@ -231,7 +231,7 @@ export class CursorMove {
                 colNum = 0;
                 lineNum += 1;
                 insideWord = false;
-                line = document.lineAt(lineNum).text;
+                lineText = document.lineAt(lineNum).text;
             }
         }
 
@@ -246,6 +246,61 @@ export class CursorMove {
     }
 
     private static _expressionPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {  // TODO
+
+        let lineNum = startPosition.line;
+        let colNum = startPosition.character;
+
+        let lineText = document.lineAt(lineNum).text;
+        if (MatchingPair.isOpenerCharCode(lineText.charCodeAt(colNum)) || MatchingPair.isQuotesCharCode(lineText.charCodeAt(colNum))) {
+            const newPosition = MatchingPair.matchPositionRight(document, startPosition);
+            if (newPosition === undefined) {
+                return undefined;
+            }
+            return (new vscode.Position(newPosition.line, newPosition.character + 1));
+        }
+
+        const lastLineNum = document.lineCount - 1;
+        let insideWord = CursorMove._isWordCharCode(lineText.charCodeAt(colNum));
+
+        let found = false;
+        while (!found) {
+            const lineLen = lineText.length;
+            for (let idx = colNum; idx < lineLen; idx += 1) {
+                const charCode = lineText.charCodeAt(idx);
+                if (insideWord) {
+                    if (!CursorMove._isWordCharCode(charCode)) {
+                        found = true;
+                        colNum = idx;
+                        break;
+                    }
+                }
+                else if (CursorMove._isWordCharCode(charCode)
+                    || MatchingPair.isQuotesCharCode(charCode)
+                    || MatchingPair.isOpenerCharCode(charCode)) {
+                    found = true;
+                    colNum = idx;
+                    break;
+                }
+            }
+            if (!found) {
+                if (insideWord) {
+                    found = true;
+                    colNum = lineLen;
+                }
+                else {
+                    if (lineNum === lastLineNum) {
+                        return undefined;
+                    }
+                    colNum = 0;
+                    lineNum += 1;
+                    lineText = document.lineAt(lineNum).text;
+                }
+            }
+        }
+
+        if (found) {
+            return (new vscode.Position(lineNum, colNum));
+        }
         return undefined;
     }
 

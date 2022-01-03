@@ -4,10 +4,6 @@ import { Language } from './language';
 
 export class MatchingPair {
 
-    public static quotes: Array<string> = ['\'', '"'];
-    public static openers: Array<string> = ['[', '(', '{'];
-    public static closers: Array<string> = [']', ')', '}'];
-
     public static matchPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
         return MatchingPair.matchPosition(document, startPosition, false);
     }
@@ -27,15 +23,15 @@ export class MatchingPair {
         let colNum = 0;
         let firstIteration = true;
         let insideQuotes = false;
-        let currentQuoteChar = '';
+        let currentQuoteStr = '';
         let insideBlockComment = false;
         let stackDepth = 0;
         let found = false;
         while (!found) {
 
             // Get matches and remove irrelevant ones
-            const str = document.lineAt(lineNum).text;
-            const unfilteredMatches = str.matchAll(pairRe);
+            const lineText = document.lineAt(lineNum).text;
+            const unfilteredMatches = lineText.matchAll(pairRe);
             let matches: Array<RegExpMatchArray> = [];
             for (const match of unfilteredMatches) {
                 if (match?.index === undefined) {
@@ -78,11 +74,11 @@ export class MatchingPair {
                     continue;
                 }
                 colNum = match.index;
-                const char = match[0];
+                const matchStr = match[0];
 
                 if (insideQuotes) {
-                    if (char === currentQuoteChar) {
-                        if (MatchingPair._charIsEscaped(colNum, str)) {
+                    if (matchStr === currentQuoteStr) {
+                        if (MatchingPair._charIsEscaped(colNum, lineText)) {
                             continue;
                         }
                         insideQuotes = false;
@@ -95,14 +91,14 @@ export class MatchingPair {
                     continue;
                 }
 
-                if (MatchingPair.quotes.includes(char)) {
+                if (MatchingPair.isQuotesCharCode(matchStr.charCodeAt(0))) {
                     insideQuotes = true;
-                    currentQuoteChar = char;
+                    currentQuoteStr = matchStr;
                     stackDepth += 1;
                     continue;
                 }
 
-                if (MatchingPair.openers.includes(char)) {
+                if (MatchingPair.isOpenerCharCode(matchStr.charCodeAt(0))) {
                     if (goingRight) {
                         stackDepth += 1;
                         continue;
@@ -116,7 +112,7 @@ export class MatchingPair {
                     }
                 }
 
-                if (MatchingPair.closers.includes(char)) {
+                if (MatchingPair.isCloserCharCode(matchStr.charCodeAt(0))) {
                     if (goingRight) {
                         stackDepth -= 1;
                         found = (stackDepth === 0);
@@ -141,6 +137,29 @@ export class MatchingPair {
             return new vscode.Position(lineNum, colNum);
         }
         return undefined;
+    }
+
+    public static isOpenerCharCode(charCode: number): boolean {
+        return (
+            (charCode === 40)      // Open paren
+            || (charCode === 91)   // Open bracket
+            || (charCode === 123)  // Open brace
+        );
+    }
+
+    public static isCloserCharCode(charCode: number): boolean {
+        return (
+            (charCode === 41)      // Close paren
+            || (charCode === 93)   // Close bracket
+            || (charCode === 125)  // Close brace
+        );
+    }
+
+    public static isQuotesCharCode(charCode: number): boolean {
+        return (
+            (charCode === 39)     // Single quote
+            || (charCode === 34)  // Double quote
+        );
     }
 
     private static _getPairRe(languageId: string) {
