@@ -5,8 +5,8 @@ import { Misc } from './misc';
 
 export function activate(context: vscode.ExtensionContext) {
 
-	function registerMyCommand(commandId: string, run: (...args: any[]) => void): void {
-		context.subscriptions.push(vscode.commands.registerCommand('vscode-my.' + commandId, run));
+	function registerMyCommand(command: string, callback: (...args: any[]) => void): void {
+		context.subscriptions.push(vscode.commands.registerCommand('vscode-my.' + command, callback));
 	}
 
 	registerMyCommand('wordLeft', function (_args) { CursorMove.wordLeft(); });

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { CharCode } from './charCode';
+import { Language } from './language';
 import { MatchingPair } from './matchingPair';
 
 export class CursorMove {
@@ -35,10 +35,11 @@ export class CursorMove {
             return;
         }
         const document = editor.document;
+        const language = new Language(document.languageId);
         const startPosition = editor.selection.active;
         const lineText = document.lineAt(startPosition.line).text;
         const charStr = lineText[startPosition.character - 1];
-        if (CharCode.isQuotes(charStr.charCodeAt(0)) || CharCode.isCloser(charStr.charCodeAt(0))) {
+        if (language.isQuotes(charStr.charCodeAt(0)) || language.isCloser(charStr.charCodeAt(0))) {
             const matchPosition = MatchingPair.matchPositionLeft(document, startPosition);
             if (matchPosition !== undefined) {
                 const newPosition = new vscode.Position(matchPosition.line, matchPosition.character);
@@ -57,13 +58,14 @@ export class CursorMove {
             return;
         }
         const document = editor.document;
+        const language = new Language(document.languageId);
         const startPosition = editor.selection.active;
         const lineText = document.lineAt(startPosition.line).text;
         const charStr = lineText[startPosition.character];
         if (/\s/.test(charStr)) {
             await vscode.commands.executeCommand<void>("deleteWordStartRight");
         }
-        else if (CharCode.isQuotes(charStr.charCodeAt(0)) || CharCode.isOpener(charStr.charCodeAt(0))) {
+        else if (language.isQuotes(charStr.charCodeAt(0)) || language.isOpener(charStr.charCodeAt(0))) {
             const matchPosition = MatchingPair.matchPositionRight(document, startPosition);
             if (matchPosition !== undefined) {
                 const newPosition = new vscode.Position(matchPosition.line, matchPosition.character + 1);
@@ -157,6 +159,8 @@ export class CursorMove {
 
     private static _wordPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
+        const language = new Language(document.languageId);
+
         let lineNum = startPosition.line;
         let colNum = startPosition.character;
 
@@ -167,13 +171,13 @@ export class CursorMove {
         while (!found) {
             for (let idx = colNum - 1; idx >= 0; idx -= 1) {
                 if (insideWord) {
-                    if (!CharCode.isWord(lineText.charCodeAt(idx))) {
+                    if (!language.isWord(lineText.charCodeAt(idx))) {
                         found = true;
                         colNum = idx + 1;
                         break;
                     }
                 }
-                else if (CharCode.isWord(lineText.charCodeAt(idx))) {
+                else if (language.isWord(lineText.charCodeAt(idx))) {
                     insideWord = true;
                 }
             }
@@ -202,12 +206,14 @@ export class CursorMove {
 
     private static _wordPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
+        const language = new Language(document.languageId);
+
         const lastLineNum = document.lineCount - 1;
         let lineNum = startPosition.line;
         let colNum = startPosition.character;
 
         let lineText = document.lineAt(lineNum).text;
-        let insideWord = CharCode.isWord(lineText.charCodeAt(colNum));
+        let insideWord = language.isWord(lineText.charCodeAt(colNum));
         colNum += 1;
 
         let found = false;
@@ -215,11 +221,11 @@ export class CursorMove {
             const lineLen = lineText.length;
             for (let idx = colNum; idx < lineLen; idx += 1) {
                 if (insideWord) {
-                    if (!CharCode.isWord(lineText.charCodeAt(idx))) {
+                    if (!language.isWord(lineText.charCodeAt(idx))) {
                         insideWord = false;
                     }
                 }
-                else if (CharCode.isWord(lineText.charCodeAt(idx))) {
+                else if (language.isWord(lineText.charCodeAt(idx))) {
                     found = true;
                     colNum = idx;
                     break;
@@ -244,6 +250,8 @@ export class CursorMove {
 
     private static _expressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
+        const language = new Language(document.languageId);
+
         let lineNum = startPosition.line;
         let colNum = startPosition.character - 1;
 
@@ -259,27 +267,27 @@ export class CursorMove {
         else {
             lineText = document.lineAt(lineNum).text;
         }
-        if (CharCode.isCloser(lineText.charCodeAt(colNum)) || CharCode.isQuotes(lineText.charCodeAt(colNum))) {
+        if (language.isCloser(lineText.charCodeAt(colNum)) || language.isQuotes(lineText.charCodeAt(colNum))) {
             return (MatchingPair.matchPositionLeft(document, startPosition));
         }
-        if (CharCode.isOpener(lineText.charCodeAt(colNum))) {
+        if (language.isOpener(lineText.charCodeAt(colNum))) {
             return undefined;
         }
 
-        let insideWord = CharCode.isWord(lineText.charCodeAt(colNum));
+        let insideWord = language.isWord(lineText.charCodeAt(colNum));
 
         let found = false;
         while (!found) {
             for (let idx = colNum - 1; idx >= 0; idx -= 1) {
                 const charCode = lineText.charCodeAt(idx);
                 if (insideWord) {
-                    if (!CharCode.isWord(lineText.charCodeAt(idx))) {
+                    if (!language.isWord(charCode)) {
                         found = true;
                         colNum = idx + 1;
                         break;
                     }
                 }
-                else if (CharCode.isWord(charCode) || CharCode.isQuotes(charCode) || CharCode.isOpener(charCode) || CharCode.isCloser(charCode)) {
+                else if (language.isWord(charCode) || language.isQuotes(charCode) || language.isOpener(charCode) || language.isCloser(charCode)) {
                     found = true;
                     colNum = idx + 1;
                     break;
@@ -309,11 +317,13 @@ export class CursorMove {
 
     private static _expressionPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
+        const language = new Language(document.languageId);
+
         let lineNum = startPosition.line;
         let colNum = startPosition.character;
 
         let lineText = document.lineAt(lineNum).text;
-        if (CharCode.isOpener(lineText.charCodeAt(colNum)) || CharCode.isQuotes(lineText.charCodeAt(colNum))) {
+        if (language.isOpener(lineText.charCodeAt(colNum)) || language.isQuotes(lineText.charCodeAt(colNum))) {
             const newPosition = MatchingPair.matchPositionRight(document, startPosition);
             if (newPosition === undefined) {
                 return undefined;
@@ -322,7 +332,7 @@ export class CursorMove {
         }
 
         const lastLineNum = document.lineCount - 1;
-        let insideWord = CharCode.isWord(lineText.charCodeAt(colNum));
+        let insideWord = language.isWord(lineText.charCodeAt(colNum));
 
         let found = false;
         while (!found) {
@@ -330,13 +340,13 @@ export class CursorMove {
             for (let idx = colNum; idx < lineLen; idx += 1) {
                 const charCode = lineText.charCodeAt(idx);
                 if (insideWord) {
-                    if (!CharCode.isWord(charCode)) {
+                    if (!language.isWord(charCode)) {
                         found = true;
                         colNum = idx;
                         break;
                     }
                 }
-                else if (CharCode.isWord(charCode) || CharCode.isQuotes(charCode) || CharCode.isOpener(charCode) || CharCode.isCloser(charCode)) {
+                else if (language.isWord(charCode) || language.isQuotes(charCode) || language.isOpener(charCode) || language.isCloser(charCode)) {
                     found = true;
                     colNum = idx;
                     break;

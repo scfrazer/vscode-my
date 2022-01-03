@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 
 import { Language } from './language';
-import { CharCode } from './charCode';
 
 export class MatchingPair {
 
@@ -15,9 +14,9 @@ export class MatchingPair {
 
     public static matchPosition(document: vscode.TextDocument, startPosition: vscode.Position, goingRight: boolean): vscode.Position | undefined {
 
+        const language = new Language(document.languageId);
         const lastLineNum = (goingRight) ? document.lineCount - 1 : 0;
-        const commentDelimiters = Language.getCommentDelimiters(document.languageId);
-        const pairRe = MatchingPair._getPairRe(document.languageId);
+        const pairRe = MatchingPair._getPairRe(language);
 
         // Iterate over lines looking for quotes/openers/closers
         let lineNum = startPosition.line;
@@ -39,7 +38,7 @@ export class MatchingPair {
                     continue;
                 }
                 if (!insideBlockComment) {
-                    if (commentDelimiters?.singleLine !== undefined && match[0] === commentDelimiters.singleLine) {
+                    if (match[0] === language.lineCommentStart) {
                         break;
                     }
                 }
@@ -92,14 +91,14 @@ export class MatchingPair {
                     continue;
                 }
 
-                if (CharCode.isQuotes(matchStr.charCodeAt(0))) {
+                if (language.isQuotes(matchStr.charCodeAt(0))) {
                     insideQuotes = true;
                     currentQuoteStr = matchStr;
                     stackDepth += 1;
                     continue;
                 }
 
-                if (CharCode.isOpener(matchStr.charCodeAt(0))) {
+                if (language.isOpener(matchStr.charCodeAt(0))) {
                     if (goingRight) {
                         stackDepth += 1;
                         continue;
@@ -113,7 +112,7 @@ export class MatchingPair {
                     }
                 }
 
-                if (CharCode.isCloser(matchStr.charCodeAt(0))) {
+                if (language.isCloser(matchStr.charCodeAt(0))) {
                     if (goingRight) {
                         stackDepth -= 1;
                         found = (stackDepth === 0);
@@ -140,16 +139,15 @@ export class MatchingPair {
         return undefined;
     }
 
-    private static _getPairRe(languageId: string) {
-        const commentDelimiters = Language.getCommentDelimiters(languageId);
-        let pairReStr = '[\\[\\](){}\'"]';
-        if (commentDelimiters?.singleLine !== undefined) {
-            let str = MatchingPair._escapeRegExp(commentDelimiters.singleLine);
+    private static _getPairRe(language: Language) {
+        let pairReStr = '[\\[\\](){}\'"]';  // TODO Get chars from Language
+        if (language.lineCommentStart !== undefined) {
+            let str = MatchingPair._escapeRegExp(language.lineCommentStart);
             pairReStr += `|${str}`;
         }
-        if (commentDelimiters?.blockStart !== undefined && commentDelimiters?.blockEnd !== undefined) {
-            let startStr = MatchingPair._escapeRegExp(commentDelimiters.blockStart);
-            let endStr = MatchingPair._escapeRegExp(commentDelimiters.blockEnd);
+        if (language.blockCommentStart !== undefined && language.blockCommentEnd !== undefined) {
+            let startStr = MatchingPair._escapeRegExp(language.blockCommentStart);
+            let endStr = MatchingPair._escapeRegExp(language.blockCommentEnd);
             pairReStr += `|${startStr}|${endStr}`;
         }
         return new RegExp(pairReStr, 'g');
