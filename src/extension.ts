@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { CursorMove } from './CursorMove';
+import { CursorMove } from './cursorMove';
 import { Misc } from './misc';
 
 export function activate(context: vscode.ExtensionContext) {

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { CharCode } from './CharCode';
+import { CharCode } from './charCode';
 import { MatchingPair } from './matchingPair';
 
 export class CursorMove {
