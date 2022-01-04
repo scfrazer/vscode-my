@@ -29,53 +29,12 @@ export class CursorMove {
         CursorMove._updateSelections(CursorMove._expressionPositionRight, true);
     }
 
-    public static async deleteExpressionLeft() {  // TODO
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        const document = editor.document;
-        const language = new Language(document.languageId);
-        const startPosition = editor.selection.active;
-        const lineText = document.lineAt(startPosition.line).text;
-        const charStr = lineText[startPosition.character - 1];
-        if (language.isQuotes(charStr.charCodeAt(0)) || language.isCloser(charStr.charCodeAt(0))) {
-            const matchPosition = MatchingPair.matchPositionLeft(document, startPosition);
-            if (matchPosition !== undefined) {
-                const newPosition = new vscode.Position(matchPosition.line, matchPosition.character);
-                editor.selection = new vscode.Selection(editor.selection.anchor, newPosition);
-                await vscode.commands.executeCommand<void>("editor.action.clipboardCutAction");
-            }
-        }
-        else {
-            await vscode.commands.executeCommand<void>("deleteWordLeft");
-        }
+    public static async deleteExpressionLeft() {
+        CursorMove._deleteExpression(CursorMove._expressionPositionLeft);
     }
 
-    public static async deleteExpressionRight() {  // TODO
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        const document = editor.document;
-        const language = new Language(document.languageId);
-        const startPosition = editor.selection.active;
-        const lineText = document.lineAt(startPosition.line).text;
-        const charStr = lineText[startPosition.character];
-        if (/\s/.test(charStr)) {
-            await vscode.commands.executeCommand<void>("deleteWordStartRight");
-        }
-        else if (language.isQuotes(charStr.charCodeAt(0)) || language.isOpener(charStr.charCodeAt(0))) {
-            const matchPosition = MatchingPair.matchPositionRight(document, startPosition);
-            if (matchPosition !== undefined) {
-                const newPosition = new vscode.Position(matchPosition.line, matchPosition.character + 1);
-                editor.selection = new vscode.Selection(editor.selection.anchor, newPosition);
-                await vscode.commands.executeCommand<void>("editor.action.clipboardCutAction");
-            }
-        }
-        else {
-            await vscode.commands.executeCommand<void>("deleteWordRight");
-        }
+    public static async deleteExpressionRight() {
+        CursorMove._deleteExpression(CursorMove._expressionPositionRight);
     }
 
     public static async previousParagraph(args: any = {}) {
@@ -154,6 +113,24 @@ export class CursorMove {
                 return selection;
             }
             return (new vscode.Selection((select || !selection.isEmpty) ? selection.anchor : newPosition, newPosition));
+        });
+    }
+
+    private static _deleteExpression(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined) {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        editor.edit((editBuilder) => {
+            editor.selections.map((selection) => {
+                const newPosition = positionFunction(document, selection.active);
+                if (newPosition === undefined) {
+                    return;
+                }
+                const range = new vscode.Range(selection.anchor, newPosition);
+                editBuilder.delete(range);
+            });
         });
     }
 
