@@ -19,6 +19,20 @@ export class Misc {
         editor.selections = selections;
     }
 
+    public static addSemicolonToEndOfLine() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        editor.edit((editBuilder) => {
+            editor.selections.map((selection) => {
+                let range = document.lineAt(selection.active.line).range;
+                editBuilder.insert(range.end, ";");
+            });
+        });
+    }
+
     // TODO: Tab out of \s*])}>'"
 
     // TODO: Search in current file

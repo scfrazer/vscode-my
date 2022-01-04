@@ -62,6 +62,10 @@
 			{
 				"command": "vscode-my.addCursorsToLineStarts",
 				"title": "My: Add cursors to line starts"
+			},
+			{
+				"command": "vscode-my.addSemicolonToEndOfLine",
+				"title": "My: Add a semicolon to end of line"
 			}
 		],
 		"keybindings": [
@@ -135,6 +139,11 @@
 				"key": "alt+shift+i",
 				"command": "vscode-my.addCursorsToLineStarts",
 				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+;",
+				"command": "vscode-my.addSemicolonToEndOfLine",
+				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
 				"key": "alt+left",
