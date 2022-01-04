@@ -37,6 +37,35 @@ export class CursorMove {
         CursorMove._deleteExpression(CursorMove._expressionPositionRight);
     }
 
+    public static async selectToChar() {
+
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+
+        const sbItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
+        sbItem.text = "Select to character ...";
+        sbItem.tooltip = "'Return' will exit without selecting";
+        sbItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
+        sbItem.show();
+
+        let typeCommand = vscode.commands.registerCommand('type', arg => {
+            if (arg.text === '\n') {
+                sbItem.dispose();
+                typeCommand.dispose();
+                return;
+            }
+            const document = editor.document;
+            editor.selections = editor.selections.map((selection) => {
+                // TODO Fill this in
+                return selection;
+            });
+            sbItem.dispose();
+            typeCommand.dispose();
+        });
+    }
+
     public static async previousParagraph(args: any = {}) {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
