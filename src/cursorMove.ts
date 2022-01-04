@@ -114,6 +114,7 @@ export class CursorMove {
             }
             return (new vscode.Selection((select || !selection.isEmpty) ? selection.anchor : newPosition, newPosition));
         });
+        vscode.commands.executeCommand<void>("revealLine", { lineNumber: editor.selection.active.line });
     }
 
     private static _deleteExpression(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined) {
