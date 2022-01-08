@@ -33,9 +33,14 @@ export class Misc {
         });
     }
 
+    // TODO: Reformat list
+    // TODO: Select inside pair
+    // TODO: Delete pair
+    // TODO: Change pair
     // TODO: Tab out of \s*])}>'"
-
     // TODO: Search in current file
+    // TODO: Center window center/top/bottom
+
     // export function activate(context: vscode.ExtensionContext) {
     //     let disposable = vscode.commands.registerCommand(
     //       "search-in-current-file.searchInCurrentFile",
@@ -65,7 +70,6 @@ export class Misc {
     //     });
     //   }
 
-    // TODO: Center window center/top/bottom
     //     let state = "center";
     //     let timeout;
     //

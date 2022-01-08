@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 
+import { Util } from './util';
 import { Language } from './language';
 
 export class MatchingPair {
@@ -142,12 +143,12 @@ export class MatchingPair {
     private static _getPairRe(language: Language) {
         let pairReStr = '[\\[\\](){}\'"]';  // TODO Get chars from Language
         if (language.lineCommentStart !== undefined) {
-            let str = MatchingPair._escapeRegExp(language.lineCommentStart);
+            let str = Util.escapeRegExp(language.lineCommentStart);
             pairReStr += `|${str}`;
         }
         if (language.blockCommentStart !== undefined && language.blockCommentEnd !== undefined) {
-            let startStr = MatchingPair._escapeRegExp(language.blockCommentStart);
-            let endStr = MatchingPair._escapeRegExp(language.blockCommentEnd);
+            let startStr = Util.escapeRegExp(language.blockCommentStart);
+            let endStr = Util.escapeRegExp(language.blockCommentEnd);
             pairReStr += `|${startStr}|${endStr}`;
         }
         return new RegExp(pairReStr, 'g');
@@ -163,9 +164,5 @@ export class MatchingPair {
             break;
         }
         return (numBackslashes % 2 === 1);
-    }
-
-    private static _escapeRegExp(str: string): string {
-        return str.replace(/[.*+?^${}()|[\]\/\\]/g, '\\$&'); // $& means the whole matched string
     }
 }

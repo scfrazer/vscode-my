@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 
+import { Util } from './util';
 import { Language } from './language';
 import { MatchingPair } from './matchingPair';
 
@@ -262,37 +263,41 @@ export class CursorMove {
 
         const language = new Language(document.languageId);
 
+        let delimiterReStr = '[\\[\\](){}\'"]';  // TODO Get chars from Language
+        if (language.lineCommentStart !== undefined) {
+            let str = Util.escapeRegExp(language.lineCommentStart);
+            delimiterReStr += `|${str}`;
+        }
+        if (language.blockCommentStart !== undefined && language.blockCommentEnd !== undefined) {
+            let startStr = Util.escapeRegExp(language.blockCommentStart);
+            let endStr = Util.escapeRegExp(language.blockCommentEnd);
+            delimiterReStr += `|${startStr}|${endStr}`;
+        }
+        delimiterReStr += '|\\w+';
+        const delimiterRe = new RegExp(delimiterReStr, 'g');
+
         const lastLineNum = document.lineCount - 1;
         let lineNum = startPosition.line;
-        let colNum = startPosition.character;
-
-        let lineText = document.lineAt(lineNum).text;
-        let insideWord = language.isWord(lineText.charCodeAt(colNum));
-        colNum += 1;
+        let colNum = startPosition.character + 1;
 
         let found = false;
         while (!found) {
-            const lineLen = lineText.length;
-            for (let idx = colNum; idx < lineLen; idx += 1) {
-                if (insideWord) {
-                    if (!language.isWord(lineText.charCodeAt(idx))) {
-                        insideWord = false;
-                    }
+            const lineText = document.lineAt(lineNum).text;
+            const matches = lineText.matchAll(delimiterRe);
+            for (const match of matches) {
+                if (match?.index === undefined || match.index < colNum) {
+                    continue;
                 }
-                else if (language.isWord(lineText.charCodeAt(idx))) {
-                    found = true;
-                    colNum = idx;
-                    break;
-                }
+                found = true;
+                colNum = match.index;
+                break;
             }
             if (!found) {
                 if (lineNum === lastLineNum) {
                     return undefined;
                 }
-                colNum = 0;
+                colNum = -1;
                 lineNum += 1;
-                insideWord = false;
-                lineText = document.lineAt(lineNum).text;
             }
         }
 
