@@ -216,40 +216,30 @@ export class CursorMove {
 
         const language = new Language(document.languageId);
 
+        const delimiterReStr = language.getDelimiterReString() + '|\\w+';
+        const delimiterRe = new RegExp(delimiterReStr, 'g');
+
         let lineNum = startPosition.line;
         let colNum = startPosition.character;
 
-        let lineText = document.lineAt(lineNum).text;
-        let insideWord = false;
-
         let found = false;
         while (!found) {
-            for (let idx = colNum - 1; idx >= 0; idx -= 1) {
-                if (insideWord) {
-                    if (!language.isWord(lineText.charCodeAt(idx))) {
-                        found = true;
-                        colNum = idx + 1;
-                        break;
-                    }
+            const lineText = document.lineAt(lineNum).text;
+            const matches = [...lineText.matchAll(delimiterRe)].reverse();
+            for (const match of matches) {
+                if (match?.index === undefined || match.index >= colNum) {
+                    continue;
                 }
-                else if (language.isWord(lineText.charCodeAt(idx))) {
-                    insideWord = true;
-                }
+                found = true;
+                colNum = match.index;
+                break;
             }
             if (!found) {
-                if (insideWord) {
-                    found = true;
-                    colNum = 0;
+                if (lineNum === 0) {
+                    return undefined;
                 }
-                else {
-                    if (lineNum === 0) {
-                        return undefined;
-                    }
-                    lineNum -= 1;
-                    lineText = document.lineAt(lineNum).text;
-                    insideWord = false;
-                    colNum = lineText.length;
-                }
+                colNum = Number.MAX_SAFE_INTEGER;
+                lineNum -= 1;
             }
         }
 
