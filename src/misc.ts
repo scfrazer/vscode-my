@@ -33,7 +33,6 @@ export class Misc {
         });
     }
 
-    // TODO: Home key invert toggling (and do select)
     // TODO: Select inside pair
     // TODO: Delete pair
     // TODO: Change pair

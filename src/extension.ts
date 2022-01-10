@@ -20,6 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('selectToChar', function (_args) { CursorMove.selectToChar(); });
 	registerMyCommand('previousParagraph', function (args) { CursorMove.previousParagraph(args); });
 	registerMyCommand('nextParagraph', function (args) { CursorMove.nextParagraph(args); });
+	registerMyCommand('home', function (args) { CursorMove.home(args); });
 	registerMyCommand('addCursorsToLineStarts', function (_args) { Misc.addCursorsToLineStarts(); });
 	registerMyCommand('addSemicolonToEndOfLine', function (_args) { Misc.addSemicolonToEndOfLine(); });
 }

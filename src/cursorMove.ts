@@ -177,6 +177,10 @@ export class CursorMove {
         await vscode.commands.executeCommand<void>("revealLine", { lineNumber: lineNum });
     }
 
+    public static async home(args: any = {}) {
+        CursorMove._updateSelections(CursorMove._homePosition, args?.select && args.select);
+    }
+
     private static _updateSelections(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined, select: boolean) {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -435,5 +439,22 @@ export class CursorMove {
             return (new vscode.Position(lineNum, colNum));
         }
         return undefined;
+    }
+
+    private static _homePosition(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+        const colNum = startPosition.character;
+        const lineNum = startPosition.line;
+        if (colNum > 0) {
+            return new vscode.Position(lineNum, 0);
+        }
+        const lineText = document.lineAt(lineNum).text;
+        const lineLen = lineText.length;
+        for (let idx = 0; idx < lineLen; idx += 1) {
+            const charCode = lineText.charCodeAt(idx);
+            if (charCode !== 32 && charCode !== 9) {
+                return (new vscode.Position(lineNum, idx));
+            }
+        }
+        return (new vscode.Position(lineNum, lineLen));
     }
 }

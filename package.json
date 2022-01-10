@@ -67,6 +67,10 @@
 				"title": "My: Next paragraph"
 			},
 			{
+				"command": "vscode-my.home",
+				"title": "My: Home"
+			},
+			{
 				"command": "vscode-my.addCursorsToLineStarts",
 				"title": "My: Add cursors to line starts"
 			},
@@ -142,6 +146,19 @@
 			{
 				"key": "ctrl+shift+down",
 				"command": "vscode-my.nextParagraph",
+				"args": {
+					"select": true
+				},
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "home",
+				"command": "vscode-my.home",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "shift+home",
+				"command": "vscode-my.home",
 				"args": {
 					"select": true
 				},
