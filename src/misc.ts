@@ -40,6 +40,8 @@ export class Misc {
     // TODO: Tab out of \s*])}>'"
     // TODO: Search in current file
     // TODO: Center window center/top/bottom
+    // TODO: Home key invert toggling
+    // TODO: Close all editors w/o an associated file
 
     // export function activate(context: vscode.ExtensionContext) {
     //     let disposable = vscode.commands.registerCommand(

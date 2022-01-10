@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 
-import { Util } from './util';
 import { Language } from './language';
 
 export class MatchingPair {
@@ -17,7 +16,7 @@ export class MatchingPair {
 
         const language = new Language(document.languageId);
         const lastLineNum = (goingRight) ? document.lineCount - 1 : 0;
-        const pairRe = MatchingPair._getPairRe(language);
+        const pairRe = new RegExp(language.getDelimiterReString(), 'g');
 
         // Iterate over lines looking for quotes/openers/closers
         let lineNum = startPosition.line;
@@ -138,20 +137,6 @@ export class MatchingPair {
             return new vscode.Position(lineNum, colNum);
         }
         return undefined;
-    }
-
-    private static _getPairRe(language: Language) {
-        let pairReStr = '[\\[\\](){}\'"]';  // TODO Get chars from Language
-        if (language.lineCommentStart !== undefined) {
-            let str = Util.escapeRegExp(language.lineCommentStart);
-            pairReStr += `|${str}`;
-        }
-        if (language.blockCommentStart !== undefined && language.blockCommentEnd !== undefined) {
-            let startStr = Util.escapeRegExp(language.blockCommentStart);
-            let endStr = Util.escapeRegExp(language.blockCommentEnd);
-            pairReStr += `|${startStr}|${endStr}`;
-        }
-        return new RegExp(pairReStr, 'g');
     }
 
     private static _charIsEscaped(startingCol: number, str: string): boolean {

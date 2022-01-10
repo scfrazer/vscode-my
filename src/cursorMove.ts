@@ -263,17 +263,7 @@ export class CursorMove {
 
         const language = new Language(document.languageId);
 
-        let delimiterReStr = '[\\[\\](){}\'"]';  // TODO Get chars from Language
-        if (language.lineCommentStart !== undefined) {
-            let str = Util.escapeRegExp(language.lineCommentStart);
-            delimiterReStr += `|${str}`;
-        }
-        if (language.blockCommentStart !== undefined && language.blockCommentEnd !== undefined) {
-            let startStr = Util.escapeRegExp(language.blockCommentStart);
-            let endStr = Util.escapeRegExp(language.blockCommentEnd);
-            delimiterReStr += `|${startStr}|${endStr}`;
-        }
-        delimiterReStr += '|\\w+';
+        const delimiterReStr = language.getDelimiterReString() + '|\\w+';
         const delimiterRe = new RegExp(delimiterReStr, 'g');
 
         const lastLineNum = document.lineCount - 1;

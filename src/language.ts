@@ -1,3 +1,5 @@
+import { Util } from './util';
+
 export class Language {
 
     private _wordCharCodeRanges: Array<Array<number>>;
@@ -72,5 +74,19 @@ export class Language {
 
     public isQuotes(charCode: number): boolean {
         return this._quoteCharCodes.includes(charCode);
+    }
+
+    public getDelimiterReString(): string {
+        let delimiterReStr = '[\\[\\](){}\'"]';  // TODO Use this._(openers/closers)
+        if (this.lineCommentStart !== undefined) {
+            let str = Util.escapeRegExp(this.lineCommentStart);
+            delimiterReStr += `|${str}`;
+        }
+        if (this.blockCommentStart !== undefined && this.blockCommentEnd !== undefined) {
+            let startStr = Util.escapeRegExp(this.blockCommentStart);
+            let endStr = Util.escapeRegExp(this.blockCommentEnd);
+            delimiterReStr += `|${startStr}|${endStr}`;
+        }
+        return delimiterReStr;
     }
 }
