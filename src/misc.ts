@@ -33,15 +33,16 @@ export class Misc {
         });
     }
 
-    // TODO: Reformat list
+    // TODO: Home key invert toggling (and do select)
     // TODO: Select inside pair
     // TODO: Delete pair
     // TODO: Change pair
+    // TODO: Reformat list
+    // TODO: Close all editors w/o an associated file
+
+    // TODO: Center window center/top/bottom
     // TODO: Tab out of \s*])}>'"
     // TODO: Search in current file
-    // TODO: Center window center/top/bottom
-    // TODO: Home key invert toggling
-    // TODO: Close all editors w/o an associated file
 
     // export function activate(context: vscode.ExtensionContext) {
     //     let disposable = vscode.commands.registerCommand(

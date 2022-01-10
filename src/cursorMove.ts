@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 
-import { Util } from './util';
 import { Language } from './language';
 import { MatchingPair } from './matchingPair';
 
@@ -23,19 +22,19 @@ export class CursorMove {
     }
 
     public static async selectExpressionLeft() {
-        CursorMove._updateSelections(CursorMove._expressionPositionLeft, true);
+        CursorMove._updateSelections(CursorMove._wordOrExpressionPositionLeft, true);
     }
 
     public static async selectExpressionRight() {
-        CursorMove._updateSelections(CursorMove._expressionPositionRight, true);
+        CursorMove._updateSelections(CursorMove._wordOrExpressionPositionRight, true);
     }
 
     public static async deleteExpressionLeft() {
-        CursorMove._deleteExpression(CursorMove._expressionPositionLeft);
+        CursorMove._deleteExpression(CursorMove._wordOrExpressionPositionLeft);
     }
 
     public static async deleteExpressionRight() {
-        CursorMove._deleteExpression(CursorMove._expressionPositionRight);
+        CursorMove._deleteExpression(CursorMove._wordOrExpressionPositionRight);
     }
 
     public static async selectToChar() {
@@ -212,6 +211,31 @@ export class CursorMove {
         });
     }
 
+    private static _wordOrExpressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+        const language = new Language(document.languageId);
+        const lineNum = startPosition.line;
+        let colNum = startPosition.character;
+        if (colNum === 0) {
+            return CursorMove._wordPositionLeft(document, startPosition);
+        }
+        const lineText = document.lineAt(lineNum).text;
+        if (language.isCloser(lineText.charCodeAt(colNum - 1)) || language.isQuotes(lineText.charCodeAt(colNum - 1))) {
+            return CursorMove._expressionPositionLeft(document, startPosition);
+        }
+        return CursorMove._wordPositionLeft(document, startPosition);
+    }
+
+    private static _wordOrExpressionPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+        const language = new Language(document.languageId);
+        const lineNum = startPosition.line;
+        const colNum = startPosition.character;
+        const lineText = document.lineAt(lineNum).text;
+        if (language.isOpener(lineText.charCodeAt(colNum)) || language.isQuotes(lineText.charCodeAt(colNum))) {
+            return CursorMove._expressionPositionRight(document, startPosition);
+        }
+        return CursorMove._wordPositionRight(document, startPosition);
+    }
+
     private static _wordPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
         const language = new Language(document.languageId);
@@ -220,14 +244,14 @@ export class CursorMove {
         const delimiterRe = new RegExp(delimiterReStr, 'g');
 
         let lineNum = startPosition.line;
-        let colNum = startPosition.character;
+        let colNum = startPosition.character - 1;
 
         let found = false;
         while (!found) {
             const lineText = document.lineAt(lineNum).text;
             const matches = [...lineText.matchAll(delimiterRe)].reverse();
             for (const match of matches) {
-                if (match?.index === undefined || match.index >= colNum) {
+                if (match?.index === undefined || match.index > colNum) {
                     continue;
                 }
                 found = true;
