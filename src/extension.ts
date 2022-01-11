@@ -17,6 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('selectExpressionRight', function (_args) { CursorMove.selectExpressionRight(); });
 	registerMyCommand('deleteExpressionLeft', function (_args) { CursorMove.deleteExpressionLeft(); });
 	registerMyCommand('deleteExpressionRight', function (_args) { CursorMove.deleteExpressionRight(); });
+	registerMyCommand('selectInside', function (_args) { CursorMove.selectInside(); });
 	registerMyCommand('selectToChar', function (_args) { CursorMove.selectToChar(); });
 	registerMyCommand('previousParagraph', function (args) { CursorMove.previousParagraph(args); });
 	registerMyCommand('nextParagraph', function (args) { CursorMove.nextParagraph(args); });

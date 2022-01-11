@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -53,6 +53,10 @@
 			{
 				"command": "vscode-my.deleteExpressionRight",
 				"title": "My: Delete expression right"
+			},
+			{
+				"command": "vscode-my.selectInside",
+				"title": "My: Select inside nearest pair"
 			},
 			{
 				"command": "vscode-my.selectToChar",
@@ -118,6 +122,11 @@
 			{
 				"key": "ctrl+delete",
 				"command": "vscode-my.deleteExpressionRight",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "alt+d",
+				"command": "vscode-my.selectInside",
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
