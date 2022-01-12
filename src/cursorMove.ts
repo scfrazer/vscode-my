@@ -270,11 +270,14 @@ export class CursorMove {
             const lineText = document.lineAt(lineNum).text;
             const matches = [...lineText.matchAll(delimiterRe)].reverse();
             for (const match of matches) {
-                if (match?.index === undefined || match.index > colNum) {
+                if (match?.index === undefined || match.index >= colNum) {
                     continue;
                 }
                 found = true;
                 colNum = match.index;
+                if (language.isCloser(lineText.charCodeAt(colNum)) || language.isQuotes(lineText.charCodeAt(colNum))) {
+                    colNum += 1;
+                }
                 break;
             }
             if (!found) {
