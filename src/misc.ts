@@ -33,7 +33,6 @@ export class Misc {
         });
     }
 
-    // TODO: Select inside pair
     // TODO: Delete pair
     // TODO: Change pair
     // TODO: Reformat list
