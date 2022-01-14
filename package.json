@@ -55,8 +55,12 @@
 				"title": "My: Delete expression right"
 			},
 			{
-				"command": "vscode-my.selectInside",
-				"title": "My: Select inside nearest pair"
+				"command": "vscode-my.selectInsideBrackets",
+				"title": "My: Select inside nearest brackets"
+			},
+			{
+				"command": "vscode-my.selectInsideQuotes",
+				"title": "My: Select inside nearest quotes"
 			},
 			{
 				"command": "vscode-my.selectToChar",
@@ -125,8 +129,13 @@
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
+				"key": "ctrl+alt+d",
+				"command": "vscode-my.selectInsideBrackets",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
 				"key": "alt+d",
-				"command": "vscode-my.selectInside",
+				"command": "vscode-my.selectInsideQuotes",
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{

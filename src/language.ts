@@ -76,8 +76,16 @@ export class Language {
         return this._quoteCharCodes.includes(charCode);
     }
 
+    public getBracketString(): string {
+        return '[\\[\\](){}]';  // TODO Use this._(opener|closer)CharCodes
+    }
+
+    public getQuoteString(): string {
+        return '[\'"]';  // TODO Use this._quoteCharCodes
+    }
+
     public getDelimiterReString(): string {
-        let delimiterReStr = '[\\[\\](){}\'"]';  // TODO Use this._(openers/closers)
+        let delimiterReStr = '[\\[\\](){}\'"]';  // TODO Use this._(opener|closer|quote)CharCodes
         if (this.lineCommentStart !== undefined) {
             let str = Util.escapeRegExp(this.lineCommentStart);
             delimiterReStr += `|${str}`;

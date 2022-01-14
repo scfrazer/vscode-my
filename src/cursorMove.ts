@@ -37,14 +37,29 @@ export class CursorMove {
         CursorMove._deleteExpression(CursorMove._wordOrExpressionPositionRight);
     }
 
-    public static async selectInside() {
+    public static async selectInsideBrackets() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
         }
         const document = editor.document;
         editor.selections = editor.selections.map((selection) => {
-            const newRange = MatchingPair.insideRange(document, selection.active);
+            const newRange = MatchingPair.insideBracketsRange(document, selection.active);
+            if (newRange === undefined) {
+                return selection;
+            }
+            return (new vscode.Selection(newRange.start, newRange.end));
+        });
+    }
+
+    public static async selectInsideQuotes() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        editor.selections = editor.selections.map((selection) => {
+            const newRange = MatchingPair.insideQuotesRange(document, selection.active);
             if (newRange === undefined) {
                 return selection;
             }

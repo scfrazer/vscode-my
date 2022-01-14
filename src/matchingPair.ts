@@ -2,18 +2,53 @@ import * as vscode from 'vscode';
 
 import { Language } from './language';
 
+interface MatchPositionArgs {
+    document: vscode.TextDocument;
+    startPosition: vscode.Position;
+    lookingForQuotes: boolean;
+    goingRight: boolean;
+    goingUp: boolean;
+}
+
 export class MatchingPair {
 
     public static matchPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
-        return MatchingPair._matchPosition(document, startPosition, false, false);
+        if (startPosition.character === 0) {
+            return undefined;
+        }
+        const language = new Language(document.languageId);
+        const lineText = document.lineAt(startPosition.line).text;
+        const lookingForQuotes = language.isQuotes(lineText.charCodeAt(startPosition.character - 1));
+        return MatchingPair._matchPosition({
+            document: document,
+            startPosition: startPosition,
+            lookingForQuotes: lookingForQuotes,
+            goingRight: false,
+            goingUp: false
+        });
     }
 
     public static matchPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
-        return MatchingPair._matchPosition(document, startPosition, true, false);
+        const language = new Language(document.languageId);
+        const lineText = document.lineAt(startPosition.line).text;
+        const lookingForQuotes = language.isQuotes(lineText.charCodeAt(startPosition.character));
+        return MatchingPair._matchPosition({
+            document: document,
+            startPosition: startPosition,
+            lookingForQuotes: lookingForQuotes,
+            goingRight: true,
+            goingUp: false
+        });
     }
 
-    public static insideRange(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Range | undefined {
-        const leftPosition = MatchingPair._matchPosition(document, startPosition, false, true);
+    public static insideBracketsRange(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Range | undefined {
+        const leftPosition = MatchingPair._matchPosition({
+            document: document,
+            startPosition: startPosition,
+            lookingForQuotes: false,
+            goingRight: false,
+            goingUp: true
+        });
         if (leftPosition === undefined) {
             return undefined;
         }
@@ -24,14 +59,32 @@ export class MatchingPair {
         return new vscode.Range(new vscode.Position(leftPosition.line, leftPosition.character + 1), rightPosition);
     }
 
-    private static _matchPosition(document: vscode.TextDocument, startPosition: vscode.Position, goingRight: boolean, goingUp: boolean): vscode.Position | undefined {
+    public static insideQuotesRange(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Range | undefined {
+        const leftPosition = MatchingPair._matchPosition({
+            document: document,
+            startPosition: startPosition,
+            lookingForQuotes: true,
+            goingRight: false,
+            goingUp: true
+        });
+        if (leftPosition === undefined) {
+            return undefined;
+        }
+        const rightPosition = MatchingPair.matchPositionRight(document, leftPosition);
+        if (rightPosition === undefined) {
+            return undefined;
+        }
+        return new vscode.Range(new vscode.Position(leftPosition.line, leftPosition.character + 1), rightPosition);
+    }
 
-        const language = new Language(document.languageId);
-        const lastLineNum = (goingRight) ? document.lineCount - 1 : 0;
+    private static _matchPosition(args: MatchPositionArgs): vscode.Position | undefined {
+
+        const language = new Language(args.document.languageId);
+        const lastLineNum = (args.goingRight) ? args.document.lineCount - 1 : 0;
         const pairRe = new RegExp(language.getDelimiterReString(), 'g');
 
         // Iterate over lines looking for quotes/openers/closers
-        let lineNum = startPosition.line;
+        let lineNum = args.startPosition.line;
         let colNum = 0;
         let firstIteration = true;
         let insideQuotes = false;
@@ -42,7 +95,7 @@ export class MatchingPair {
         while (!found) {
 
             // Get matches and remove irrelevant ones
-            const lineText = document.lineAt(lineNum).text;
+            const lineText = args.document.lineAt(lineNum).text;
             const unfilteredMatches = lineText.matchAll(pairRe);
             let matches: Array<RegExpMatchArray> = [];
             for (const match of unfilteredMatches) {
@@ -58,21 +111,21 @@ export class MatchingPair {
                     // TODO Handle block comments
                 }
                 if (firstIteration) {
-                    if (goingRight) {
-                        if (match.index < startPosition.character) {
+                    if (args.goingRight) {
+                        if (match.index < args.startPosition.character) {
                             continue;
                         }
                     }
-                    else if (match.index > startPosition.character - 1) {
+                    else if (match.index > args.startPosition.character - 1) {
                         continue;
                     }
                 }
                 matches.push(match);
             }
-            if (!goingUp && matches.length === 0 && firstIteration) {
+            if (!args.goingUp && matches.length === 0 && firstIteration) {
                 return undefined;
             }
-            if (!goingRight) {
+            if (!args.goingRight) {
                 matches = matches.reverse();
             }
             firstIteration = false;
@@ -93,7 +146,7 @@ export class MatchingPair {
                         }
                         insideQuotes = false;
                         stackDepth -= 1;
-                        found = (stackDepth === ((goingUp) ? -1 : 0));
+                        found = (stackDepth === ((args.goingUp) ? -1 : 0));
                         if (found) {
                             break;
                         }
@@ -102,7 +155,7 @@ export class MatchingPair {
                 }
 
                 if (language.isQuotes(matchStr.charCodeAt(0))) {
-                    if (!goingUp || stackDepth > 0) {
+                    if (!args.goingUp || stackDepth > 0) {
                         insideQuotes = true;
                         currentQuoteStr = matchStr;
                         stackDepth += 1;
@@ -115,13 +168,13 @@ export class MatchingPair {
                 }
 
                 if (language.isOpener(matchStr.charCodeAt(0))) {
-                    if (goingRight) {
+                    if (args.goingRight) {
                         stackDepth += 1;
                         continue;
                     }
                     else {
                         stackDepth -= 1;
-                        found = (stackDepth === ((goingUp) ? -1 : 0));
+                        found = (stackDepth === ((args.goingUp) ? -1 : 0));
                         if (found) {
                             break;
                         }
@@ -129,9 +182,9 @@ export class MatchingPair {
                 }
 
                 if (language.isCloser(matchStr.charCodeAt(0))) {
-                    if (goingRight) {
+                    if (args.goingRight) {
                         stackDepth -= 1;
-                        found = (stackDepth === ((goingUp) ? -1 : 0));
+                        found = (stackDepth === ((args.goingUp) ? -1 : 0));
                         if (found) {
                             break;
                         }
@@ -146,7 +199,7 @@ export class MatchingPair {
             if (found || (lineNum === lastLineNum)) {
                 break;
             }
-            lineNum += (goingRight) ? 1 : -1;
+            lineNum += (args.goingRight) ? 1 : -1;
         }
 
         if (found) {
