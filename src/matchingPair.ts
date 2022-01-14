@@ -81,34 +81,23 @@ export class MatchingPair {
 
         const language = new Language(args.document.languageId);
         const lastLineNum = (args.goingRight) ? args.document.lineCount - 1 : 0;
-        const pairRe = new RegExp(language.getDelimiterReString(), 'g');
+        const searchRe = new RegExp((args.lookingForQuotes ? language.getQuoteString() : language.getBracketString()), 'g');
 
-        // Iterate over lines looking for quotes/openers/closers
         let lineNum = args.startPosition.line;
         let colNum = 0;
         let firstIteration = true;
-        let insideQuotes = false;
         let currentQuoteStr = '';
-        let insideBlockComment = false;
         let stackDepth = 0;
         let found = false;
         while (!found) {
 
             // Get matches and remove irrelevant ones
             const lineText = args.document.lineAt(lineNum).text;
-            const unfilteredMatches = lineText.matchAll(pairRe);
+            const unfilteredMatches = lineText.matchAll(searchRe);
             let matches: Array<RegExpMatchArray> = [];
             for (const match of unfilteredMatches) {
                 if (match?.index === undefined) {
                     continue;
-                }
-                if (!insideBlockComment) {
-                    if (match[0] === language.lineCommentStart) {
-                        break;
-                    }
-                }
-                else {
-                    // TODO Handle block comments
                 }
                 if (firstIteration) {
                     if (args.goingRight) {
@@ -138,33 +127,25 @@ export class MatchingPair {
                 }
                 colNum = match.index;
                 const matchStr = match[0];
-
-                if (insideQuotes) {
-                    if (matchStr === currentQuoteStr) {
-                        if (MatchingPair._charIsEscaped(colNum, lineText)) {
-                            continue;
-                        }
-                        insideQuotes = false;
-                        stackDepth -= 1;
-                        found = (stackDepth === ((args.goingUp) ? -1 : 0));
-                        if (found) {
-                            break;
-                        }
-                    }
+                if (MatchingPair._charIsEscaped(colNum, lineText)) {
                     continue;
                 }
 
-                if (language.isQuotes(matchStr.charCodeAt(0))) {
-                    if (!args.goingUp || stackDepth > 0) {
-                        insideQuotes = true;
+                if (args.lookingForQuotes) {
+                    if (stackDepth === 0) {
+                        if (args.goingUp) {
+                            found = true;
+                            break;
+                        }
                         currentQuoteStr = matchStr;
-                        stackDepth += 1;
+                        stackDepth = 1;
                         continue;
                     }
-                    else {
-                        found = true;
-                        break;
+                    if (matchStr !== currentQuoteStr) {
+                        continue;
                     }
+                    found = true;
+                    break;
                 }
 
                 if (language.isOpener(matchStr.charCodeAt(0))) {
@@ -179,21 +160,18 @@ export class MatchingPair {
                             break;
                         }
                     }
+                    continue;
                 }
 
-                if (language.isCloser(matchStr.charCodeAt(0))) {
-                    if (args.goingRight) {
-                        stackDepth -= 1;
-                        found = (stackDepth === ((args.goingUp) ? -1 : 0));
-                        if (found) {
-                            break;
-                        }
+                if (args.goingRight) {
+                    stackDepth -= 1;
+                    found = (stackDepth === ((args.goingUp) ? -1 : 0));
+                    if (found) {
+                        break;
                     }
-                    else {
-                        stackDepth += 1;
-                        continue;
-                    }
+                    continue;
                 }
+                stackDepth += 1;
             }
 
             if (found || (lineNum === lastLineNum)) {
