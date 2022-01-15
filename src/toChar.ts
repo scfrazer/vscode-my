@@ -79,4 +79,8 @@ export class ToChar {
         });
         vscode.commands.executeCommand<void>("revealLine", { lineNumber: editor.selection.active.line });
     }
+
+    public static async delete() {
+        // FIXME
+    }
 }

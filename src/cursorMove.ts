@@ -30,14 +30,6 @@ export class CursorMove {
         Util.updateSelections(CursorMove._wordOrExpressionPositionRight, true);
     }
 
-    public static async deleteExpressionLeft() {
-        Util.deleteToPosition(CursorMove._wordOrExpressionPositionLeft);
-    }
-
-    public static async deleteExpressionRight() {
-        Util.deleteToPosition(CursorMove._wordOrExpressionPositionRight);
-    }
-
     public static async previousParagraph(args: any = {}) {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -135,7 +127,7 @@ export class CursorMove {
 
         const language = new Language(document.languageId);
 
-        const delimiterReStr = language.getDelimiterReString() + '|\\w+';
+        const delimiterReStr = language.getDelimiterReString() + '|[a-zA-Z0-9_]+';
         const delimiterRe = new RegExp(delimiterReStr, 'g');
 
         let lineNum = startPosition.line;
@@ -175,7 +167,7 @@ export class CursorMove {
 
         const language = new Language(document.languageId);
 
-        const delimiterReStr = language.getDelimiterReString() + '|\\w+';
+        const delimiterReStr = language.getDelimiterReString() + '|[a-zA-Z0-9_]+';
         const delimiterRe = new RegExp(delimiterReStr, 'g');
 
         const lastLineNum = document.lineCount - 1;

@@ -47,12 +47,24 @@
 				"title": "My: Select expression right"
 			},
 			{
-				"command": "vscode-my.deleteExpressionLeft",
-				"title": "My: Delete expression left"
+				"command": "vscode-my.previousParagraph",
+				"title": "My: Previous paragraph"
 			},
 			{
-				"command": "vscode-my.deleteExpressionRight",
-				"title": "My: Delete expression right"
+				"command": "vscode-my.nextParagraph",
+				"title": "My: Next paragraph"
+			},
+			{
+				"command": "vscode-my.home",
+				"title": "My: Home"
+			},
+			{
+				"command": "vscode-my.smartDeleteLeft",
+				"title": "My: Smart delete left"
+			},
+			{
+				"command": "vscode-my.smartDeleteRight",
+				"title": "My: Smart delete right"
 			},
 			{
 				"command": "vscode-my.selectInsideBrackets",
@@ -67,16 +79,8 @@
 				"title": "My: Select to char"
 			},
 			{
-				"command": "vscode-my.previousParagraph",
-				"title": "My: Previous paragraph"
-			},
-			{
-				"command": "vscode-my.nextParagraph",
-				"title": "My: Next paragraph"
-			},
-			{
-				"command": "vscode-my.home",
-				"title": "My: Home"
+				"command": "vscode-my.deleteToChar",
+				"title": "My: Select to char"
 			},
 			{
 				"command": "vscode-my.addCursorsToLineStarts",
@@ -119,31 +123,6 @@
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
-				"key": "ctrl+backspace",
-				"command": "vscode-my.deleteExpressionLeft",
-				"when": "textInputFocus && !accessibilityModeEnabled"
-			},
-			{
-				"key": "ctrl+delete",
-				"command": "vscode-my.deleteExpressionRight",
-				"when": "textInputFocus && !accessibilityModeEnabled"
-			},
-			{
-				"key": "ctrl+alt+d",
-				"command": "vscode-my.selectInsideBrackets",
-				"when": "textInputFocus && !accessibilityModeEnabled"
-			},
-			{
-				"key": "alt+d",
-				"command": "vscode-my.selectInsideQuotes",
-				"when": "textInputFocus && !accessibilityModeEnabled"
-			},
-			{
-				"key": "ctrl+m",
-				"command": "vscode-my.selectToChar",
-				"when": "textInputFocus && !accessibilityModeEnabled"
-			},
-			{
 				"key": "ctrl+up",
 				"command": "vscode-my.previousParagraph",
 				"when": "textInputFocus && !accessibilityModeEnabled"
@@ -180,6 +159,36 @@
 				"args": {
 					"select": true
 				},
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+backspace",
+				"command": "vscode-my.smartDeleteLeft",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+delete",
+				"command": "vscode-my.smartDeleteRight",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+alt+d",
+				"command": "vscode-my.selectInsideBrackets",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "alt+d",
+				"command": "vscode-my.selectInsideQuotes",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "alt+m",
+				"command": "vscode-my.selectToChar",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+m",
+				"command": "vscode-my.deleteToChar",
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{

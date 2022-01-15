@@ -18,14 +18,15 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('expressionRight', function (_args) { CursorMove.expressionRight(); });
 	registerMyCommand('selectExpressionLeft', function (_args) { CursorMove.selectExpressionLeft(); });
 	registerMyCommand('selectExpressionRight', function (_args) { CursorMove.selectExpressionRight(); });
-	registerMyCommand('deleteExpressionLeft', function (_args) { CursorMove.deleteExpressionLeft(); });
-	registerMyCommand('deleteExpressionRight', function (_args) { CursorMove.deleteExpressionRight(); });
-	registerMyCommand('selectInsideBrackets', function (_args) { MatchingPair.selectInsideBrackets(); });
-	registerMyCommand('selectInsideQuotes', function (_args) { MatchingPair.selectInsideQuotes(); });
-	registerMyCommand('selectToChar', function (_args) { ToChar.select(); });
 	registerMyCommand('previousParagraph', function (args) { CursorMove.previousParagraph(args); });
 	registerMyCommand('nextParagraph', function (args) { CursorMove.nextParagraph(args); });
 	registerMyCommand('home', function (args) { CursorMove.home(args); });
+	registerMyCommand('smartDeleteLeft', function (_args) { SmartDelete.deleteLeft(); });
+	registerMyCommand('smartDeleteRight', function (_args) { SmartDelete.deleteRight(); });
+	registerMyCommand('selectInsideBrackets', function (_args) { MatchingPair.selectInsideBrackets(); });
+	registerMyCommand('selectInsideQuotes', function (_args) { MatchingPair.selectInsideQuotes(); });
+	registerMyCommand('selectToChar', function (_args) { ToChar.select(); });
+	registerMyCommand('deleteToChar', function (_args) { ToChar.delete(); });
 	registerMyCommand('addCursorsToLineStarts', function (_args) { Misc.addCursorsToLineStarts(); });
 	registerMyCommand('addSemicolonToEndOfLine', function (_args) { Misc.addSemicolonToEndOfLine(); });
 }
