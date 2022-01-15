@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 
 import { CursorMove } from './cursorMove';
+import { SmartDelete } from './smartDelete';
+import { MatchingPair } from './matchingPair';
+import { ToChar } from './toChar';
 import { Misc } from './misc';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -17,9 +20,9 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('selectExpressionRight', function (_args) { CursorMove.selectExpressionRight(); });
 	registerMyCommand('deleteExpressionLeft', function (_args) { CursorMove.deleteExpressionLeft(); });
 	registerMyCommand('deleteExpressionRight', function (_args) { CursorMove.deleteExpressionRight(); });
-	registerMyCommand('selectInsideBrackets', function (_args) { CursorMove.selectInsideBrackets(); });
-	registerMyCommand('selectInsideQuotes', function (_args) { CursorMove.selectInsideQuotes(); });
-	registerMyCommand('selectToChar', function (_args) { CursorMove.selectToChar(); });
+	registerMyCommand('selectInsideBrackets', function (_args) { MatchingPair.selectInsideBrackets(); });
+	registerMyCommand('selectInsideQuotes', function (_args) { MatchingPair.selectInsideQuotes(); });
+	registerMyCommand('selectToChar', function (_args) { ToChar.select(); });
 	registerMyCommand('previousParagraph', function (args) { CursorMove.previousParagraph(args); });
 	registerMyCommand('nextParagraph', function (args) { CursorMove.nextParagraph(args); });
 	registerMyCommand('home', function (args) { CursorMove.home(args); });

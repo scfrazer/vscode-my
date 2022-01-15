@@ -1,146 +1,41 @@
 import * as vscode from 'vscode';
 
+import { Util } from './util';
 import { Language } from './language';
 import { MatchingPair } from './matchingPair';
 
 export class CursorMove {
 
     public static async wordLeft() {
-        CursorMove._updateSelections(CursorMove._wordPositionLeft, false);
+        Util.updateSelections(CursorMove._wordPositionLeft, false);
     }
 
     public static async wordRight() {
-        CursorMove._updateSelections(CursorMove._wordPositionRight, false);
+        Util.updateSelections(CursorMove._wordPositionRight, false);
     }
 
     public static async expressionLeft() {
-        CursorMove._updateSelections(CursorMove._expressionPositionLeft, false);
+        Util.updateSelections(CursorMove._expressionPositionLeft, false);
     }
 
     public static async expressionRight() {
-        CursorMove._updateSelections(CursorMove._expressionPositionRight, false);
+        Util.updateSelections(CursorMove._expressionPositionRight, false);
     }
 
     public static async selectExpressionLeft() {
-        CursorMove._updateSelections(CursorMove._wordOrExpressionPositionLeft, true);
+        Util.updateSelections(CursorMove._wordOrExpressionPositionLeft, true);
     }
 
     public static async selectExpressionRight() {
-        CursorMove._updateSelections(CursorMove._wordOrExpressionPositionRight, true);
+        Util.updateSelections(CursorMove._wordOrExpressionPositionRight, true);
     }
 
     public static async deleteExpressionLeft() {
-        CursorMove._deleteExpression(CursorMove._wordOrExpressionPositionLeft);
+        Util.deleteToPosition(CursorMove._wordOrExpressionPositionLeft);
     }
 
     public static async deleteExpressionRight() {
-        CursorMove._deleteExpression(CursorMove._wordOrExpressionPositionRight);
-    }
-
-    public static async selectInsideBrackets() {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        const document = editor.document;
-        editor.selections = editor.selections.map((selection) => {
-            const newRange = MatchingPair.insideBracketsRange(document, selection.active);
-            if (newRange === undefined) {
-                return selection;
-            }
-            return (new vscode.Selection(newRange.start, newRange.end));
-        });
-    }
-
-    public static async selectInsideQuotes() {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        const document = editor.document;
-        editor.selections = editor.selections.map((selection) => {
-            const newRange = MatchingPair.insideQuotesRange(document, selection.active);
-            if (newRange === undefined) {
-                return selection;
-            }
-            return (new vscode.Selection(newRange.start, newRange.end));
-        });
-    }
-
-    public static async selectToChar() {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-
-        const sbItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
-        sbItem.text = "Select to character ...";
-        sbItem.tooltip = "'Return' will exit without selecting";
-        sbItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
-        sbItem.show();
-
-        let typeCommand = vscode.commands.registerCommand('type', args => {
-            if (args.text === '\n') {
-                sbItem.dispose();
-                typeCommand.dispose();
-                return;
-            }
-
-            const document = editor.document;
-            editor.selections = editor.selections.map((selection) => {
-                const language = new Language(document.languageId);
-
-                const lastLineNum = document.lineCount - 1;
-                let lineNum = selection.active.line;
-                let colNum = selection.active.character;
-
-                let jumpOverPair = false;
-                let found = false;
-                while (!found) {
-                    const lineText = document.lineAt(lineNum).text;
-                    const lineLen = lineText.length;
-                    // TODO Handle comments somehow
-                    for (let idx = colNum; idx < lineLen; idx += 1) {
-                        if (lineText.charAt(idx) === args.text) {
-                            found = true;
-                            colNum = idx;
-                            break;
-                        }
-                        else if (language.isOpener(lineText.charCodeAt(idx)) || language.isQuotes(lineText.charCodeAt(idx))) {
-                            jumpOverPair = true;
-                            colNum = idx;
-                            break;
-                        }
-                    }
-                    if (jumpOverPair) {
-                        let newPosition = MatchingPair.matchPositionRight(document, new vscode.Position(lineNum, colNum));
-                        if (newPosition === undefined) {
-                            return selection;
-                        }
-                        jumpOverPair = false;
-                        colNum = newPosition.character + 1;
-                        lineNum = newPosition.line;
-                        continue;
-                    }
-                    if (!found) {
-                        if (lineNum === lastLineNum) {
-                            return selection;
-                        }
-                        colNum = 0;
-                        lineNum += 1;
-                    }
-                }
-
-                if (found) {
-                    return (new vscode.Selection(selection.anchor, new vscode.Position(lineNum, colNum)));
-                }
-                return selection;
-            });
-
-            sbItem.dispose();
-            typeCommand.dispose();
-        });
-        vscode.commands.executeCommand<void>("revealLine", { lineNumber: editor.selection.active.line });
+        Util.deleteToPosition(CursorMove._wordOrExpressionPositionRight);
     }
 
     public static async previousParagraph(args: any = {}) {
@@ -208,41 +103,7 @@ export class CursorMove {
     }
 
     public static async home(args: any = {}) {
-        CursorMove._updateSelections(CursorMove._homePosition, args?.select && args.select);
-    }
-
-    private static _updateSelections(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined, select: boolean) {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        const document = editor.document;
-        editor.selections = editor.selections.map((selection) => {
-            const newPosition = positionFunction(document, selection.active);
-            if (newPosition === undefined) {
-                return selection;
-            }
-            return (new vscode.Selection((select || !selection.isEmpty) ? selection.anchor : newPosition, newPosition));
-        });
-        vscode.commands.executeCommand<void>("revealLine", { lineNumber: editor.selection.active.line });
-    }
-
-    private static _deleteExpression(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined) {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        const document = editor.document;
-        editor.edit((editBuilder) => {
-            editor.selections.map((selection) => {
-                const newPosition = positionFunction(document, selection.active);
-                if (newPosition === undefined) {
-                    return;
-                }
-                const range = new vscode.Range(selection.anchor, newPosition);
-                editBuilder.delete(range);
-            });
-        });
+        Util.updateSelections(CursorMove._homePosition, args?.select && args.select);
     }
 
     private static _wordOrExpressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
