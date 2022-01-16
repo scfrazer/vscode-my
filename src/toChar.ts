@@ -2,19 +2,27 @@ import * as vscode from 'vscode';
 
 import { Language } from './language';
 import { MatchingPair } from './matchingPair';
+import { Util } from './util';
 
 export class ToChar {
 
-    public static async select() {
+    public static async goto(args: any = {}) {
 
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
         }
 
+        const select = args?.select && args.select;
         const sbItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
-        sbItem.text = "Select to character ...";
-        sbItem.tooltip = "'Return' will exit without selecting";
+        if (select) {
+            sbItem.text = "Select to character ...";
+            sbItem.tooltip = "'Return' will exit without selecting";
+        }
+        else {
+            sbItem.text = "Go to character ...";
+            sbItem.tooltip = "'Return' will exit without moving";
+        }
         sbItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
         sbItem.show();
 
@@ -28,7 +36,12 @@ export class ToChar {
             editor.selections = editor.selections.map((selection) => {
                 const newPosition = ToChar._upTo(document, selection.active, args.text);
                 if (newPosition !== undefined) {
-                    return (new vscode.Selection(selection.anchor, newPosition));
+                    if (select) {
+                        return (new vscode.Selection(editor.selection.anchor, newPosition));
+                    }
+                    else {
+                        return (new vscode.Selection(newPosition, newPosition));
+                    }
                 }
                 return selection;
             });
@@ -36,7 +49,7 @@ export class ToChar {
             typeCommand.dispose();
         });
 
-        vscode.commands.executeCommand<void>("revealLine", { lineNumber: editor.selection.active.line });
+        Util.revealActivePosition(editor);
     }
 
     public static async delete() {

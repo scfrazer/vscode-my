@@ -25,10 +25,12 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('smartDeleteRight', function (_args) { SmartDelete.deleteRight(); });
 	registerMyCommand('selectInsideBrackets', function (_args) { MatchingPair.selectInsideBrackets(); });
 	registerMyCommand('selectInsideQuotes', function (_args) { MatchingPair.selectInsideQuotes(); });
-	registerMyCommand('selectToChar', function (_args) { ToChar.select(); });
+	registerMyCommand('gotoChar', function (args) { ToChar.goto(args); });
 	registerMyCommand('deleteToChar', function (_args) { ToChar.delete(); });
 	registerMyCommand('addCursorsToLineStarts', function (_args) { Misc.addCursorsToLineStarts(); });
 	registerMyCommand('addSemicolonToEndOfLine', function (_args) { Misc.addSemicolonToEndOfLine(); });
+	registerMyCommand('justOneSpace', function (_args) { Misc.justOneSpace(); });
+	registerMyCommand('gotoLine', function (_args) { Misc.gotoLine(); });
 }
 
 export function deactivate() { }

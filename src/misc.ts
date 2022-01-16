@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 
+import { Util } from './util';
+
 export class Misc {
 
     public static addCursorsToLineStarts() {
@@ -30,6 +32,74 @@ export class Misc {
                 let range = document.lineAt(selection.active.line).range;
                 editBuilder.insert(range.end, ";");
             });
+        });
+    }
+
+    public static justOneSpace() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        editor.edit((editBuilder) => {
+            editor.selections.map((selection) => {
+                const lineText = document.lineAt(selection.active.line).text;
+                const lineLen = lineText.length;
+                const currCol = selection.active.character;
+
+                let endCol = currCol;
+                for (let idx = currCol; idx < lineLen; idx += 1) {
+                    const charCode = lineText.charCodeAt(idx);
+                    endCol = idx;
+                    if (charCode === 32 || charCode === 9) {
+                        continue;
+                    }
+                    break;
+                }
+                let startCol = currCol;
+                for (let idx = currCol - 1; idx >= 0; idx -= 1) {
+                    const charCode = lineText.charCodeAt(idx);
+                    if (charCode === 32 || charCode === 9) {
+                        startCol = idx;
+                        continue;
+                    }
+                    break;
+                }
+                if (endCol - startCol < 2) {
+                    return;
+                }
+
+                const startPosition = new vscode.Position(selection.active.line, startCol);
+                const endPosition = new vscode.Position(selection.active.line, endCol);
+                const range = new vscode.Range(startPosition, endPosition);
+                editBuilder.replace(range, " ");
+            });
+        });
+    }
+
+    public static gotoLine() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        vscode.window.showInputBox({ prompt: "Go to line number?" }).then(input => {
+            if (input === undefined) {
+                return;
+            }
+            let lineNum = Number(input);
+            if (lineNum === undefined) {
+                return;
+            }
+            if (lineNum < 1) {
+                lineNum = 1;
+            }
+            else if (lineNum > document.lineCount) {
+                lineNum = document.lineCount;
+            }
+            const position = new vscode.Position(lineNum - 1, 0);
+            editor.selection = new vscode.Selection(position, position);
+            Util.revealActivePosition(editor);
         });
     }
 

@@ -57,7 +57,7 @@ export class CursorMove {
         else {
             editor.selection = new vscode.Selection(newPosition, newPosition);
         }
-        await vscode.commands.executeCommand<void>("revealLine", { lineNumber: lineNum });
+        Util.revealActivePosition(editor);
     }
 
     public static async nextParagraph(args: any = {}) {
@@ -91,7 +91,7 @@ export class CursorMove {
         else {
             editor.selection = new vscode.Selection(newPosition, newPosition);
         }
-        await vscode.commands.executeCommand<void>("revealLine", { lineNumber: lineNum });
+        Util.revealActivePosition(editor);
     }
 
     public static async home(args: any = {}) {

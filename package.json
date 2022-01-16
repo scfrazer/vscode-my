@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -75,7 +75,7 @@
 				"title": "My: Select inside nearest quotes"
 			},
 			{
-				"command": "vscode-my.selectToChar",
+				"command": "vscode-my.gotoChar",
 				"title": "My: Select to char"
 			},
 			{
@@ -89,6 +89,14 @@
 			{
 				"command": "vscode-my.addSemicolonToEndOfLine",
 				"title": "My: Add a semicolon to end of line"
+			},
+			{
+				"command": "vscode-my.justOneSpace",
+				"title": "My: Change multiple spaces to just one"
+			},
+			{
+				"command": "vscode-my.gotoLine",
+				"title": "My: Go to line"
 			}
 		],
 		"keybindings": [
@@ -182,12 +190,20 @@
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
-				"key": "alt+m",
-				"command": "vscode-my.selectToChar",
+				"key": "ctrl+m",
+				"command": "vscode-my.gotoChar",
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
-				"key": "ctrl+m",
+				"key": "ctrl+shift+m",
+				"command": "vscode-my.gotoChar",
+				"args": {
+					"select": true
+				},
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "alt+m",
 				"command": "vscode-my.deleteToChar",
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
@@ -202,11 +218,17 @@
 				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
-				"key": "alt+left",
-				"command": "cursorWordPartStartLeft"
+				"key": "ctrl+k space",
+				"command": "vscode-my.justOneSpace",
+				"when": "textInputFocus && !accessibilityModeEnabled"
 			},
 			{
-				"key": "alt+right",
+				"key": "ctrl+g",
+				"command": "vscode-my.gotoLine",
+				"when": "textInputFocus && !accessibilityModeEnabled"
+			},
+			{
+				"key": "ctrl+shift+-",
 				"command": "cursorWordPartRight"
 			},
 			{
@@ -216,14 +238,6 @@
 			{
 				"key": "ctrl+shift+delete",
 				"command": "deleteWordPartRight"
-			},
-			{
-				"key": "alt+,",
-				"command": "workbench.action.navigateBack"
-			},
-			{
-				"key": "alt+.",
-				"command": "workbench.action.navigateForward"
 			}
 		]
 	},

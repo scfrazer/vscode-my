@@ -2,6 +2,11 @@ import * as vscode from 'vscode';
 
 export class Util {
 
+    public static revealActivePosition(editor: vscode.TextEditor) {
+        const selection = new vscode.Selection(editor.selection.active, editor.selection.active);
+        editor.revealRange(selection, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+    }
+
     public static updateSelections(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined, select: boolean) {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -15,7 +20,7 @@ export class Util {
             }
             return (new vscode.Selection((select || !selection.isEmpty) ? selection.anchor : newPosition, newPosition));
         });
-        vscode.commands.executeCommand<void>("revealLine", { lineNumber: editor.selection.active.line });
+        Util.revealActivePosition(editor);
     }
 
     public static deleteToPosition(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined) {
