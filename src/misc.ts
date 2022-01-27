@@ -103,14 +103,27 @@ export class Misc {
         });
     }
 
+    // Current code refactoring
+    // TODO: position/range/selection translate/with
+    // TODO: quickinput box title
+    // TODO: home textline firstnonwhitespace
+    // TODO: vcs breakpoint copy to env.clipboard
+    // TODO: document filename as static index
+    // TODO: completion workspace on did close text document
+    // TODO: I interface naming
+    // TODO: debug print thing
+
+    // New features
     // TODO: Delete pair
     // TODO: Change pair
     // TODO: Reformat list
     // TODO: Close all editors w/o an associated file
 
+    // Provided by extensions
     // TODO: Center window center/top/bottom
     // TODO: Tab out of \s*])}>'"
     // TODO: Search in current file
+    // TODO: Remove extra blank lines and trailing whitespace
 
     // export function activate(context: vscode.ExtensionContext) {
     //     let disposable = vscode.commands.registerCommand(

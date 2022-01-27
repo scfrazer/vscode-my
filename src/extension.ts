@@ -4,6 +4,7 @@ import { CursorMove } from './cursorMove';
 import { SmartDelete } from './smartDelete';
 import { MatchingPair } from './matchingPair';
 import { ToChar } from './toChar';
+import { Complete } from './complete';
 import { Misc } from './misc';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -27,10 +28,19 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('selectInsideQuotes', function (_args) { MatchingPair.selectInsideQuotes(); });
 	registerMyCommand('gotoChar', function (args) { ToChar.goto(args); });
 	registerMyCommand('deleteToChar', function (_args) { ToChar.delete(); });
+	registerMyCommand('completeCurrentWord', function (_args) { Complete.currentWord(); });
 	registerMyCommand('addCursorsToLineStarts', function (_args) { Misc.addCursorsToLineStarts(); });
 	registerMyCommand('addSemicolonToEndOfLine', function (_args) { Misc.addSemicolonToEndOfLine(); });
 	registerMyCommand('justOneSpace', function (_args) { Misc.justOneSpace(); });
 	registerMyCommand('gotoLine', function (_args) { Misc.gotoLine(); });
+
+	// Keep editors in MRU order
+	vscode.window.onDidChangeActiveTextEditor((e) => {
+		if (e === undefined) {
+			return;
+		}
+		vscode.commands.executeCommand('moveActiveEditor', { to: "first", by: "tab" });
+	});
 }
 
 export function deactivate() { }
