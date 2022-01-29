@@ -339,7 +339,7 @@ export class CursorMove {
         const lineLen = lineText.length;
         for (let idx = 0; idx < lineLen; idx += 1) {
             const charCode = lineText.charCodeAt(idx);
-            if (charCode !== 32 && charCode !== 9) {
+            if (!Util.isWhitespace(charCode)) {
                 return (new vscode.Position(lineNum, idx));
             }
         }

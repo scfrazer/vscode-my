@@ -41,6 +41,10 @@ export class Util {
         });
     }
 
+    public static isWhitespace(charCode: number): boolean {
+        return (charCode === 32) || (charCode === 9);
+    }
+
     public static escapeRegExp(str: string): string {
         return str.replace(/[.*+?^${}()|[\]\/\\]/g, '\\$&'); // $& means the whole matched string
     }

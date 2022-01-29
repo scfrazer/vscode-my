@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 import { Language } from './language';
 import { MatchingPair } from './matchingPair';
+import { Util } from './util';
 
 export class SmartDelete {
 
@@ -38,7 +39,7 @@ export class SmartDelete {
                 let newPosition: vscode.Position | undefined = undefined;
 
                 // Looking back at whitespace, delete whitespace
-                if (charCode === 32 || charCode === 9) {
+                if (Util.isWhitespace(charCode)) {
                     const searchRe = new RegExp('[ \\t]+$');
                     let match = leftText.match(searchRe);
                     if (match !== null) {
@@ -109,7 +110,7 @@ export class SmartDelete {
                 let newPosition: vscode.Position | undefined = undefined;
 
                 // Looking at whitespace, delete whitespace
-                if (charCode === 32 || charCode === 9) {
+                if (Util.isWhitespace(charCode)) {
                     const searchRe = new RegExp('^[ \\t]+');
                     let match = rightText.match(searchRe);
                     if (match !== null) {
@@ -123,15 +124,24 @@ export class SmartDelete {
                         newPosition = new vscode.Position(matchPosition.line, matchPosition.character + 1);
                     }
                 }
-                // Looking at word char, delete word + whitespace
+                // Looking at word char ...
                 else if (language.isWord(charCode)) {
-                    const searchRe = new RegExp('^[a-zA-Z0-9_]+[ \\t]*');
+                    let searchRe;
+                    // At beginning of word, delete word + whitespace
+                    if (selection.active.character === 0
+                        || !language.isWord(lineText.charCodeAt(selection.active.character - 1))) {
+                        searchRe = new RegExp('^[a-zA-Z0-9_]+[ \\t]*');
+                    }
+                    // In middle of word, delete to end of word
+                    else {
+                        searchRe = new RegExp('^[a-zA-Z0-9_]+');
+                    }
                     let match = rightText.match(searchRe);
                     if (match !== null) {
                         newCol = selection.active.character + match[0].length;
                     }
                 }
-                // Looking at not-word char, delete not-word-or-opener-or-quote + whitespace
+                // Looking at not-word char, delete not-word-or-opener-or-quote
                 else {
                     const searchRe = new RegExp('^[^a-zA-Z0-9_\\[\\](){}\'"]+'); // TODO Get brackets/quote from language
                     let match = rightText.match(searchRe);

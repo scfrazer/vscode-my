@@ -49,17 +49,15 @@ export class Misc {
 
                 let endCol = currCol;
                 for (let idx = currCol; idx < lineLen; idx += 1) {
-                    const charCode = lineText.charCodeAt(idx);
                     endCol = idx;
-                    if (charCode === 32 || charCode === 9) {
+                    if (Util.isWhitespace(lineText.charCodeAt(idx))) {
                         continue;
                     }
                     break;
                 }
                 let startCol = currCol;
                 for (let idx = currCol - 1; idx >= 0; idx -= 1) {
-                    const charCode = lineText.charCodeAt(idx);
-                    if (charCode === 32 || charCode === 9) {
+                    if (Util.isWhitespace(lineText.charCodeAt(idx))) {
                         startCol = idx;
                         continue;
                     }
