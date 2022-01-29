@@ -32,6 +32,17 @@ export class Misc {
                 let range = document.lineAt(selection.active.line).range;
                 editBuilder.insert(range.end, ";");
             });
+        }).then((success) => {
+            if (!success) {
+                return;
+            }
+            editor.selections = editor.selections.map((selection) => {
+                if (selection.active.isEqual(document.lineAt(selection.active).range.end)) {
+                    let newPosition = selection.active.translate(0, -1);
+                    return (new vscode.Selection(newPosition, newPosition));
+                }
+                return selection;
+            });
         });
     }
 
