@@ -38,9 +38,17 @@ export class SmartDelete {
                 let newCol: number | undefined = undefined;
                 let newPosition: vscode.Position | undefined = undefined;
 
-                // Looking back at whitespace, delete whitespace
+                // Looking back at whitespace ...
                 if (Util.isWhitespace(charCode)) {
-                    const searchRe = new RegExp('[ \\t]+$');
+                    let searchRe;
+                    // At beginning of word, delete whitespace + word
+                    if (!Util.isWhitespace(lineText.charCodeAt(selection.active.character))) {
+                        searchRe = new RegExp('[a-zA-Z0-9_]*[ \\t]+$');
+                    }
+                    // In the middle of whitespace, delete whitespace
+                    else {
+                        searchRe = new RegExp('[ \\t]+$');
+                    }
                     let match = leftText.match(searchRe);
                     if (match !== null) {
                         newCol = selection.active.character - match[0].length;
@@ -61,7 +69,7 @@ export class SmartDelete {
                         newCol = selection.active.character - match[0].length;
                     }
                 }
-                // Looking back at not-word char, delete not-word-or-opener-or-quote + whitespace
+                // Looking back at not-word char, delete not-word-or-opener-or-quote
                 else {
                     const searchRe = new RegExp('[^a-zA-Z0-9_\\[\\](){}\'"]+$'); // TODO Get brackets/quote from language
                     let match = leftText.match(searchRe);
