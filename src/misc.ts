@@ -67,8 +67,8 @@ export class Misc {
                     return;
                 }
 
-                const startPosition = new vscode.Position(selection.active.line, startCol);
-                const endPosition = new vscode.Position(selection.active.line, endCol);
+                const startPosition = selection.active.with(undefined, startCol);
+                const endPosition = selection.active.with(undefined, endCol);
                 const range = new vscode.Range(startPosition, endPosition);
                 editBuilder.replace(range, " ");
             });
@@ -81,7 +81,7 @@ export class Misc {
             return;
         }
         const document = editor.document;
-        vscode.window.showInputBox({ prompt: "Go to line number?" }).then(input => {
+        vscode.window.showInputBox({ title: "Go to line number" }).then(input => {
             if (input === undefined) {
                 return;
             }
@@ -102,20 +102,18 @@ export class Misc {
     }
 
     // Current code refactoring
-    // TODO: position/range/selection translate/with
-    // TODO: quickinput box title
-    // TODO: home textline firstnonwhitespace
-    // TODO: vcs breakpoint copy to env.clipboard
-    // TODO: document filename as static index
-    // TODO: completion workspace on did close text document
-    // TODO: I interface naming
-    // TODO: debug print thing
+    // TODO: cursorMove left/right line ends
 
     // New features
+    // TODO: VCS breakpoint copy to env.clipboard
     // TODO: Delete pair
     // TODO: Change pair
     // TODO: Reformat list
     // TODO: Close all editors w/o an associated file
+
+    // dabbrev
+    // TODO: document filename as static index
+    // TODO: completion workspace on did close text document
 
     // Provided by extensions
     // TODO: Center window center/top/bottom

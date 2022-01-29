@@ -58,7 +58,7 @@ export class SmartDelete {
                 else if (language.isCloser(charCode) || language.isQuotes(charCode)) {
                     const matchPosition = MatchingPair.matchPositionLeft(document, selection.active);
                     if (matchPosition !== undefined) {
-                        newPosition = new vscode.Position(matchPosition.line, matchPosition.character);
+                        newPosition = matchPosition;
                     }
                 }
                 // Looking back at word char, delete word
@@ -79,7 +79,7 @@ export class SmartDelete {
                 }
 
                 if (newCol !== undefined) {
-                    newPosition = new vscode.Position(selection.active.line, newCol);
+                    newPosition = selection.active.with(undefined, newCol);
                 }
                 if (newPosition !== undefined) {
                     const range = new vscode.Range(selection.anchor, newPosition);
@@ -129,7 +129,7 @@ export class SmartDelete {
                 else if (language.isOpener(charCode) || language.isQuotes(charCode)) {
                     const matchPosition = MatchingPair.matchPositionRight(document, selection.active);
                     if (matchPosition !== undefined) {
-                        newPosition = new vscode.Position(matchPosition.line, matchPosition.character + 1);
+                        newPosition = matchPosition.translate(0, 1);
                     }
                 }
                 // Looking at word char ...
@@ -159,7 +159,7 @@ export class SmartDelete {
                 }
 
                 if (newCol !== undefined) {
-                    newPosition = new vscode.Position(selection.active.line, newCol);
+                    newPosition = selection.active.with(undefined, newCol);
                 }
                 if (newPosition !== undefined) {
                     const range = new vscode.Range(selection.anchor, newPosition);

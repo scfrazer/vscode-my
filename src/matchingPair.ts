@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { Language } from './language';
 
-interface MatchPositionArgs {
+interface IMatchPositionArgs {
     document: vscode.TextDocument;
     startPosition: vscode.Position;
     lookingForQuotes: boolean;
@@ -71,7 +71,7 @@ export class MatchingPair {
         });
     }
 
-    private static _matchPosition(args: MatchPositionArgs): vscode.Position | undefined {
+    private static _matchPosition(args: IMatchPositionArgs): vscode.Position | undefined {
 
         const language = new Language(args.document.languageId);
         const lastLineNum = (args.goingRight) ? args.document.lineCount - 1 : 0;
@@ -195,7 +195,7 @@ export class MatchingPair {
         if (rightPosition === undefined) {
             return undefined;
         }
-        return new vscode.Range(new vscode.Position(leftPosition.line, leftPosition.character + 1), rightPosition);
+        return new vscode.Range(leftPosition.translate(0, 1), rightPosition);
     }
 
     private static _insideQuotesRange(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Range | undefined {
@@ -213,7 +213,7 @@ export class MatchingPair {
         if (rightPosition === undefined) {
             return undefined;
         }
-        return new vscode.Range(new vscode.Position(leftPosition.line, leftPosition.character + 1), rightPosition);
+        return new vscode.Range(leftPosition.translate(0, 1), rightPosition);
     }
 
     private static _charIsEscaped(startingCol: number, str: string): boolean {

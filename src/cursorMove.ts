@@ -54,7 +54,8 @@ export class CursorMove {
         }
         let newPosition = new vscode.Position(lineNum, 0);
         if (args?.select && args.select) {
-            editor.selection = new vscode.Selection(editor.selection.anchor, newPosition);
+            const startPosition = editor.selection.active.with(undefined, 0);
+            editor.selection = new vscode.Selection(startPosition, newPosition);
         }
         else {
             editor.selection = new vscode.Selection(newPosition, newPosition);
@@ -88,7 +89,8 @@ export class CursorMove {
         }
         let newPosition = new vscode.Position(lineNum, 0);
         if (args?.select && args.select) {
-            editor.selection = new vscode.Selection(editor.selection.anchor, newPosition);
+            const startPosition = editor.selection.active.with(undefined, 0);
+            editor.selection = new vscode.Selection(startPosition, newPosition);
         }
         else {
             editor.selection = new vscode.Selection(newPosition, newPosition);
@@ -100,31 +102,6 @@ export class CursorMove {
         Util.updateSelections(CursorMove._homePosition, args?.select && args.select);
     }
 
-    //     private static _wordOrExpressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
-    //         const language = new Language(document.languageId);
-    //         const lineNum = startPosition.line;
-    //         let colNum = startPosition.character;
-    //         if (colNum === 0) {
-    //             return CursorMove._wordPositionLeft(document, startPosition);
-    //         }
-    //         const lineText = document.lineAt(lineNum).text;
-    //         if (language.isCloser(lineText.charCodeAt(colNum - 1)) || language.isQuotes(lineText.charCodeAt(colNum - 1))) {
-    //             return CursorMove._expressionPositionLeft(document, startPosition);
-    //         }
-    //         return CursorMove._wordPositionLeft(document, startPosition);
-    //     }
-    //
-    //     private static _wordOrExpressionPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
-    //         const language = new Language(document.languageId);
-    //         const lineNum = startPosition.line;
-    //         const colNum = startPosition.character;
-    //         const lineText = document.lineAt(lineNum).text;
-    //         if (language.isOpener(lineText.charCodeAt(colNum)) || language.isQuotes(lineText.charCodeAt(colNum))) {
-    //             return CursorMove._expressionPositionRight(document, startPosition);
-    //         }
-    //         return CursorMove._wordPositionRight(document, startPosition);
-    //     }
-    //
     private static _wordPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
         const language = new Language(document.languageId);
@@ -283,7 +260,7 @@ export class CursorMove {
             if (newPosition === undefined) {
                 return undefined;
             }
-            return (new vscode.Position(newPosition.line, newPosition.character + 1));
+            return (newPosition.translate(0, 1));
         }
 
         const lastLineNum = document.lineCount - 1;
@@ -335,14 +312,6 @@ export class CursorMove {
         if (colNum > 0) {
             return new vscode.Position(lineNum, 0);
         }
-        const lineText = document.lineAt(lineNum).text;
-        const lineLen = lineText.length;
-        for (let idx = 0; idx < lineLen; idx += 1) {
-            const charCode = lineText.charCodeAt(idx);
-            if (!Util.isWhitespace(charCode)) {
-                return (new vscode.Position(lineNum, idx));
-            }
-        }
-        return (new vscode.Position(lineNum, lineLen));
+        return (new vscode.Position(lineNum, document.lineAt(lineNum).firstNonWhitespaceCharacterIndex));
     }
 }
