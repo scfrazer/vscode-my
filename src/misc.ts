@@ -101,9 +101,6 @@ export class Misc {
         });
     }
 
-    // Current code refactoring
-    // TODO: cursorMove left/right line ends
-
     // New features
     // TODO: VCS breakpoint copy to env.clipboard
     // TODO: Delete pair

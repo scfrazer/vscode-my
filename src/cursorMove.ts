@@ -23,12 +23,10 @@ export class CursorMove {
     }
 
     public static async selectExpressionLeft() {
-        // Util.updateSelections(CursorMove._wordOrExpressionPositionLeft, true);
         Util.updateSelections(CursorMove._expressionPositionLeft, true);
     }
 
     public static async selectExpressionRight() {
-        // Util.updateSelections(CursorMove._wordOrExpressionPositionRight, true);
         Util.updateSelections(CursorMove._expressionPositionRight, true);
     }
 
@@ -104,80 +102,63 @@ export class CursorMove {
 
     private static _wordPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
-        const language = new Language(document.languageId);
+        const lineNum = startPosition.line;
 
+        if (startPosition.character === 0) {
+            if (lineNum > 0) {
+                return (document.lineAt(lineNum - 1).range.end);
+            }
+            return undefined;
+        }
+
+        const language = new Language(document.languageId);
         const delimiterReStr = language.getDelimiterReString() + '|[a-zA-Z0-9_]+';
         const delimiterRe = new RegExp(delimiterReStr, 'g');
 
-        let lineNum = startPosition.line;
         let colNum = startPosition.character - 1;
 
-        let found = false;
-        while (!found) {
-            const lineText = document.lineAt(lineNum).text;
-            const matches = [...lineText.matchAll(delimiterRe)].reverse();
-            for (const match of matches) {
-                if (match?.index === undefined || match.index >= colNum) {
-                    continue;
-                }
-                found = true;
-                colNum = match.index;
-                if (language.isCloser(lineText.charCodeAt(colNum)) || language.isQuotes(lineText.charCodeAt(colNum))) {
-                    colNum += 1;
-                }
-                break;
+        const lineText = document.lineAt(lineNum).text;
+        const matches = [...lineText.matchAll(delimiterRe)].reverse();
+        for (const match of matches) {
+            if (match?.index === undefined || match.index >= colNum) {
+                continue;
             }
-            if (!found) {
-                if (lineNum === 0) {
-                    return undefined;
-                }
-                colNum = Number.MAX_SAFE_INTEGER;
-                lineNum -= 1;
+            colNum = match.index;
+            if (language.isCloser(lineText.charCodeAt(colNum)) || language.isQuotes(lineText.charCodeAt(colNum))) {
+                colNum += 1;
             }
-        }
-
-        if (found) {
             return (new vscode.Position(lineNum, colNum));
         }
-        return undefined;
+        return (new vscode.Position(lineNum, 0));
     }
 
     private static _wordPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
-        const language = new Language(document.languageId);
+        const lineNum = startPosition.line;
+        const lineText = document.lineAt(lineNum).text;
+        const lastLineNum = document.lineCount - 1;
 
+        if (startPosition.character === lineText.length) {
+            if (lineNum === lastLineNum) {
+                return undefined;
+            }
+            return (new vscode.Position(lineNum + 1, 0));
+        }
+
+        const language = new Language(document.languageId);
         const delimiterReStr = language.getDelimiterReString() + '|[a-zA-Z0-9_]+';
         const delimiterRe = new RegExp(delimiterReStr, 'g');
 
-        const lastLineNum = document.lineCount - 1;
-        let lineNum = startPosition.line;
         let colNum = startPosition.character + 1;
 
-        let found = false;
-        while (!found) {
-            const lineText = document.lineAt(lineNum).text;
-            const matches = lineText.matchAll(delimiterRe);
-            for (const match of matches) {
-                if (match?.index === undefined || match.index < colNum) {
-                    continue;
-                }
-                found = true;
-                colNum = match.index;
-                break;
+        const matches = lineText.matchAll(delimiterRe);
+        for (const match of matches) {
+            if (match?.index === undefined || match.index < colNum) {
+                continue;
             }
-            if (!found) {
-                if (lineNum === lastLineNum) {
-                    return undefined;
-                }
-                colNum = -1;
-                lineNum += 1;
-            }
+            return (new vscode.Position(lineNum, match.index));
         }
-
-        if (found) {
-            return (new vscode.Position(lineNum, colNum));
-        }
-        return undefined;
+        return (new vscode.Position(lineNum, lineText.length));
     }
 
     private static _expressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
@@ -187,18 +168,14 @@ export class CursorMove {
         let lineNum = startPosition.line;
         let colNum = startPosition.character - 1;
 
-        let lineText;
         if (colNum < 0) {
             if (lineNum === 0) {
                 return undefined;
             }
-            lineNum -= 1;
-            lineText = document.lineAt(lineNum).text;
-            colNum = lineText.length;
+            return (document.lineAt(lineNum - 1).range.end);
         }
-        else {
-            lineText = document.lineAt(lineNum).text;
-        }
+
+        let lineText = document.lineAt(lineNum).text;
         if (language.isCloser(lineText.charCodeAt(colNum)) || language.isQuotes(lineText.charCodeAt(colNum))) {
             return (MatchingPair.matchPositionLeft(document, startPosition));
         }
