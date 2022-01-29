@@ -136,10 +136,9 @@ export class CursorMove {
 
         const lineNum = startPosition.line;
         const lineText = document.lineAt(lineNum).text;
-        const lastLineNum = document.lineCount - 1;
 
         if (startPosition.character === lineText.length) {
-            if (lineNum === lastLineNum) {
+            if (lineNum === (document.lineCount - 1)) {
                 return undefined;
             }
             return (new vscode.Position(lineNum + 1, 0));
@@ -165,8 +164,8 @@ export class CursorMove {
 
         const language = new Language(document.languageId);
 
-        let lineNum = startPosition.line;
-        let colNum = startPosition.character - 1;
+        const lineNum = startPosition.line;
+        const colNum = startPosition.character - 1;
 
         if (colNum < 0) {
             if (lineNum === 0) {
@@ -185,53 +184,35 @@ export class CursorMove {
 
         let insideWord = language.isWord(lineText.charCodeAt(colNum));
 
-        let found = false;
-        while (!found) {
-            for (let idx = colNum - 1; idx >= 0; idx -= 1) {
-                const charCode = lineText.charCodeAt(idx);
-                if (insideWord) {
-                    if (!language.isWord(charCode)) {
-                        found = true;
-                        colNum = idx + 1;
-                        break;
-                    }
-                }
-                else if (language.isWord(charCode) || language.isQuotes(charCode) || language.isOpener(charCode) || language.isCloser(charCode)) {
-                    found = true;
-                    colNum = idx + 1;
-                    break;
+        for (let idx = colNum - 1; idx >= 0; idx -= 1) {
+            const charCode = lineText.charCodeAt(idx);
+            if (insideWord) {
+                if (!language.isWord(charCode)) {
+                    return (new vscode.Position(lineNum, idx + 1));
                 }
             }
-            if (!found) {
-                if (insideWord) {
-                    found = true;
-                    colNum = 0;
-                }
-                else {
-                    if (lineNum === 0) {
-                        return undefined;
-                    }
-                    lineNum -= 1;
-                    lineText = document.lineAt(lineNum).text;
-                    colNum = lineText.length;
-                }
+            else if (language.isWord(charCode) || language.isQuotes(charCode) || language.isOpener(charCode) || language.isCloser(charCode)) {
+                return (new vscode.Position(lineNum, idx + 1));
             }
         }
-
-        if (found) {
-            return (new vscode.Position(lineNum, colNum));
-        }
-        return undefined;
+        return (new vscode.Position(lineNum, 0));
     }
 
     private static _expressionPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
-        const language = new Language(document.languageId);
+        const lineNum = startPosition.line;
+        const lineText = document.lineAt(lineNum).text;
 
-        let lineNum = startPosition.line;
+        if (startPosition.character === lineText.length) {
+            if (lineNum === (document.lineCount - 1)) {
+                return undefined;
+            }
+            return (new vscode.Position(lineNum + 1, 0));
+        }
+
+        const language = new Language(document.languageId);
         let colNum = startPosition.character;
 
-        let lineText = document.lineAt(lineNum).text;
         if (language.isOpener(lineText.charCodeAt(colNum)) || language.isQuotes(lineText.charCodeAt(colNum))) {
             const newPosition = MatchingPair.matchPositionRight(document, startPosition);
             if (newPosition === undefined) {
@@ -239,48 +220,25 @@ export class CursorMove {
             }
             return (newPosition.translate(0, 1));
         }
+        if (language.isCloser(lineText.charCodeAt(colNum))) {
+            return undefined;
+        }
 
-        const lastLineNum = document.lineCount - 1;
         let insideWord = language.isWord(lineText.charCodeAt(colNum));
 
-        let found = false;
-        while (!found) {
-            const lineLen = lineText.length;
-            for (let idx = colNum; idx < lineLen; idx += 1) {
-                const charCode = lineText.charCodeAt(idx);
-                if (insideWord) {
-                    if (!language.isWord(charCode)) {
-                        found = true;
-                        colNum = idx;
-                        break;
-                    }
-                }
-                else if (language.isWord(charCode) || language.isQuotes(charCode) || language.isOpener(charCode) || language.isCloser(charCode)) {
-                    found = true;
-                    colNum = idx;
-                    break;
+        const lineLen = lineText.length;
+        for (let idx = colNum; idx < lineLen; idx += 1) {
+            const charCode = lineText.charCodeAt(idx);
+            if (insideWord) {
+                if (!language.isWord(charCode)) {
+                    return (new vscode.Position(lineNum, idx));
                 }
             }
-            if (!found) {
-                if (insideWord) {
-                    found = true;
-                    colNum = lineLen;
-                }
-                else {
-                    if (lineNum === lastLineNum) {
-                        return undefined;
-                    }
-                    colNum = 0;
-                    lineNum += 1;
-                    lineText = document.lineAt(lineNum).text;
-                }
+            else if (language.isWord(charCode) || language.isQuotes(charCode) || language.isOpener(charCode) || language.isCloser(charCode)) {
+                return (new vscode.Position(lineNum, idx));
             }
         }
-
-        if (found) {
-            return (new vscode.Position(lineNum, colNum));
-        }
-        return undefined;
+        return (new vscode.Position(lineNum, lineLen));
     }
 
     private static _homePosition(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {

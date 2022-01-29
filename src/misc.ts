@@ -101,16 +101,16 @@ export class Misc {
         });
     }
 
+    // dabbrev
+    // TODO: document filename as static index
+    // TODO: completion workspace on did close text document
+
     // New features
     // TODO: VCS breakpoint copy to env.clipboard
     // TODO: Delete pair
     // TODO: Change pair
     // TODO: Reformat list
     // TODO: Close all editors w/o an associated file
-
-    // dabbrev
-    // TODO: document filename as static index
-    // TODO: completion workspace on did close text document
 
     // Provided by extensions
     // TODO: Center window center/top/bottom
