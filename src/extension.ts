@@ -33,6 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('addSemicolonToEndOfLine', function (_args) { Misc.addSemicolonToEndOfLine(); });
 	registerMyCommand('justOneSpace', function (_args) { Misc.justOneSpace(); });
 	registerMyCommand('gotoLine', function (_args) { Misc.gotoLine(); });
+	registerMyCommand('smartTab', function (_args) { Misc.smartTab(); });
 
 	// Keep editors in MRU order
 	vscode.window.onDidChangeActiveTextEditor((e) => {

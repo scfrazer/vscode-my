@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 
+import { Language } from './language';
 import { Util } from './util';
 
 export class Misc {
@@ -29,7 +30,7 @@ export class Misc {
         const document = editor.document;
         editor.edit((editBuilder) => {
             editor.selections.map((selection) => {
-                let range = document.lineAt(selection.active.line).range;
+                let range = document.lineAt(selection.active).range;
                 editBuilder.insert(range.end, ";");
             });
         }).then((success) => {
@@ -54,7 +55,7 @@ export class Misc {
         const document = editor.document;
         editor.edit((editBuilder) => {
             editor.selections.map((selection) => {
-                const lineText = document.lineAt(selection.active.line).text;
+                const lineText = document.lineAt(selection.active).text;
                 const lineLen = lineText.length;
                 const currCol = selection.active.character;
 
@@ -112,6 +113,30 @@ export class Misc {
         });
     }
 
+    public static smartTab() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        const language = new Language(document.languageId);
+        editor.selections = editor.selections.map((selection) => {
+            const lineText = document.lineAt(selection.active).text;
+            const charCode = lineText.charCodeAt(selection.active.character);
+            if (selection.active.character > 0 && (language.isCloser(charCode) || language.isQuotes(charCode))) {
+                let newPosition = selection.active.translate(0, 1);
+                return (new vscode.Selection(newPosition, newPosition));
+            }
+            else if (editor.selections.length === 1) {
+                vscode.commands.executeCommand<void>("tab");
+            }
+            return selection;
+        });
+    }
+
+    // Refactoring
+    // TODO: document.lineAt(position) instead of position.line
+
     // dabbrev
     // TODO: document filename as static index
     // TODO: completion workspace on did close text document
@@ -125,7 +150,6 @@ export class Misc {
 
     // Provided by extensions
     // TODO: Center window center/top/bottom
-    // TODO: Tab out of \s*])}>'"
     // TODO: Search in current file
     // TODO: Remove extra blank lines and trailing whitespace
 
