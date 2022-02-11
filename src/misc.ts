@@ -134,9 +134,6 @@ export class Misc {
         });
     }
 
-    // Refactoring
-    // TODO: document.lineAt(position) instead of position.line
-
     // dabbrev
     // TODO: document filename as static index
     // TODO: completion workspace on did close text document

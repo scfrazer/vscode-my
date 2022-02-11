@@ -52,7 +52,7 @@ export class CursorMove {
         }
         let newPosition = new vscode.Position(lineNum, 0);
         if (args?.select && args.select) {
-            const startPosition = editor.selection.active.with(undefined, 0);
+            const startPosition = editor.selection.anchor.with(undefined, 0);
             editor.selection = new vscode.Selection(startPosition, newPosition);
         }
         else {
@@ -87,7 +87,7 @@ export class CursorMove {
         }
         let newPosition = new vscode.Position(lineNum, 0);
         if (args?.select && args.select) {
-            const startPosition = editor.selection.active.with(undefined, 0);
+            const startPosition = editor.selection.anchor.with(undefined, 0);
             editor.selection = new vscode.Selection(startPosition, newPosition);
         }
         else {
