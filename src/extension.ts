@@ -36,12 +36,12 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('smartTab', function (_args) { Misc.smartTab(); });
 
 	// Keep editors in MRU order
-	vscode.window.onDidChangeActiveTextEditor((e) => {
-		if (e === undefined) {
-			return;
-		}
-		vscode.commands.executeCommand('moveActiveEditor', { to: "first", by: "tab" });
-	});
+	// vscode.window.onDidChangeActiveTextEditor((e) => {
+	// 	if (e === undefined) {
+	// 		return;
+	// 	}
+	// 	vscode.commands.executeCommand('moveActiveEditor', { to: "first", by: "tab" });
+	// });
 }
 
 export function deactivate() { }

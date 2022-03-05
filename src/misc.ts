@@ -120,18 +120,34 @@ export class Misc {
         }
         const document = editor.document;
         const language = new Language(document.languageId);
-        editor.selections = editor.selections.map((selection) => {
-            const lineText = document.lineAt(selection.active).text;
-            const charCode = lineText.charCodeAt(selection.active.character);
-            if (selection.active.character > 0 && (language.isCloser(charCode) || language.isQuotes(charCode))) {
-                let newPosition = selection.active.translate(0, 1);
-                return (new vscode.Selection(newPosition, newPosition));
+        if (editor.selections.length === 1) {
+            const selection = Misc._maybeTabOutSelection(document, editor.selection, language);
+            if (selection !== undefined) {
+                editor.selection = selection;
             }
-            else if (editor.selections.length === 1) {
+            else {
                 vscode.commands.executeCommand<void>("tab");
             }
-            return selection;
-        });
+        }
+        else {
+            editor.selections = editor.selections.map((selection) => {
+                const newSelection = Misc._maybeTabOutSelection(document, selection, language);
+                if (newSelection !== undefined) {
+                    return newSelection;
+                }
+                return selection;
+            });
+        }
+    }
+
+    private static _maybeTabOutSelection(document: vscode.TextDocument, selection: vscode.Selection, language: Language): vscode.Selection | undefined {
+        const lineText = document.lineAt(selection.active).text;
+        const charCode = lineText.charCodeAt(selection.active.character);
+        if (selection.active.character > 0 && (language.isCloser(charCode) || language.isQuotes(charCode))) {
+            let newPosition = selection.active.translate(0, 1);
+            return (new vscode.Selection(newPosition, newPosition));
+        }
+        return undefined;
     }
 
     // dabbrev
