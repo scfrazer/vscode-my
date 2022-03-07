@@ -40,7 +40,7 @@ export class Complete {
         if (Complete._searchingLeft) {
             completion = Complete._searchLeft(document);
             if (completion === undefined) {
-                Complete._searchPos = Complete._startPos;
+                Complete._searchPos = Complete._endPos;
                 Complete._searchingLeft = false;
             }
         }
@@ -73,7 +73,7 @@ export class Complete {
     private static _searchLeft(document: vscode.TextDocument): string | undefined {
 
         let completion: string | undefined = undefined;
-        const wordRe = new RegExp(Complete._stem + '[a-zA-Z0-9_]+', 'g');
+        const wordRe = new RegExp('\\b' + Complete._stem + '[a-zA-Z0-9_]+', 'g');
 
         let lineNum = Complete._searchPos.line;
         let colNum = Complete._searchPos.character;
@@ -117,19 +117,17 @@ export class Complete {
     private static _searchRight(document: vscode.TextDocument): string | undefined {
 
         let completion: string | undefined = undefined;
-        const wordRe = new RegExp(Complete._stem + '[a-zA-Z0-9_]+', 'g');
+        const wordRe = new RegExp('\\b' + Complete._stem + '[a-zA-Z0-9_]+', 'g');
+        const lastLineNum = document.lineCount;
 
         let lineNum = Complete._searchPos.line;
         let colNum = Complete._searchPos.character;
 
         while (completion === undefined) {
 
-            let text = document.lineAt(lineNum).text;
-            if (colNum > 0) {
-                text = text.substring(0, colNum);
-            }
+            const text = document.lineAt(lineNum).text.substring(colNum);
 
-            const matches = [...text.matchAll(wordRe)].reverse();
+            const matches = text.matchAll(wordRe);
             for (const match of matches) {
                 if (match?.index === undefined) {
                     continue;
@@ -138,7 +136,7 @@ export class Complete {
                 if (Complete._previousCompletions.has(candidate)) {
                     continue;
                 }
-                Complete._searchPos = new vscode.Position(lineNum, match.index);
+                Complete._searchPos = new vscode.Position(lineNum, match.index + candidate.length);
                 Complete._previousCompletions.set(candidate, true);
                 completion = candidate;
                 break;
@@ -148,8 +146,8 @@ export class Complete {
                 break;
             }
 
-            lineNum -= 1;
-            if (lineNum < 0) {
+            lineNum += 1;
+            if (lineNum >= lastLineNum) {
                 break;
             }
             colNum = 0;
