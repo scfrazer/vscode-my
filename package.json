@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.6.1",
+	"version": "0.6.3",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -87,6 +87,10 @@
 				"title": "My: Complete current word"
 			},
 			{
+				"command": "vscode-my.completeKeepCompleting",
+				"title": "My: Complete current word"
+			},
+			{
 				"command": "vscode-my.addCursorsToLineStarts",
 				"title": "My: Add cursors to line starts"
 			},
@@ -105,43 +109,55 @@
 			{
 				"command": "vscode-my.smartTab",
 				"title": "My: Smart tab"
+			},
+			{
+				"command": "vscode-my.findInCurrentFile",
+				"title": "My: Find in current file"
+			},
+			{
+				"command": "vscode-my.centerCursorLine",
+				"title": "My: Center line cursor is on"
+			},
+			{
+				"command": "vscode-my.googleSelection",
+				"title": "My: Google selection"
 			}
 		],
 		"keybindings": [
 			{
 				"key": "ctrl+left",
 				"command": "vscode-my.wordLeft",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+right",
 				"command": "vscode-my.wordRight",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+alt+left",
 				"command": "vscode-my.expressionLeft",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+alt+right",
 				"command": "vscode-my.expressionRight",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+left",
 				"command": "vscode-my.selectExpressionLeft",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+right",
 				"command": "vscode-my.selectExpressionRight",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+up",
 				"command": "vscode-my.previousParagraph",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+up",
@@ -149,12 +165,12 @@
 				"args": {
 					"select": true
 				},
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+down",
 				"command": "vscode-my.nextParagraph",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+down",
@@ -162,32 +178,32 @@
 				"args": {
 					"select": true
 				},
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+backspace",
 				"command": "vscode-my.smartDeleteLeft",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+delete",
 				"command": "vscode-my.smartDeleteRight",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+d",
 				"command": "vscode-my.selectInsideBrackets",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+e",
 				"command": "vscode-my.selectInsideQuotes",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+m",
 				"command": "vscode-my.gotoChar",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+m",
@@ -195,17 +211,22 @@
 				"args": {
 					"select": true
 				},
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+m",
 				"command": "vscode-my.deleteToChar",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+'",
 				"command": "vscode-my.completeCurrentWord",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+shift+'",
+				"command": "vscode-my.completeKeepCompleting",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+shift+i",
@@ -215,32 +236,42 @@
 			{
 				"key": "ctrl+;",
 				"command": "vscode-my.addSemicolonToEndOfLine",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+k space",
 				"command": "vscode-my.justOneSpace",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+g",
 				"command": "vscode-my.gotoLine",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "tab",
 				"command": "vscode-my.smartTab",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "alt+f",
+				"command": "vscode-my.findInCurrentFile",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "ctrl+=",
+				"command": "vscode-my.centerCursorLine",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+home",
 				"command": "cursorLineStart",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "shift+alt+home",
 				"command": "cursorLineStartSelect",
-				"when": "textInputFocus && !accessibilityModeEnabled"
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+-",
@@ -254,7 +285,16 @@
 				"key": "ctrl+shift+delete",
 				"command": "deleteWordPartRight"
 			}
-		]
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"when": "editorHasSelection",
+					"command": "vscode-my.googleSelection",
+					"group": "navigation"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

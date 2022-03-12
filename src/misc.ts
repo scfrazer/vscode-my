@@ -150,125 +150,45 @@ export class Misc {
         return undefined;
     }
 
-    // dabbrev
-    // TODO: document filename as static index
-    // TODO: completion workspace on did close text document
+    public static async findInCurrentFile() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        await vscode.commands.executeCommand("workbench.action.findInFiles", {
+            query: editor.document.getText(editor.selection),
+            filesToInclude: vscode.workspace.asRelativePath(editor.document.uri),
+            triggerSearch: true,
+            focusResults: true,
+        });
+    }
+
+    public static centerCursorLine() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        vscode.commands.executeCommand("revealLine", {
+            lineNumber: editor.selection.active.line,
+            at: "center"
+        });
+    }
+
+    public static async googleSelection() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const selection = editor.document.getText(editor.selection);
+        const uriText = encodeURI(selection);
+        const query = `https://www.google.com/search?q=${uriText}`;
+        vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(query));
+    }
 
     // New features
-    // TODO: VCS breakpoint copy to env.clipboard
-    // TODO: Delete pair
-    // TODO: Change pair
+    // TODO: Delete pair -- ctrl+k -
     // TODO: Reformat list
-    // TODO: Close all editors w/o an associated file
 
     // Provided by extensions
-    // TODO: Center window center/top/bottom
-    // TODO: Search in current file
     // TODO: Remove extra blank lines and trailing whitespace
-
-    // export function activate(context: vscode.ExtensionContext) {
-    //     let disposable = vscode.commands.registerCommand(
-    //       "search-in-current-file.searchInCurrentFile",
-    //       async () => {
-    //         await searchInCurrentFile();
-    //       }
-    //     );
-    //
-    //     context.subscriptions.push(disposable);
-    //   }
-    //
-    //   export function deactivate() {}
-    //
-    //   async function searchInCurrentFile(): Promise<void> {
-    //     const activeEditor = vscode.window.activeTextEditor;
-    //     if (!activeEditor) {
-    //       return;
-    //     }
-    //
-    //     const currentFilePath = vscode.workspace.asRelativePath(
-    //       activeEditor.document.uri
-    //     );
-    //     await vscode.commands.executeCommand("workbench.action.findInFiles", {
-    //       // Fill-in selected text to query
-    //       query: activeEditor.document.getText(activeEditor.selection),
-    //       filesToInclude: currentFilePath,
-    //     });
-    //   }
-
-    //     let state = "center";
-    //     let timeout;
-    //
-    //     function reset() {
-    //       if (timeout) clearTimeout(timeout);
-    //
-    //       timeout = setTimeout(() => {
-    //         state = "center";
-    //       }, 1000);
-    //     }
-    //
-    //     vscode.window.onDidChangeActiveTextEditor(() => {
-    //       clearTimeout(timeout);
-    //       state = "center";
-    //     });
-    //
-    //     let disposable = vscode.commands.registerCommand(
-    //       "center-editor-window.center",
-    //       () => {
-    //         if (
-    //           vscode.workspace
-    //             .getConfiguration("center-editor-window")
-    //             .get("threeStateToggle")
-    //         ) {
-    //           switch (state) {
-    //             case "center":
-    //               toCenter();
-    //               state = "top";
-    //               reset();
-    //               break;
-    //             case "top":
-    //               toTop();
-    //               state = "bottom";
-    //               reset();
-    //               break;
-    //             case "bottom":
-    //               toBottom();
-    //               state = "center";
-    //               reset();
-    //               break;
-    //           }
-    //         } else {
-    //           toCenter();
-    //         }
-    //       }
-    //     );
-    //
-    //     context.subscriptions.push(disposable);
-    //   }
-    //
-    //   async function toCenter() {
-    //     let currentLineNumber = vscode.window.activeTextEditor.selection.start.line;
-    //     let offset = +vscode.workspace
-    //       .getConfiguration("center-editor-window")
-    //       .get("offset");
-    //     await vscode.commands.executeCommand("revealLine", {
-    //       lineNumber: currentLineNumber + offset,
-    //       at: "center"
-    //     });
-    //   }
-    //
-    //   async function toTop() {
-    //     let currentLineNumber = vscode.window.activeTextEditor.selection.start.line;
-    //     await vscode.commands.executeCommand("revealLine", {
-    //       lineNumber: currentLineNumber,
-    //       at: "top"
-    //     });
-    //   }
-    //
-    //   async function toBottom() {
-    //     let currentLineNumber = vscode.window.activeTextEditor.selection.start.line;
-    //     await vscode.commands.executeCommand("revealLine", {
-    //       lineNumber: currentLineNumber,
-    //       at: "bottom"
-    //     });
-    // }
 }

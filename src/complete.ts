@@ -70,6 +70,10 @@ export class Complete {
         });
     }
 
+    public static async keepCompleting() {
+        // TODO
+    }
+
     private static _searchLeft(document: vscode.TextDocument): string | undefined {
 
         let completion: string | undefined = undefined;

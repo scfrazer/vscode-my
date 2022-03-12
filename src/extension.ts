@@ -29,11 +29,15 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('gotoChar', function (args) { ToChar.goto(args); });
 	registerMyCommand('deleteToChar', function (_args) { ToChar.delete(); });
 	registerMyCommand('completeCurrentWord', function (_args) { Complete.currentWord(); });
+	registerMyCommand('completeKeepCompleting', function (_args) { Complete.keepCompleting(); });
 	registerMyCommand('addCursorsToLineStarts', function (_args) { Misc.addCursorsToLineStarts(); });
 	registerMyCommand('addSemicolonToEndOfLine', function (_args) { Misc.addSemicolonToEndOfLine(); });
 	registerMyCommand('justOneSpace', function (_args) { Misc.justOneSpace(); });
 	registerMyCommand('gotoLine', function (_args) { Misc.gotoLine(); });
 	registerMyCommand('smartTab', function (_args) { Misc.smartTab(); });
+	registerMyCommand('findInCurrentFile', function (_args) { Misc.findInCurrentFile(); });
+	registerMyCommand('centerCursorLine', function (_args) { Misc.centerCursorLine(); });
+	registerMyCommand('googleSelection', function (_args) { Misc.googleSelection(); });
 
 	// Keep editors in MRU order
 	// vscode.window.onDidChangeActiveTextEditor((e) => {
