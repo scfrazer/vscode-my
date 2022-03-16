@@ -176,7 +176,7 @@ export class Misc {
 
     public static async googleSelection() {
         const editor = vscode.window.activeTextEditor;
-        if (!editor) {
+        if (!editor || editor.selection.isEmpty) {
             return;
         }
         const selection = editor.document.getText(editor.selection);
@@ -185,9 +185,24 @@ export class Misc {
         vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(query));
     }
 
+    // TODO WIP
+    public static oneArgumentPerLine() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        const selection = editor.selection;
+        const args = document.getText(selection);
+        editor.edit(editBuilder => {
+            // Use negative lookahead to find "," not wrapped in in <>/{}()
+            let newArgs = args.replace(/,\s*(?!([^<\{()]*[>\})](?!;)))/g, ",\n");
+            editBuilder.replace(selection, newArgs);
+        });
+    }
+
     // New features
     // TODO: Delete pair -- ctrl+k -
-    // TODO: Reformat list
 
     // Provided by extensions
     // TODO: Remove extra blank lines and trailing whitespace

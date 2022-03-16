@@ -5,6 +5,7 @@ import { SmartDelete } from './smartDelete';
 import { MatchingPair } from './matchingPair';
 import { ToChar } from './toChar';
 import { Complete } from './complete';
+import { Reselect } from './reselect';
 import { Misc } from './misc';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -38,6 +39,9 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('findInCurrentFile', function (_args) { Misc.findInCurrentFile(); });
 	registerMyCommand('centerCursorLine', function (_args) { Misc.centerCursorLine(); });
 	registerMyCommand('googleSelection', function (_args) { Misc.googleSelection(); });
+	registerMyCommand('oneArgumentPerLine', function (_args) { Misc.oneArgumentPerLine(); });
+	registerMyCommand('reselectablePaste', function (_args) { Reselect.paste(); });
+	registerMyCommand('reselectPreviousPaste', function (_args) { Reselect.previousPaste(); });
 
 	// Keep editors in MRU order
 	// vscode.window.onDidChangeActiveTextEditor((e) => {
