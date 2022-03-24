@@ -19,7 +19,7 @@ export class MatchingPair {
         }
         const document = editor.document;
         editor.selections = editor.selections.map((selection) => {
-            const newRange = MatchingPair._insideBracketsRange(document, selection.active);
+            const newRange = MatchingPair.insideBracketsRange(document, selection.active);
             if (newRange === undefined) {
                 return selection;
             }
@@ -180,7 +180,7 @@ export class MatchingPair {
         return undefined;
     }
 
-    private static _insideBracketsRange(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Range | undefined {
+    public static insideBracketsRange(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Range | undefined {
         const leftPosition = MatchingPair._matchPosition({
             document: document,
             startPosition: startPosition,

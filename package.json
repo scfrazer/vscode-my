@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.7.0",
+	"version": "0.7.1",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -24,147 +24,169 @@
 		"commands": [
 			{
 				"command": "vscode-my.wordLeft",
-				"title": "My: Move cursor a word left"
+				"category": "My",
+				"title": "Move cursor a word left"
 			},
 			{
 				"command": "vscode-my.wordRight",
-				"title": "My: Move cursor a word right"
+				"category": "My",
+				"title": "Move cursor a word right"
 			},
 			{
 				"command": "vscode-my.expressionLeft",
-				"title": "My: Move cursor an expression left"
+				"category": "My",
+				"title": "Move cursor an expression left"
 			},
 			{
 				"command": "vscode-my.expressionRight",
-				"title": "My: Move cursor an expression right"
+				"category": "My",
+				"title": "Move cursor an expression right"
 			},
 			{
 				"command": "vscode-my.selectExpressionLeft",
-				"title": "My: Select expression left"
+				"category": "My",
+				"title": "Select expression left"
 			},
 			{
 				"command": "vscode-my.selectExpressionRight",
-				"title": "My: Select expression right"
+				"category": "My",
+				"title": "Select expression right"
 			},
 			{
 				"command": "vscode-my.previousParagraph",
-				"title": "My: Previous paragraph"
+				"category": "My",
+				"title": "Previous paragraph"
 			},
 			{
 				"command": "vscode-my.nextParagraph",
-				"title": "My: Next paragraph"
+				"category": "My",
+				"title": "Next paragraph"
 			},
 			{
 				"command": "vscode-my.home",
-				"title": "My: Home"
+				"category": "My",
+				"title": "Home"
 			},
 			{
 				"command": "vscode-my.smartDeleteLeft",
-				"title": "My: Smart delete left"
+				"category": "My",
+				"title": "Smart delete left"
 			},
 			{
 				"command": "vscode-my.smartDeleteRight",
-				"title": "My: Smart delete right"
+				"category": "My",
+				"title": "Smart delete right"
 			},
 			{
 				"command": "vscode-my.selectInsideBrackets",
-				"title": "My: Select inside nearest brackets"
+				"category": "My",
+				"title": "Select inside nearest brackets"
 			},
 			{
 				"command": "vscode-my.selectInsideQuotes",
-				"title": "My: Select inside nearest quotes"
+				"category": "My",
+				"title": "Select inside nearest quotes"
 			},
 			{
 				"command": "vscode-my.gotoChar",
-				"title": "My: Select to char"
+				"category": "My",
+				"title": "Select to char"
 			},
 			{
 				"command": "vscode-my.deleteToChar",
-				"title": "My: Select to char"
+				"category": "My",
+				"title": "Select to char"
 			},
 			{
 				"command": "vscode-my.completeCurrentWord",
-				"title": "My: Complete current word"
+				"category": "My",
+				"title": "Complete current word"
 			},
 			{
 				"command": "vscode-my.completeKeepCompleting",
-				"title": "My: Complete current word"
+				"category": "My",
+				"title": "Complete current word"
 			},
 			{
 				"command": "vscode-my.addCursorsToLineStarts",
-				"title": "My: Add cursors to line starts"
+				"category": "My",
+				"title": "Add cursors to line starts"
 			},
 			{
 				"command": "vscode-my.addSemicolonToEndOfLine",
-				"title": "My: Add a semicolon to end of line"
+				"category": "My",
+				"title": "Add a semicolon to end of line"
 			},
 			{
 				"command": "vscode-my.justOneSpace",
-				"title": "My: Change multiple spaces to just one"
+				"category": "My",
+				"title": "Change multiple spaces to just one"
 			},
 			{
 				"command": "vscode-my.gotoLine",
-				"title": "My: Go to line"
+				"category": "My",
+				"title": "Go to line"
 			},
 			{
 				"command": "vscode-my.smartTab",
-				"title": "My: Smart tab"
+				"category": "My",
+				"title": "Smart tab"
 			},
 			{
 				"command": "vscode-my.findInCurrentFile",
-				"title": "My: Find in current file"
+				"category": "My",
+				"title": "Find in current file"
 			},
 			{
 				"command": "vscode-my.centerCursorLine",
-				"title": "My: Center line cursor is on"
+				"category": "My",
+				"title": "Center line cursor is on"
 			},
 			{
 				"command": "vscode-my.googleSelection",
-				"title": "My: Google Current Selection"
+				"category": "My",
+				"title": "Google Current Selection"
 			},
 			{
 				"command": "vscode-my.oneArgumentPerLine",
-				"title": "My: Reformat arguments to be one per line"
+				"category": "My",
+				"title": "Reformat arguments to be one per line"
 			},
 			{
 				"command": "vscode-my.reselectablePaste",
-				"title": "My: Reselectable paste"
+				"category": "My",
+				"title": "Reselectable paste"
 			},
 			{
 				"command": "vscode-my.reselectPreviousPaste",
-				"title": "My: Reselect previous paste"
+				"category": "My",
+				"title": "Reselect previous paste"
 			}
 		],
 		"keybindings": [
 			{
 				"key": "ctrl+left",
-				"command": "vscode-my.wordLeft",
-				"when": "editorTextFocus"
+				"command": "vscode-my.wordLeft"
 			},
 			{
 				"key": "ctrl+right",
-				"command": "vscode-my.wordRight",
-				"when": "editorTextFocus"
+				"command": "vscode-my.wordRight"
 			},
 			{
 				"key": "ctrl+alt+left",
-				"command": "vscode-my.expressionLeft",
-				"when": "editorTextFocus"
+				"command": "vscode-my.expressionLeft"
 			},
 			{
 				"key": "ctrl+alt+right",
-				"command": "vscode-my.expressionRight",
-				"when": "editorTextFocus"
+				"command": "vscode-my.expressionRight"
 			},
 			{
 				"key": "ctrl+shift+left",
-				"command": "vscode-my.selectExpressionLeft",
-				"when": "editorTextFocus"
+				"command": "vscode-my.selectExpressionLeft"
 			},
 			{
 				"key": "ctrl+shift+right",
-				"command": "vscode-my.selectExpressionRight",
-				"when": "editorTextFocus"
+				"command": "vscode-my.selectExpressionRight"
 			},
 			{
 				"key": "ctrl+up",
@@ -194,13 +216,11 @@
 			},
 			{
 				"key": "ctrl+backspace",
-				"command": "vscode-my.smartDeleteLeft",
-				"when": "editorTextFocus"
+				"command": "vscode-my.smartDeleteLeft"
 			},
 			{
 				"key": "ctrl+delete",
-				"command": "vscode-my.smartDeleteRight",
-				"when": "editorTextFocus"
+				"command": "vscode-my.smartDeleteRight"
 			},
 			{
 				"key": "alt+d",
@@ -316,9 +336,9 @@
 		"menus": {
 			"editor/context": [
 				{
-					"when": "editorHasSelection",
+					"group": "navigation",
 					"command": "vscode-my.googleSelection",
-					"group": "navigation"
+					"when": "editorHasSelection"
 				}
 			]
 		}

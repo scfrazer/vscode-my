@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 
 import { Language } from './language';
+import { MatchingPair } from './matchingPair';
+import { ToChar } from "./toChar";
 import { Util } from './util';
 
 export class Misc {
@@ -192,13 +194,20 @@ export class Misc {
             return;
         }
         const document = editor.document;
-        const selection = editor.selection;
-        const args = document.getText(selection);
-        editor.edit(editBuilder => {
-            // Use negative lookahead to find "," not wrapped in in <>/{}()
-            let newArgs = args.replace(/,\s*(?!([^<\{()]*[>\})](?!;)))/g, ",\n");
-            editBuilder.replace(selection, newArgs);
-        });
+        const range = MatchingPair.insideBracketsRange(document, editor.selection.active);
+        if (range === undefined) {
+            return;
+        }
+        const indent = document.lineAt(range.start).firstNonWhitespaceCharacterIndex;
+
+
+        // const selection = editor.selection;
+        // const args = document.getText(selection);
+        // editor.edit(editBuilder => {
+        //     // Use negative lookahead to find "," not wrapped in in <>/{}()
+        //     let newArgs = args.replace(/,\s*(?!([^<\{()]*[>\})](?!;)))/g, ",\n");
+        //     editBuilder.replace(selection, newArgs);
+        // });
     }
 
     // New features

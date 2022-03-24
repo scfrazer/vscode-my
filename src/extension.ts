@@ -6,6 +6,7 @@ import { MatchingPair } from './matchingPair';
 import { ToChar } from './toChar';
 import { Complete } from './complete';
 import { Reselect } from './reselect';
+import { LineCount } from './lineCount';
 import { Misc } from './misc';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -42,6 +43,8 @@ export function activate(context: vscode.ExtensionContext) {
 	registerMyCommand('oneArgumentPerLine', function (_args) { Misc.oneArgumentPerLine(); });
 	registerMyCommand('reselectablePaste', function (_args) { Reselect.paste(); });
 	registerMyCommand('reselectPreviousPaste', function (_args) { Reselect.previousPaste(); });
+
+	LineCount.subscribeToDocumentChanges(context);
 
 	// Keep editors in MRU order
 	// vscode.window.onDidChangeActiveTextEditor((e) => {

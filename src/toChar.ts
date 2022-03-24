@@ -34,7 +34,7 @@ export class ToChar {
             }
             const document = editor.document;
             editor.selections = editor.selections.map((selection) => {
-                const newPosition = ToChar._upTo(document, selection.active, args.text);
+                const newPosition = ToChar.upTo(document, selection.active, args.text);
                 if (newPosition !== undefined) {
                     if (select) {
                         return (new vscode.Selection(editor.selection.anchor, newPosition));
@@ -74,7 +74,7 @@ export class ToChar {
             const document = editor.document;
             editor.edit((editBuilder) => {
                 editor.selections.map((selection) => {
-                    const newPosition = ToChar._upTo(document, selection.active, args.text);
+                    const newPosition = ToChar.upTo(document, selection.active, args.text);
                     if (newPosition !== undefined) {
                         const range = new vscode.Range(selection.anchor, newPosition);
                         editBuilder.delete(range);
@@ -86,7 +86,7 @@ export class ToChar {
         });
     }
 
-    private static _upTo(document: vscode.TextDocument, startPosition: vscode.Position, text: string): vscode.Position | undefined {
+    public static upTo(document: vscode.TextDocument, startPosition: vscode.Position, text: string): vscode.Position | undefined {
 
         const language = new Language(document.languageId);
 
