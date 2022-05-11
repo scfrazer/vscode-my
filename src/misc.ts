@@ -89,6 +89,31 @@ export class Misc {
         });
     }
 
+    public static deletePairRight() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        const language = new Language(document.languageId);
+        editor.edit((editBuilder) => {
+            editor.selections.map((selection) => {
+                const lineText = document.lineAt(selection.active).text;
+                if (!language.isOpener(lineText.charCodeAt(selection.active.character)) && !language.isQuotes(lineText.charCodeAt(selection.active.character))) {
+                    return;
+                }
+                const matchPosition = MatchingPair.matchPositionRight(document, selection.active);
+                if (matchPosition === undefined) {
+                    return;
+                }
+                let range = new vscode.Range(matchPosition, matchPosition.translate(0, 1));
+                editBuilder.delete(range);
+                range = new vscode.Range(selection.active, selection.active.translate(0, 1));
+                editBuilder.delete(range);
+            });
+        });
+    }
+
     public static gotoLine() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -215,4 +240,5 @@ export class Misc {
 
     // Provided by extensions
     // TODO: Remove extra blank lines and trailing whitespace
+    // TODO: Open file at cursor or selection
 }

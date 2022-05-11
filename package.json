@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.7.1",
+	"version": "0.8.1",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -123,6 +123,11 @@
 				"title": "Change multiple spaces to just one"
 			},
 			{
+				"command": "vscode-my.deletePairRight",
+				"category": "My",
+				"title": "Delete matching pair rightward"
+			},
+			{
 				"command": "vscode-my.gotoLine",
 				"category": "My",
 				"title": "Go to line"
@@ -166,27 +171,33 @@
 		"keybindings": [
 			{
 				"key": "ctrl+left",
-				"command": "vscode-my.wordLeft"
+				"command": "vscode-my.wordLeft",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+right",
-				"command": "vscode-my.wordRight"
+				"command": "vscode-my.wordRight",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+alt+left",
-				"command": "vscode-my.expressionLeft"
+				"command": "vscode-my.expressionLeft",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+alt+right",
-				"command": "vscode-my.expressionRight"
+				"command": "vscode-my.expressionRight",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+left",
-				"command": "vscode-my.selectExpressionLeft"
+				"command": "vscode-my.selectExpressionLeft",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+right",
-				"command": "vscode-my.selectExpressionRight"
+				"command": "vscode-my.selectExpressionRight",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+up",
@@ -216,11 +227,13 @@
 			},
 			{
 				"key": "ctrl+backspace",
-				"command": "vscode-my.smartDeleteLeft"
+				"command": "vscode-my.smartDeleteLeft",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+delete",
-				"command": "vscode-my.smartDeleteRight"
+				"command": "vscode-my.smartDeleteRight",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "alt+d",
@@ -276,6 +289,11 @@
 				"when": "editorTextFocus"
 			},
 			{
+				"key": "ctrl+k -",
+				"command": "vscode-my.deletePairRight",
+				"when": "editorTextFocus"
+			},
+			{
 				"key": "ctrl+g",
 				"command": "vscode-my.gotoLine",
 				"when": "editorTextFocus"
@@ -322,15 +340,18 @@
 			},
 			{
 				"key": "ctrl+shift+-",
-				"command": "cursorWordPartRight"
+				"command": "cursorWordPartRight",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+backspace",
-				"command": "deleteWordPartLeft"
+				"command": "deleteWordPartLeft",
+				"when": "editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+delete",
-				"command": "deleteWordPartRight"
+				"command": "deleteWordPartRight",
+				"when": "editorTextFocus"
 			}
 		],
 		"menus": {
