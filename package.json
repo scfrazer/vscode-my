@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.8.1",
+	"version": "0.8.3",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -236,7 +236,7 @@
 				"when": "editorTextFocus"
 			},
 			{
-				"key": "alt+d",
+				"key": "ctrl+r",
 				"command": "vscode-my.selectInsideBrackets",
 				"when": "editorTextFocus"
 			},

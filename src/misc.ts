@@ -212,31 +212,31 @@ export class Misc {
         vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(query));
     }
 
-    // TODO WIP
     public static oneArgumentPerLine() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
         }
         const document = editor.document;
+
         const range = MatchingPair.insideBracketsRange(document, editor.selection.active);
         if (range === undefined) {
             return;
         }
         const indent = document.lineAt(range.start).firstNonWhitespaceCharacterIndex;
 
-
-        // const selection = editor.selection;
-        // const args = document.getText(selection);
-        // editor.edit(editBuilder => {
-        //     // Use negative lookahead to find "," not wrapped in in <>/{}()
-        //     let newArgs = args.replace(/,\s*(?!([^<\{()]*[>\})](?!;)))/g, ",\n");
-        //     editBuilder.replace(selection, newArgs);
-        // });
+        const args = document.getText(range);
+        editor.edit(editBuilder => {
+            // Use negative lookahead to find "," outside <>{}()[]
+            let newArgs = args.replace(/,\s*(?!([^<\{()\[]*[>\})\]](?!;)))/g, ",\n" + " ".repeat(indent + 4));
+            newArgs = "\n" + " ".repeat(indent + 4) + newArgs + "\n" + " ".repeat(indent);
+            editBuilder.replace(range, newArgs);
+        });
     }
 
-    // New features
-    // TODO: Delete pair -- ctrl+k -
+    // Annoying default behavior
+    // TODO: Cursor word part right should go over underscores
+    // TODO: Delete word part right should delete underscores
 
     // Provided by extensions
     // TODO: Remove extra blank lines and trailing whitespace
