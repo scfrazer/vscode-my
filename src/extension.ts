@@ -17,6 +17,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     registerMyCommand('wordLeft', function (_args) { CursorMove.wordLeft(); });
     registerMyCommand('wordRight', function (_args) { CursorMove.wordRight(); });
+    registerMyCommand('wordPartLeft', function (_args) { CursorMove.wordPartLeft(); });
+    registerMyCommand('wordPartRight', function (_args) { CursorMove.wordPartRight(); });
+    registerMyCommand('deleteWordPartLeft', function (_args) { CursorMove.deleteWordPartLeft(); });
+    registerMyCommand('deleteWordPartRight', function (_args) { CursorMove.deleteWordPartRight(); });
     registerMyCommand('expressionLeft', function (_args) { CursorMove.expressionLeft(); });
     registerMyCommand('expressionRight', function (_args) { CursorMove.expressionRight(); });
     registerMyCommand('selectExpressionLeft', function (_args) { CursorMove.selectExpressionLeft(); });

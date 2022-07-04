@@ -14,6 +14,22 @@ export class CursorMove {
         Util.updateSelections(CursorMove._wordPositionRight, false);
     }
 
+    public static async wordPartLeft() {
+        Util.updateSelections(CursorMove._wordPartPositionLeft, false);
+    }
+
+    public static async wordPartRight() {
+        Util.updateSelections(CursorMove._wordPartPositionRight, false);
+    }
+
+    public static async deleteWordPartLeft() {
+        Util.deleteToPosition(CursorMove._wordPartPositionLeft);
+    }
+
+    public static async deleteWordPartRight() {
+        Util.deleteToPosition(CursorMove._wordPartPositionRight);
+    }
+
     public static async expressionLeft() {
         Util.updateSelections(CursorMove._expressionPositionLeft, false);
     }
@@ -158,6 +174,85 @@ export class CursorMove {
             return (new vscode.Position(lineNum, match.index));
         }
         return (new vscode.Position(lineNum, lineText.length));
+    }
+
+    private static _wordPartPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+
+        const lineNum = startPosition.line;
+        const lineText = document.lineAt(lineNum).text;
+
+        let colNum = startPosition.character - 1;
+        if (colNum === 0) {
+            return new vscode.Position(lineNum, 0);
+        }
+        let charCode = lineText.charCodeAt(colNum);
+
+        // Underscore
+        while (charCode === 0x5f) {
+            colNum -= 1;
+            if (colNum === 0) {
+                return new vscode.Position(lineNum, 0);
+            }
+            charCode = lineText.charCodeAt(colNum);
+        }
+
+        // Lowercase
+        while (charCode >= 0x61 && charCode <= 0x7a) {
+            colNum -= 1;
+            if (colNum === 0) {
+                return new vscode.Position(lineNum, 0);
+            }
+            charCode = lineText.charCodeAt(colNum);
+        }
+
+        // Uppercase
+        while (charCode >= 0x41 && charCode <= 0x5a) {
+            colNum -= 1;
+            if (colNum === 0) {
+                return new vscode.Position(lineNum, 0);
+            }
+            charCode = lineText.charCodeAt(colNum);
+        }
+
+        return (new vscode.Position(lineNum, colNum + 1));
+        }
+
+    private static _wordPartPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+
+        const lineNum = startPosition.line;
+        const lineText = document.lineAt(lineNum).text;
+
+        let colNum = startPosition.character;
+        let charCode = lineText.charCodeAt(colNum);
+
+        // Uppercase
+        while (charCode >= 0x41 && charCode <= 0x5a) {
+            colNum += 1;
+            if (colNum === lineText.length) {
+                return undefined;
+            }
+            charCode = lineText.charCodeAt(colNum);
+        }
+
+        // Lowercase
+        while (charCode >= 0x61 && charCode <= 0x7a) {
+            colNum += 1;
+            if (colNum === lineText.length) {
+                return undefined;
+            }
+            charCode = lineText.charCodeAt(colNum);
+        }
+
+        // Underscore
+        while (charCode === 0x5f) {
+            colNum += 1;
+            if (colNum === lineText.length) {
+                return undefined;
+            }
+            charCode = lineText.charCodeAt(colNum);
+        }
+
+        return (new vscode.Position(lineNum, colNum));
     }
 
     private static _expressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {

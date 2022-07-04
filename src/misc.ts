@@ -234,10 +234,6 @@ export class Misc {
         });
     }
 
-    // Annoying default behavior
-    // TODO: Cursor word part right should go over underscores
-    // TODO: Delete word part right should delete underscores
-
     // Provided by extensions
     // TODO: Remove extra blank lines and trailing whitespace
     // TODO: Open file at cursor or selection
