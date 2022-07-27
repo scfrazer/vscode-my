@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.9.0",
+	"version": "0.9.1",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -341,7 +341,7 @@
 			{
 				"key": "tab",
 				"command": "vscode-my.smartTab",
-				"when": "editorTextFocus"
+				"when": "editorTextFocus && !inSnippetMode"
 			},
 			{
 				"key": "alt+f",
