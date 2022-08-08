@@ -236,5 +236,7 @@ export class Misc {
 
     // Provided by extensions
     // TODO: Remove extra blank lines and trailing whitespace
+    // TODO: Color FIXME/TODO/NOTE/DEBUG
+    // TODO: Filter lines
     // TODO: Open file at cursor or selection
 }
