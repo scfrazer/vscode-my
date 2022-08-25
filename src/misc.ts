@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 
 import { Language } from './language';
 import { MatchingPair } from './matchingPair';
-import { ToChar } from "./toChar";
 import { Util } from './util';
 
 export class Misc {
@@ -234,9 +233,10 @@ export class Misc {
         });
     }
 
+    // TODO: Conditionally set shortcuts
     // Provided by extensions
     // TODO: Remove extra blank lines and trailing whitespace
     // TODO: Color FIXME/TODO/NOTE/DEBUG
-    // TODO: Filter lines
+    // TODO: Filter lines -- Add links to original file?
     // TODO: Open file at cursor or selection
 }

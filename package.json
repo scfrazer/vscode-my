@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.9.2",
+	"version": "0.9.3",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -266,6 +266,11 @@
 				"when": "editorTextFocus"
 			},
 			{
+				"key": "alt+home",
+				"command": "vscode-my.home",
+				"when": "editorTextFocus"
+			},
+			{
 				"key": "ctrl+backspace",
 				"command": "vscode-my.smartDeleteLeft",
 				"when": "editorTextFocus"
@@ -364,6 +369,11 @@
 				"when": "editorTextFocus"
 			},
 			{
+				"key": "shift+insert",
+				"command": "vscode-my.reselectablePaste",
+				"when": "editorTextFocus"
+			},
+			{
 				"key": "ctrl+k ctrl+k",
 				"command": "vscode-my.reselectPreviousPaste",
 				"when": "editorTextFocus"
@@ -377,7 +387,73 @@
 					"when": "editorHasSelection"
 				}
 			]
-		}
+		},
+		"colors": [
+			{
+				"id": "vscodeMy.fixmeBackground",
+				"description": "Background color for FIXME",
+				"defaults": {
+					"light": "#af0000",
+					"dark": "#af0000"
+				}
+			},
+			{
+				"id": "vscodeMy.fixmeForeground",
+				"description": "Foreground color for FIXME",
+				"defaults": {
+					"light": "#ffffff",
+					"dark": "#ffffff"
+				}
+			},
+			{
+				"id": "vscodeMy.todoBackground",
+				"description": "Background color for TODO",
+				"defaults": {
+					"light": "#eeee00",
+					"dark": "#eeee00"
+				}
+			},
+			{
+				"id": "vscodeMy.todoForeground",
+				"description": "Foreground color for TODO",
+				"defaults": {
+					"light": "#000000",
+					"dark": "#000000"
+				}
+			},
+			{
+				"id": "vscodeMy.debugBackground",
+				"description": "Background color for DEBUG",
+				"defaults": {
+					"light": "#ffa500",
+					"dark": "#ffa500"
+				}
+			},
+			{
+				"id": "vscodeMy.debugForeground",
+				"description": "Foreground color for DEBUG",
+				"defaults": {
+					"light": "#000000",
+					"dark": "#000000"
+				}
+			},
+			{
+				"id": "vscodeMy.noteBackground",
+				"description": "Background color for NOTE",
+				"defaults": {
+					"light": "#27408b",
+					"dark": "#27408b"
+				}
+			},
+			{
+				"id": "vscodeMy.noteForeground",
+				"description": "Foreground color for NOTE",
+				"defaults": {
+					"light": "#ffffff",
+					"dark": "#ffffff"
+				}
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

@@ -7,6 +7,7 @@ import { ToChar } from './toChar';
 import { Complete } from './complete';
 import { Reselect } from './reselect';
 import { LineCount } from './lineCount';
+import { Decorate } from './decorate';
 import { Misc } from './misc';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -50,6 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand('reselectPreviousPaste', function (_args) { Reselect.previousPaste(); });
 
     LineCount.subscribeToDocumentChanges(context);
+    Decorate.subscribeToChanges(context);
 
     // Keep editors in MRU order
     // vscode.window.onDidChangeActiveTextEditor((e) => {

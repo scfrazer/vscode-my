@@ -12,9 +12,11 @@ export class Reselect {
         const onlyOneSelection = (editor && editor.selections.length === 1);
 
         if (onlyOneSelection) {
-            const clipboardText = await vscode.env.clipboard.readText();
-            if (clipboardText.search(/\n/) !== -1) {
-                await vscode.commands.executeCommand<void>("cursorMove", { to: "wrappedLineStart" });
+            if (editor.selection.isEmpty) {
+                const clipboardText = await vscode.env.clipboard.readText();
+                if (clipboardText.search(/\n/) !== -1) {
+                    await vscode.commands.executeCommand<void>("cursorMove", { to: "wrappedLineStart" });
+                }
             }
             Reselect._prevFilePath = editor.document.uri.fsPath;
             Reselect._prevStartPosition = editor.selection.start;
