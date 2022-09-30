@@ -233,7 +233,6 @@ export class Misc {
         });
     }
 
-    // TODO: Conditionally set shortcuts
     // Provided by extensions
     // TODO: Remove extra blank lines and trailing whitespace
     // TODO: Color FIXME/TODO/NOTE/DEBUG

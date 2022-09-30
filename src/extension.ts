@@ -53,6 +53,16 @@ export function activate(context: vscode.ExtensionContext) {
     LineCount.subscribeToDocumentChanges(context);
     Decorate.subscribeToChanges(context);
 
+    setKeybindingsEnabled();
+    vscode.workspace.onDidChangeConfiguration(event => {
+        if (event.affectsConfiguration('my.enableKeybindings')) {
+            setKeybindingsEnabled();
+        }
+        if (event.affectsConfiguration('my.todoDecorationDelay')) {
+            // TODO: Change decoration delay
+        }
+    });
+
     // Keep editors in MRU order
     // vscode.window.onDidChangeActiveTextEditor((e) => {
     // 	if (e === undefined) {
@@ -60,6 +70,11 @@ export function activate(context: vscode.ExtensionContext) {
     // 	}
     // 	vscode.commands.executeCommand('moveActiveEditor', { to: "first", by: "tab" });
     // });
+}
+
+function setKeybindingsEnabled() {
+    const enabled = vscode.workspace.getConfiguration().get('my.enableKeybindings');
+    vscode.commands.executeCommand('setContext', 'myKeybindingsEnabled', enabled);
 }
 
 export function deactivate() { }

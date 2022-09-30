@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.9.3",
+	"version": "0.10.0",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -192,57 +192,57 @@
 			{
 				"key": "ctrl+left",
 				"command": "vscode-my.wordLeft",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+right",
 				"command": "vscode-my.wordRight",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+,",
 				"command": "vscode-my.wordPartLeft",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+.",
 				"command": "vscode-my.wordPartRight",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+backspace",
 				"command": "vscode-my.deleteWordPartLeft",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+delete",
 				"command": "vscode-my.deleteWordPartRight",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+alt+left",
 				"command": "vscode-my.expressionLeft",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+alt+right",
 				"command": "vscode-my.expressionRight",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+left",
 				"command": "vscode-my.selectExpressionLeft",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+right",
 				"command": "vscode-my.selectExpressionRight",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+up",
 				"command": "vscode-my.previousParagraph",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+up",
@@ -250,12 +250,12 @@
 				"args": {
 					"select": true
 				},
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+down",
 				"command": "vscode-my.nextParagraph",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+down",
@@ -263,37 +263,37 @@
 				"args": {
 					"select": true
 				},
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "alt+home",
 				"command": "vscode-my.home",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+backspace",
 				"command": "vscode-my.smartDeleteLeft",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+delete",
 				"command": "vscode-my.smartDeleteRight",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+r",
 				"command": "vscode-my.selectInsideBrackets",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+e",
 				"command": "vscode-my.selectInsideQuotes",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+m",
 				"command": "vscode-my.gotoChar",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+m",
@@ -301,82 +301,82 @@
 				"args": {
 					"select": true
 				},
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "alt+m",
 				"command": "vscode-my.deleteToChar",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+'",
 				"command": "vscode-my.completeCurrentWord",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+shift+'",
 				"command": "vscode-my.completeKeepCompleting",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "alt+shift+i",
 				"command": "vscode-my.addCursorsToLineStarts",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+;",
 				"command": "vscode-my.addSemicolonToEndOfLine",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+k space",
 				"command": "vscode-my.justOneSpace",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+k -",
 				"command": "vscode-my.deletePairRight",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+g",
 				"command": "vscode-my.gotoLine",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "tab",
 				"command": "vscode-my.smartTab",
-				"when": "editorTextFocus && !inSnippetMode && !suggestWidgetVisible && !inlineSuggestionVisible"
+				"when": "myKeybindingsEnabled && editorTextFocus && !inSnippetMode && !hasSnippetCompletions && !suggestWidgetVisible && !inlineSuggestionVisible"
 			},
 			{
 				"key": "alt+f",
 				"command": "vscode-my.findInCurrentFile",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+=",
 				"command": "vscode-my.centerCursorLine",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+k ,",
 				"command": "vscode-my.oneArgumentPerLine",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+v",
 				"command": "vscode-my.reselectablePaste",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "shift+insert",
 				"command": "vscode-my.reselectablePaste",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+k ctrl+k",
 				"command": "vscode-my.reselectPreviousPaste",
-				"when": "editorTextFocus"
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			}
 		],
 		"menus": {
@@ -387,6 +387,21 @@
 					"when": "editorHasSelection"
 				}
 			]
+		},
+		"configuration": {
+			"title": "My",
+			"properties": {
+				"my.enableKeybindings": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable keybindings"
+				},
+				"my.todoDecorationDelay": {
+					"type": "integer",
+					"default": 300,
+					"description": "Delay in milliseconds before decorating TODOs"
+				}
+			}
 		},
 		"colors": [
 			{
