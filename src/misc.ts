@@ -233,9 +233,11 @@ export class Misc {
         });
     }
 
+    // New functions
+    // TODO: Ctrl+Alt+o -- Open file and close previous editor
+
     // Provided by extensions
     // TODO: Remove extra blank lines and trailing whitespace
-    // TODO: Color FIXME/TODO/NOTE/DEBUG
     // TODO: Filter lines -- Add links to original file?
     // TODO: Open file at cursor or selection
 }
