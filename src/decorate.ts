@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
 
-// TODO Highlight TODO/FIXME/NOTE/DEBUG
-
 export class Decorate {
 
     private static _timeout: NodeJS.Timer | undefined = undefined;
@@ -11,25 +9,33 @@ export class Decorate {
     private static _fixmeDecorationType = vscode.window.createTextEditorDecorationType({
         color: "white",
         backgroundColor: "#af0000",
-        borderRadius: "2px"
+        borderRadius: "2px",
+        overviewRulerLane: vscode.OverviewRulerLane.Left,
+        overviewRulerColor: "#af0000"
     });
 
     private static _todoDecorationType = vscode.window.createTextEditorDecorationType({
         color: "black",
         backgroundColor: "#eeee00",
-        borderRadius: "2px"
+        borderRadius: "2px",
+        overviewRulerLane: vscode.OverviewRulerLane.Left,
+        overviewRulerColor: "#eeee00"
     });
 
     private static _noteDecorationType = vscode.window.createTextEditorDecorationType({
         color: "white",
         backgroundColor: "#27408b",
-        borderRadius: "2px"
+        borderRadius: "2px",
+        overviewRulerLane: vscode.OverviewRulerLane.Left,
+        overviewRulerColor: "#27408b"
     });
 
     private static _debugDecorationType = vscode.window.createTextEditorDecorationType({
         color: "black",
         backgroundColor: "#ffa500",
-        borderRadius: "2px"
+        borderRadius: "2px",
+        overviewRulerLane: vscode.OverviewRulerLane.Left,
+        overviewRulerColor: "#ffa500"
     });
 
     public static subscribeToChanges(context: vscode.ExtensionContext): void {
