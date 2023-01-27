@@ -54,12 +54,14 @@ export function activate(context: vscode.ExtensionContext) {
     Decorate.subscribeToChanges(context);
 
     setKeybindingsEnabled();
+    Decorate.setDecorationDelay();
+
     vscode.workspace.onDidChangeConfiguration(event => {
         if (event.affectsConfiguration('my.enableKeybindings')) {
             setKeybindingsEnabled();
         }
         if (event.affectsConfiguration('my.todoDecorationDelay')) {
-            // TODO: Change decoration delay
+            Decorate.setDecorationDelay();
         }
     });
 
