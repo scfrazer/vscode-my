@@ -6,7 +6,7 @@ import { MatchingPair } from './matchingPair';
 import { ToChar } from './toChar';
 import { Complete } from './complete';
 import { Reselect } from './reselect';
-import { LineCount } from './lineCount';
+import { StatusBar } from './statusBar';
 import { Decorate } from './decorate';
 import { Misc } from './misc';
 
@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand('reselectablePaste', function (_args) { Reselect.paste(); });
     registerMyCommand('reselectPreviousPaste', function (_args) { Reselect.previousPaste(); });
 
-    LineCount.subscribeToDocumentChanges(context);
+    StatusBar.subscribeToChanges(context);
     Decorate.subscribeToChanges(context);
 
     setKeybindingsEnabled();
