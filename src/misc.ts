@@ -88,6 +88,16 @@ export class Misc {
         });
     }
 
+    public static async pasteSelectedAtLastEditLocation() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor || editor.selection.isEmpty) {
+            return;
+        }
+        await vscode.commands.executeCommand<void>("editor.action.clipboardCopyAction");
+        await vscode.commands.executeCommand<void>("workbench.action.navigateToLastEditLocation");
+        await vscode.commands.executeCommand<void>("editor.action.clipboardPasteAction");
+    }
+
     public static deletePairRight() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -234,6 +244,7 @@ export class Misc {
     }
 
     // New functions
+    // TODO: Ctrl+Shift+v -- Paste selected text at last edit location
     // TODO: Ctrl+Alt+o -- Open file and close previous editor
 
     // Provided by extensions

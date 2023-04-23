@@ -40,6 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand('addCursorsToLineStarts', function (_args) { Misc.addCursorsToLineStarts(); });
     registerMyCommand('addSemicolonToEndOfLine', function (_args) { Misc.addSemicolonToEndOfLine(); });
     registerMyCommand('justOneSpace', function (_args) { Misc.justOneSpace(); });
+    registerMyCommand('pasteSelectedAtLastEditLocation', function (_args) { Misc.pasteSelectedAtLastEditLocation(); });
     registerMyCommand('deletePairRight', function (_args) { Misc.deletePairRight(); });
     registerMyCommand('gotoLine', function (_args) { Misc.gotoLine(); });
     registerMyCommand('smartTab', function (_args) { Misc.smartTab(); });

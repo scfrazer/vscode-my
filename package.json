@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.12.0",
+	"version": "0.12.1",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -141,6 +141,11 @@
 				"command": "vscode-my.justOneSpace",
 				"category": "My",
 				"title": "Change multiple spaces to just one"
+			},
+			{
+				"command": "vscode-my.pasteSelectedAtLastEditLocation",
+				"category": "My",
+				"title": "Paste selected text at last edit location"
 			},
 			{
 				"command": "vscode-my.deletePairRight",
@@ -321,6 +326,11 @@
 			{
 				"key": "ctrl+k space",
 				"command": "vscode-my.justOneSpace",
+				"when": "myKeybindingsEnabled && editorTextFocus"
+			},
+			{
+				"key": "ctrl+shift+v",
+				"command": "vscode-my.pasteSelectedAtLastEditLocation",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
