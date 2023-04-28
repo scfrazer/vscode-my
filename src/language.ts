@@ -35,6 +35,7 @@ export class Language {
                 break;
 
             case "python":
+            case "shellscript":
             case "yaml":
                 this.lineCommentStart = "#";
                 break;
@@ -45,6 +46,7 @@ export class Language {
             case "jsonc":
             case "markdown":
             case "python":
+            case "shellscript":
             case "typescript":
             case "yaml":
                 this._quoteCharCodes = [34, 39];  // Double/single quotes
@@ -77,15 +79,22 @@ export class Language {
     }
 
     public getBracketString(): string {
-        return '[\\[\\](){}]';  // TODO Use this._(opener|closer)CharCodes
+        const allCharCodes = this._openerCharCodes.concat(this._closerCharCodes);
+        const str = Util.escapeRegExp(String.fromCharCode(...allCharCodes));
+        return `[${str}]`;
     }
 
     public getQuoteString(): string {
-        return '[\'"]';  // TODO Use this._quoteCharCodes
+        const str = Util.escapeRegExp(String.fromCharCode(...this._quoteCharCodes));
+        return `[${str}]`;
     }
 
     public getDelimiterReString(): string {
-        let delimiterReStr = '[\\[\\](){}\'"]';  // TODO Use this._(opener|closer|quote)CharCodes
+
+        const allCharCodes = this._openerCharCodes.concat(this._closerCharCodes).concat(this._quoteCharCodes);
+        const charCodestr = Util.escapeRegExp(String.fromCharCode(...allCharCodes));
+
+        let delimiterReStr = `[${charCodestr}]`;
         if (this.lineCommentStart !== undefined) {
             let str = Util.escapeRegExp(this.lineCommentStart);
             delimiterReStr += `|${str}`;

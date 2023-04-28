@@ -63,9 +63,12 @@ export class MatchingPair {
         const document = editor.document;
         const position = editor.selection.active;
         const lineText = document.lineAt(position).text.substring(0, position.character);
-        // TODO Get quotes from language
-        const quoteCount = (lineText.match(/"/g) || []).length + (lineText.match(/'/g) || []).length;
-        // TODO Check if any quotes are escaped
+
+        const language = new Language(document.languageId);
+        const quoteStr = language.getQuoteString();
+        const searchRe = new RegExp(`^${quoteStr}|[^\\\\]${quoteStr}`, 'g');
+
+        const quoteCount = (lineText.match(searchRe) || []).length;
         return (quoteCount % 2 === 1);
     }
 
