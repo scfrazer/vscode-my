@@ -42,6 +42,34 @@ export class MatchingPair {
         });
     }
 
+    public static async selectInsideAny() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        if (this._isInsideSingleLineString()) {
+            this.selectInsideQuotes();
+        }
+        else {
+            this.selectInsideBrackets();
+        }
+    }
+
+    private static _isInsideSingleLineString(): boolean {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return false;
+        }
+        const document = editor.document;
+        const position = editor.selection.active;
+        const lineText = document.lineAt(position).text.substring(0, position.character);
+        // TODO Get quotes from language
+        const quoteCount = (lineText.match(/"/g) || []).length + (lineText.match(/'/g) || []).length;
+        // TODO Check if any quotes are escaped
+        return (quoteCount % 2 === 1);
+    }
+
+
     public static matchPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
         if (startPosition.character === 0) {
             return undefined;

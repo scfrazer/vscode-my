@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.12.2",
+	"version": "0.13.0",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -106,6 +106,11 @@
 				"command": "vscode-my.selectInsideQuotes",
 				"category": "My",
 				"title": "Select inside nearest quotes"
+			},
+			{
+				"command": "vscode-my.selectInsideAny",
+				"category": "My",
+				"title": "Select inside nearest quotes or brackets"
 			},
 			{
 				"command": "vscode-my.gotoChar",
@@ -291,8 +296,13 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "ctrl+e",
+				"key": "ctrl+shift+e",
 				"command": "vscode-my.selectInsideQuotes",
+				"when": "myKeybindingsEnabled && editorTextFocus"
+			},
+			{
+				"key": "ctrl+e",
+				"command": "vscode-my.selectInsideAny",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
