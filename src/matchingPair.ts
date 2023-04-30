@@ -43,31 +43,34 @@ export class MatchingPair {
     }
 
     public static async selectInsideAny() {
+
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
         }
-        if (this._isInsideSingleLineString()) {
-            this.selectInsideQuotes();
-        }
-        else {
-            this.selectInsideBrackets();
-        }
+        const document = editor.document;
+        editor.selections = editor.selections.map((selection) => {
+            let newRange;
+            if (this._isInsideSingleLineString(document, selection.active)) {
+                newRange = MatchingPair._insideQuotesRange(document, selection.active);
+                if (newRange === undefined) {
+                    return selection;
+                }
+                return (new vscode.Selection(newRange.start, newRange.end));
+            }
+            newRange = MatchingPair.insideBracketsRange(document, selection.active);
+            if (newRange === undefined) {
+                return selection;
+            }
+            return (new vscode.Selection(newRange.start, newRange.end));
+        });
     }
 
-    private static _isInsideSingleLineString(): boolean {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return false;
-        }
-        const document = editor.document;
-        const position = editor.selection.active;
-        const lineText = document.lineAt(position).text.substring(0, position.character);
-
+    private static _isInsideSingleLineString(document: vscode.TextDocument, startPosition: vscode.Position): boolean {
+        const lineText = document.lineAt(startPosition).text.substring(0, startPosition.character);
         const language = new Language(document.languageId);
         const quoteStr = language.getQuoteString();
         const searchRe = new RegExp(`^${quoteStr}|[^\\\\]${quoteStr}`, 'g');
-
         const quoteCount = (lineText.match(searchRe) || []).length;
         return (quoteCount % 2 === 1);
     }
