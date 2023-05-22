@@ -243,6 +243,24 @@ export class Misc {
         });
     }
 
+    public static async gotoFirstMatch() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        await vscode.commands.executeCommand<void>("cursorTop");
+        await vscode.commands.executeCommand<void>("editor.action.nextMatchFindAction");
+    }
+
+    public static async gotoLastMatch() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        await vscode.commands.executeCommand<void>("cursorBottom");
+        await vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction");
+    }
+
     // New functions
     // TODO: Ctrl+Alt+o -- Open file and close previous editor
 

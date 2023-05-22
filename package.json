@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.13.2",
+	"version": "0.13.3",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -186,6 +186,16 @@
 				"command": "vscode-my.oneArgumentPerLine",
 				"category": "My",
 				"title": "Reformat arguments to be one per line"
+			},
+			{
+				"command": "vscode-my.gotoFirstMatch",
+				"category": "My",
+				"title": "Go to the first match"
+			},
+			{
+				"command": "vscode-my.gotoLastMatch",
+				"category": "My",
+				"title": "Go to the last match"
 			},
 			{
 				"command": "vscode-my.reselectablePaste",
@@ -372,6 +382,16 @@
 				"key": "ctrl+k ,",
 				"command": "vscode-my.oneArgumentPerLine",
 				"when": "myKeybindingsEnabled && editorTextFocus"
+			},
+			{
+				"key": "ctrl+home",
+				"command": "vscode-my.gotoFirstMatch",
+				"when": "editorFocus && findInputFocussed"
+			},
+			{
+				"key": "ctrl+end",
+				"command": "vscode-my.gotoLastMatch",
+				"when": "editorFocus && findInputFocussed"
 			},
 			{
 				"key": "ctrl+v",

@@ -49,6 +49,8 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand('centerCursorLine', function (_args) { Misc.centerCursorLine(); });
     registerMyCommand('googleSelection', function (_args) { Misc.googleSelection(); });
     registerMyCommand('oneArgumentPerLine', function (_args) { Misc.oneArgumentPerLine(); });
+    registerMyCommand('gotoFirstMatch', function (_args) { Misc.gotoFirstMatch(); });
+    registerMyCommand('gotoLastMatch', function (_args) { Misc.gotoLastMatch(); });
     registerMyCommand('reselectablePaste', function (_args) { Reselect.paste(); });
     registerMyCommand('reselectPreviousPaste', function (_args) { Reselect.previousPaste(); });
 
