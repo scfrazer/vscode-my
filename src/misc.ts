@@ -261,11 +261,35 @@ export class Misc {
         await vscode.commands.executeCommand<void>("editor.action.previousMatchFindAction");
     }
 
-    // New functions
-    // TODO: Ctrl+Alt+o -- Open file and close previous editor
+    public static async openAlternativeFile() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
 
-    // Provided by extensions
+        let uri: vscode.Uri | undefined = undefined;
+        const dialogOptions: vscode.OpenDialogOptions = {
+            defaultUri: editor.document.uri,
+            canSelectMany: false,
+            title: "Open Alternative File"
+        };
+        await vscode.window.showOpenDialog(dialogOptions).then((uris) => {
+            if (uris === undefined) {
+                return;
+            }
+            uri = uris[0];
+        });
+        if (uri === undefined) {
+            return;
+        }
+
+        await vscode.window.showTextDocument(uri);
+        vscode.commands.executeCommand<void>("workbench.action.openPreviousRecentlyUsedEditor").then(() => {
+            vscode.commands.executeCommand<void>("workbench.action.closeActiveEditor");
+        });
+    }
+
+    // TODO: Filter lines -- Highlight filter text, add links to original file?
     // TODO: Remove extra blank lines and trailing whitespace
-    // TODO: Filter lines -- Add links to original file?
     // TODO: Open file at cursor or selection
 }

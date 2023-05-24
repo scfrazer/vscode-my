@@ -51,6 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand('oneArgumentPerLine', function (_args) { Misc.oneArgumentPerLine(); });
     registerMyCommand('gotoFirstMatch', function (_args) { Misc.gotoFirstMatch(); });
     registerMyCommand('gotoLastMatch', function (_args) { Misc.gotoLastMatch(); });
+    registerMyCommand('openAlternativeFile', function (_args) { Misc.openAlternativeFile(); });
     registerMyCommand('reselectablePaste', function (_args) { Reselect.paste(); });
     registerMyCommand('reselectPreviousPaste', function (_args) { Reselect.previousPaste(); });
 
