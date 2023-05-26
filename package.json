@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.14.2",
+	"version": "0.14.3",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -339,7 +339,7 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "ctrl+'",
+				"key": "shift+space",
 				"command": "vscode-my.completeCurrentWord",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
@@ -371,17 +371,12 @@
 			{
 				"key": "tab",
 				"command": "vscode-my.smartTab",
-				"when": "myKeybindingsEnabled && editorTextFocus && !inSnippetMode && !hasSnippetCompletions && !suggestWidgetVisible"
+				"when": "myKeybindingsEnabled && editorTextFocus && !inSnippetMode && !hasSnippetCompletions && !suggestWidgetVisible && !inlineSuggestionVisible"
 			},
 			{
 				"key": "alt+f",
 				"command": "vscode-my.findInCurrentFile",
 				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+o",
-				"command": "vscode-my.findInCurrentFile",
-				"when": "myKeybindingsEnabled && editorTextFocus && findInputFocussed"
 			},
 			{
 				"key": "ctrl+=",
