@@ -191,7 +191,7 @@ export class Misc {
         if (!editor) {
             return;
         }
-        await vscode.commands.executeCommand("workbench.action.findInFiles", {
+        await vscode.commands.executeCommand("search.action.openNewEditor", {
             query: editor.document.getText(editor.selection),
             filesToInclude: vscode.workspace.asRelativePath(editor.document.uri),
             triggerSearch: true,
@@ -267,6 +267,11 @@ export class Misc {
             return;
         }
 
+        const previousTab = vscode.window.tabGroups.activeTabGroup.activeTab;
+        if (!previousTab) {
+            return;
+        }
+
         let uri: vscode.Uri | undefined = undefined;
         const dialogOptions: vscode.OpenDialogOptions = {
             defaultUri: editor.document.uri,
@@ -284,9 +289,7 @@ export class Misc {
         }
 
         await vscode.window.showTextDocument(uri);
-        vscode.commands.executeCommand<void>("workbench.action.openPreviousRecentlyUsedEditor").then(() => {
-            vscode.commands.executeCommand<void>("workbench.action.closeActiveEditor");
-        });
+        vscode.window.tabGroups.close(previousTab, true);
     }
 
     // TODO: Filter lines -- Highlight filter text, add links to original file?
