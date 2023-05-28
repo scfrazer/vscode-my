@@ -5,6 +5,7 @@ import { SmartDelete } from './smartDelete';
 import { MatchingPair } from './matchingPair';
 import { ToChar } from './toChar';
 import { Complete } from './complete';
+import { InlineCompletionItemProvider } from './completionProvider';
 import { Reselect } from './reselect';
 import { StatusBar } from './statusBar';
 import { Decorate } from './decorate';
@@ -57,6 +58,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     StatusBar.subscribeToChanges(context);
     Decorate.subscribeToChanges(context);
+
+    context.subscriptions.push(
+        vscode.languages.registerInlineCompletionItemProvider(
+            { pattern: "**​/*.{txt,md,sh,ts,js,py,sv,svh,c,h,cpp,hpp,cc,hh}" },
+            new InlineCompletionItemProvider()
+        )
+    );
 
     setKeybindingsEnabled();
     Decorate.setDecorationDelay();
