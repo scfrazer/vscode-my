@@ -12,7 +12,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
         const previousCompletions = new Map<string, boolean>;
 
         const word = _wordBeforePosition(document, position);
-        if (word === undefined) {
+        if (word === undefined || word.length < 2) {
             return;
         }
         const wordRe = new RegExp('\\b' + word + '[a-zA-Z0-9_]+', 'g');

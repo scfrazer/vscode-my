@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
         vscode.languages.registerInlineCompletionItemProvider(
-            { pattern: "**​/*.{txt,md,sh,ts,js,py,sv,svh,c,h,cpp,hpp,cc,hh}" },
+            { pattern: "**/*.{txt,md,sh,ts,js,py,sv,svh,c,h,cpp,hpp,cc,hh}" },
             new InlineCompletionItemProvider()
         )
     );
