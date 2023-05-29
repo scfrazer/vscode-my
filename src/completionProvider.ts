@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 
+import { Util } from './util';
+
 export class InlineCompletionItemProvider implements vscode.InlineCompletionItemProvider {
     provideInlineCompletionItems(
         document: vscode.TextDocument,
@@ -10,26 +12,35 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
 
         const results: Array<vscode.InlineCompletionItem> = [];
         const previousCompletions = new Map<string, boolean>;
+        const numLinesToSearch = 75;
 
+        let searchRe;
         const word = _wordBeforePosition(document, position);
-        if (word === undefined || word.length < 2) {
-            return;
+        if (word === undefined) {
+            const path = _pathBeforePosition(document, position);
+            if (path === undefined) {
+                return;
+            }
+            searchRe = new RegExp('\\b' + Util.escapeRegExp(path) + '([a-zA-Z0-9_]+)', 'g');
         }
-        const wordRe = new RegExp('\\b' + word + '[a-zA-Z0-9_]+', 'g');
+        else {
+            searchRe = new RegExp('\\b' + `(${word}[a-zA-Z0-9_]+)`, 'g');
+        }
 
         let lineNum = position.line;
         let colNum = position.character;
-        while (lineNum > 0) {
+        let targetLineNum = (numLinesToSearch >= (lineNum + 1)) ? 0 : (lineNum - numLinesToSearch + 1);
+        while (lineNum > targetLineNum) {
             let text = document.lineAt(lineNum).text;
             if (colNum > 0) {
                 text = text.substring(0, colNum);
             }
-            const matches = [...text.matchAll(wordRe)].reverse();
+            const matches = [...text.matchAll(searchRe)].reverse();
             for (const match of matches) {
                 if (match?.index === undefined) {
                     continue;
                 }
-                const candidate = match[0];
+                const candidate = match[1];
                 if (previousCompletions.has(candidate)) {
                     continue;
                 }
@@ -44,14 +55,18 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
         lineNum = position.line;
         colNum = position.character;
         const lastLineNum = document.lineCount;
-        while (lineNum < lastLineNum) {
-            const text = document.lineAt(lineNum).text.substring(colNum);
-            const matches = text.matchAll(wordRe);
+        targetLineNum = ((lineNum + numLinesToSearch) >= lastLineNum) ? lastLineNum : (lineNum + numLinesToSearch);
+        while (lineNum < targetLineNum) {
+            let text = document.lineAt(lineNum).text;
+            if (colNum > 0) {
+                text = text.substring(colNum);
+            }
+            const matches = text.matchAll(searchRe);
             for (const match of matches) {
                 if (match?.index === undefined) {
                     continue;
                 }
-                const candidate = match[0];
+                const candidate = match[1];
                 if (previousCompletions.has(candidate)) {
                     continue;
                 }
@@ -76,4 +91,15 @@ function _wordBeforePosition(document: vscode.TextDocument, position: vscode.Pos
         word = match[1];
     }
     return word;
+}
+
+function _pathBeforePosition(document: vscode.TextDocument, position: vscode.Position): string | undefined {
+    let path: string | undefined = undefined;
+    const lineText = document.lineAt(position).text;
+    const leftText = lineText.substring(0, position.character);
+    const match = leftText.match(/([^\s]+[.])$/);
+    if (match !== null) {
+        path = match[1];
+    }
+    return path;
 }
