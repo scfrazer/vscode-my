@@ -16,16 +16,20 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
 
         let searchRe;
         const word = _wordBeforePosition(document, position);
+        let path: string | undefined = "";
         if (word === undefined) {
-            const path = _pathBeforePosition(document, position);
+            path = _pathBeforePosition(document, position);
             if (path === undefined) {
                 return;
             }
-            searchRe = new RegExp('\\b' + Util.escapeRegExp(path) + '([a-zA-Z0-9_]+)', 'g');
+            searchRe = new RegExp('\\b(' + Util.escapeRegExp(path) + '[a-zA-Z0-9_]+)', 'g');
         }
         else {
-            searchRe = new RegExp('\\b' + `(${word}[a-zA-Z0-9_]+)`, 'g');
+            searchRe = new RegExp('\\b(' + `${word}` + '[a-zA-Z0-9_]+)', 'g');
         }
+
+        const replacementLength = (word !== undefined) ? word.length : path.length;
+        const range = new vscode.Range(position.translate(0, -1 * replacementLength), position);
 
         let lineNum = position.line;
         let colNum = position.character;
@@ -45,7 +49,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
                     continue;
                 }
                 previousCompletions.set(candidate, true);
-                const completionItem = new vscode.InlineCompletionItem(candidate);
+                const completionItem = new vscode.InlineCompletionItem(candidate, range);
                 results.push(completionItem);
             }
             lineNum -= 1;
@@ -71,7 +75,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
                     continue;
                 }
                 previousCompletions.set(candidate, true);
-                const completionItem = new vscode.InlineCompletionItem(candidate);
+                const completionItem = new vscode.InlineCompletionItem(candidate, range);
                 results.push(completionItem);
             }
             lineNum += 1;
@@ -97,7 +101,7 @@ function _pathBeforePosition(document: vscode.TextDocument, position: vscode.Pos
     let path: string | undefined = undefined;
     const lineText = document.lineAt(position).text;
     const leftText = lineText.substring(0, position.character);
-    const match = leftText.match(/([^\s]+[.])$/);
+    const match = leftText.match(/([a-zA-Z0-9_.:\[\]]+[.\[])$/);
     if (match !== null) {
         path = match[1];
     }
