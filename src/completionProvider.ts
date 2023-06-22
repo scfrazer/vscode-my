@@ -12,7 +12,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
 
         const results: Array<vscode.InlineCompletionItem> = [];
         const previousCompletions = new Map<string, boolean>;
-        const numLinesToSearch = 75;
+        const numLinesToSearch = 1000;
 
         let searchRe;
         let path: string | undefined = "";

@@ -25,6 +25,7 @@ export class Reselect {
         await vscode.commands.executeCommand<void>("editor.action.clipboardPasteAction");
 
         if (onlyOneSelection) {
+            await vscode.commands.executeCommand<void>("editor.action.cancelSelectionAnchor");
             Reselect._prevEndPosition = editor.selection.start;
         }
     }
