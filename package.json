@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.15.7",
+	"version": "0.15.8",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -286,12 +286,12 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "shift+ctrl+backspace",
+				"key": "alt+backspace",
 				"command": "vscode-my.smartDeleteRight",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "alt+backspace",
+				"key": "shift+ctrl+backspace",
 				"command": "vscode-my.deleteWordPartLeft",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
@@ -306,12 +306,17 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
+				"key": "shift+ctrl+delete",
+				"command": "vscode-my.deleteWordPartRight",
+				"when": "myKeybindingsEnabled && editorTextFocus"
+			},
+			{
 				"key": "ctrl+r",
 				"command": "vscode-my.selectInsideBrackets",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "ctrl+shift+e",
+				"key": "alt+e",
 				"command": "vscode-my.selectInsideQuotes",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
