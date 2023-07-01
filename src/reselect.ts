@@ -4,7 +4,6 @@ export class Reselect {
 
     private static _prevFilePath: string;
     private static _prevStartPosition: vscode.Position | undefined;
-    private static _prevEndPosition: vscode.Position | undefined;
 
     public static async paste() {
 
@@ -23,17 +22,12 @@ export class Reselect {
         }
 
         await vscode.commands.executeCommand<void>("editor.action.clipboardPasteAction");
-
-        if (onlyOneSelection) {
-            await vscode.commands.executeCommand<void>("editor.action.cancelSelectionAnchor");
-            Reselect._prevEndPosition = editor.selection.start;
-        }
     }
 
     public static async previousPaste() {
         const editor = vscode.window.activeTextEditor;
-        if (editor && Reselect._prevFilePath === editor.document.uri.fsPath && Reselect._prevStartPosition && Reselect._prevEndPosition) {
-            editor.selection = new vscode.Selection(Reselect._prevStartPosition, Reselect._prevEndPosition);
+        if (editor && Reselect._prevFilePath === editor.document.uri.fsPath && Reselect._prevStartPosition) {
+            editor.selection = new vscode.Selection(Reselect._prevStartPosition, editor.selection.start);
         }
     }
 }

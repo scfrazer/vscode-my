@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.15.8",
+	"version": "0.15.9",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"

@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
 
-import { Util } from './util';
-
 export class InlineCompletionItemProvider implements vscode.InlineCompletionItemProvider {
     provideInlineCompletionItems(
         document: vscode.TextDocument,
@@ -15,30 +13,22 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
         const numLinesToSearch = 1000;
 
         let searchRe;
-        let path: string | undefined = "";
         let range: vscode.Range;
 
         let word = _wordBeforePosition(document, position);
-        if (word !== undefined) {
-            const restOfWord = _wordAfterPosition(document, position);
-            if (restOfWord !== undefined) {
-                searchRe = new RegExp(`\\b(${word}[a-zA-Z0-9_]*${restOfWord})`, 'g');
-                range = new vscode.Range(position.translate(0, -1 * word.length), position.translate(0, restOfWord.length));
-                word += restOfWord;
-            }
-            else {
-                searchRe = new RegExp(`\\b(${word}[a-zA-Z0-9_]*)`, 'g');
-                range = new vscode.Range(position.translate(0, -1 * word.length), position);
-            }
+        let restOfWord = _wordAfterPosition(document, position);
+        if (word === undefined && restOfWord === undefined) {
+            return;
         }
-        else {
-            path = _pathBeforePosition(document, position);
-            if (path === undefined) {
-                return;
-            }
-            searchRe = new RegExp('\\b(' + Util.escapeRegExp(path) + '[a-zA-Z0-9_]+)', 'g');
-            range = new vscode.Range(position.translate(0, -1 * path.length), position);
+        if (word === undefined) {
+            word = "";
         }
+        if (restOfWord === undefined) {
+            restOfWord = "";
+        }
+        searchRe = new RegExp(`\\b(${word}[a-zA-Z0-9_]*${restOfWord})\\b`, 'g');
+        range = new vscode.Range(position.translate(0, -1 * word.length), position.translate(0, restOfWord.length));
+        word += restOfWord;
 
         let lineNum = position.line;
         let colNum = position.character;
@@ -54,7 +44,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
                     continue;
                 }
                 const candidate = match[1];
-                if (word !== undefined && (candidate.length === word.length)) {
+                if (candidate.length === word.length) {
                     return;
                 }
                 if (previousCompletions.has(candidate)) {
@@ -83,7 +73,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
                     continue;
                 }
                 const candidate = match[1];
-                if (word !== undefined && (candidate.length === word.length)) {
+                if (candidate.length === word.length) {
                     return;
                 }
                 if (previousCompletions.has(candidate)) {
@@ -121,15 +111,4 @@ function _wordAfterPosition(document: vscode.TextDocument, position: vscode.Posi
         word = match[1];
     }
     return word;
-}
-
-function _pathBeforePosition(document: vscode.TextDocument, position: vscode.Position): string | undefined {
-    let path: string | undefined = undefined;
-    const lineText = document.lineAt(position).text;
-    const leftText = lineText.substring(0, position.character);
-    const match = leftText.match(/([a-zA-Z0-9_.:\[\]]+[.\[])$/);
-    if (match !== null) {
-        path = match[1];
-    }
-    return path;
 }
