@@ -31,12 +31,15 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
         word += restOfWord;
 
         let lineNum = position.line;
-        let colNum = position.character;
+        let colNum = position.character - 1;
+        if (colNum < 0) {
+            colNum = 0;
+        }
         let targetLineNum = (numLinesToSearch >= (lineNum + 1)) ? 0 : (lineNum - numLinesToSearch + 1);
         while (lineNum > targetLineNum) {
             let text = document.lineAt(lineNum).text;
             if (colNum > 0) {
-                text = text.substring(0, colNum - 1);
+                text = text.substring(0, colNum);
             }
             const matches = [...text.matchAll(searchRe)].reverse();
             for (const match of matches) {
@@ -59,7 +62,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
         }
 
         lineNum = position.line;
-        colNum = position.character;
+        colNum = position.character + 1;
         const lastLineNum = document.lineCount;
         targetLineNum = ((lineNum + numLinesToSearch) >= lastLineNum) ? lastLineNum : (lineNum + numLinesToSearch);
         while (lineNum < targetLineNum) {
