@@ -4,10 +4,11 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
     provideInlineCompletionItems(
         document: vscode.TextDocument,
         position: vscode.Position,
-        _context: vscode.InlineCompletionContext,
+        context: vscode.InlineCompletionContext,
         _token: vscode.CancellationToken
     ): vscode.ProviderResult<vscode.InlineCompletionItem[] | vscode.InlineCompletionList> {
 
+        const automaticallyTriggered: boolean = (context.triggerKind === vscode.InlineCompletionTriggerKind.Automatic);
         const results: Array<vscode.InlineCompletionItem> = [];
         const previousCompletions = new Map<string, boolean>;
         const numLinesToSearch = 1000;
@@ -48,7 +49,10 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
                 }
                 const candidate = match[1];
                 if (candidate.length === word.length) {
-                    return;
+                    if (automaticallyTriggered) {
+                        return;
+                    }
+                    continue;
                 }
                 if (previousCompletions.has(candidate)) {
                     continue;
@@ -77,7 +81,10 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
                 }
                 const candidate = match[1];
                 if (candidate.length === word.length) {
-                    return;
+                    if (automaticallyTriggered) {
+                        return;
+                    }
+                    continue;
                 }
                 if (previousCompletions.has(candidate)) {
                     continue;
