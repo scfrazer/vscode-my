@@ -27,9 +27,9 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
         if (restOfWord === undefined) {
             restOfWord = "";
         }
-        searchRe = new RegExp(`\\b(${word}[a-zA-Z0-9_]*${restOfWord})\\b`, 'g');
-        range = new vscode.Range(position.translate(0, -1 * word.length), position.translate(0, restOfWord.length));
-        word += restOfWord;
+        searchRe = new RegExp(`\\b(${word}[a-zA-Z0-9_]*)${restOfWord}\\b`, 'g');
+        const prefixLength = word.length;
+        range = new vscode.Range(position.translate(0, -1 * prefixLength), position);
 
         let lineNum = position.line;
         let colNum = position.character - 1;
@@ -48,7 +48,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
                     continue;
                 }
                 const candidate = match[1];
-                if (candidate.length === word.length) {
+                if (candidate.length === prefixLength) {
                     if (automaticallyTriggered) {
                         return;
                     }
@@ -80,7 +80,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
                     continue;
                 }
                 const candidate = match[1];
-                if (candidate.length === word.length) {
+                if (candidate.length === prefixLength) {
                     if (automaticallyTriggered) {
                         return;
                     }
