@@ -16,19 +16,23 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
         let searchRe;
         let range: vscode.Range;
 
-        let word = _wordBeforePosition(document, position);
-        let restOfWord = _wordAfterPosition(document, position);
-        if (word === undefined && restOfWord === undefined) {
+        let prefix = _wordBeforePosition(document, position);
+        let suffix = _wordAfterPosition(document, position);
+        if (prefix === undefined && suffix === undefined) {
             return;
         }
-        if (word === undefined) {
-            word = "";
+        if (prefix === undefined) {
+            prefix = "";
         }
-        if (restOfWord === undefined) {
-            restOfWord = "";
+        if (suffix === undefined) {
+            suffix = "";
         }
-        searchRe = new RegExp(`\\b(${word}[a-zA-Z0-9_]*)${restOfWord}\\b`, 'g');
-        const prefixLength = word.length;
+        else if (automaticallyTriggered) {
+            return;
+        }
+
+        searchRe = new RegExp(`\\b(${prefix}[a-zA-Z0-9_]*)${suffix}\\b`, 'g');
+        const prefixLength = prefix.length;
         range = new vscode.Range(position.translate(0, -1 * prefixLength), position);
 
         let lineNum = position.line;
