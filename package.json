@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.15.14",
+	"version": "0.16.0",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -123,16 +123,6 @@
 				"title": "Select to char"
 			},
 			{
-				"command": "vscode-my.completeCurrentWord",
-				"category": "My",
-				"title": "Complete current word"
-			},
-			{
-				"command": "vscode-my.completeKeepCompleting",
-				"category": "My",
-				"title": "Complete current word"
-			},
-			{
 				"command": "vscode-my.addCursorsToLineStarts",
 				"category": "My",
 				"title": "Add cursors to line starts"
@@ -211,6 +201,30 @@
 				"command": "vscode-my.reselectPreviousPaste",
 				"category": "My",
 				"title": "Reselect previous paste"
+			},
+			{
+				"command": "vscode-my.previousChange",
+				"category": "My",
+				"icon": "$(arrow-up)",
+				"title": "Goto previous change in file"
+			},
+			{
+				"command": "vscode-my.nextChange",
+				"category": "My",
+				"icon": "$(arrow-down)",
+				"title": "Goto next change in file"
+			},
+			{
+				"command": "vscode-my.previousProblem",
+				"category": "My",
+				"icon": "$(arrow-circle-up)",
+				"title": "Goto previous problem in file"
+			},
+			{
+				"command": "vscode-my.nextProblem",
+				"category": "My",
+				"icon": "$(arrow-circle-down)",
+				"title": "Goto next problem in file"
 			}
 		],
 		"keybindings": [
@@ -435,6 +449,28 @@
 					"group": "navigation",
 					"command": "vscode-my.googleSelection",
 					"when": "editorHasSelection"
+				}
+			],
+			"editor/title": [
+				{
+					"command": "vscode-my.previousChange",
+					"group": "navigation@1",
+					"when": "!isInDiffEditor && gitOpenRepositoryCount >= 1 && !activeEditorIsReadonly && resourceScheme != 'untitled'"
+				},
+				{
+					"command": "vscode-my.nextChange",
+					"group": "navigation@2",
+					"when": "!isInDiffEditor && gitOpenRepositoryCount >= 1 && !activeEditorIsReadonly && resourceScheme != 'untitled'"
+				},
+				{
+					"command": "vscode-my.previousProblem",
+					"group": "navigation@3",
+					"when": "!isInDiffEditor && resourceScheme != 'untitled'"
+				},
+				{
+					"command": "vscode-my.nextProblem",
+					"group": "navigation@4",
+					"when": "!isInDiffEditor && resourceScheme != 'untitled'"
 				}
 			]
 		},

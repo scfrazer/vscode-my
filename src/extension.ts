@@ -1,15 +1,15 @@
 import * as vscode from 'vscode';
 
 import { CursorMove } from './cursorMove';
-import { SmartDelete } from './smartDelete';
-import { MatchingPair } from './matchingPair';
-import { ToChar } from './toChar';
-import { Complete } from './complete';
-import { InlineCompletionItemProvider } from './completionProvider';
-import { Reselect } from './reselect';
-import { StatusBar } from './statusBar';
 import { Decorate } from './decorate';
+import { EditorNavigation } from './editorNavigation';
+import { InlineCompletionItemProvider } from './completionProvider';
+import { MatchingPair } from './matchingPair';
 import { Misc } from './misc';
+import { Reselect } from './reselect';
+import { SmartDelete } from './smartDelete';
+import { StatusBar } from './statusBar';
+import { ToChar } from './toChar';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -37,8 +37,6 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand('selectInsideAny', function (_args) { MatchingPair.selectInsideAny(); });
     registerMyCommand('gotoChar', function (args) { ToChar.goto(args); });
     registerMyCommand('deleteToChar', function (_args) { ToChar.delete(); });
-    registerMyCommand('completeCurrentWord', function (_args) { Complete.currentWord(); });
-    registerMyCommand('completeKeepCompleting', function (_args) { Complete.keepCompleting(); });
     registerMyCommand('addCursorsToLineStarts', function (_args) { Misc.addCursorsToLineStarts(); });
     registerMyCommand('addSemicolonToEndOfLine', function (_args) { Misc.addSemicolonToEndOfLine(); });
     registerMyCommand('justOneSpace', function (_args) { Misc.justOneSpace(); });
@@ -55,6 +53,10 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand('openAlternativeFile', function (_args) { Misc.openAlternativeFile(); });
     registerMyCommand('reselectablePaste', function (_args) { Reselect.paste(); });
     registerMyCommand('reselectPreviousPaste', function (_args) { Reselect.previousPaste(); });
+    registerMyCommand('previousChange', function (_args) { EditorNavigation.previousChange(); });
+    registerMyCommand('nextChange', function (_args) { EditorNavigation.nextChange(); });
+    registerMyCommand('previousProblem', function (_args) { EditorNavigation.previousProblem(); });
+    registerMyCommand('nextProblem', function (_args) { EditorNavigation.nextProblem(); });
 
     StatusBar.subscribeToChanges(context);
     Decorate.subscribeToChanges(context);
