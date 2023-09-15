@@ -14,10 +14,15 @@ export class ToChar {
         }
 
         const select = args?.select && args.select;
+        const cut = args?.cut && args.cut;
         const sbItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
         if (select) {
             sbItem.text = "Select to character ...";
             sbItem.tooltip = "'Return' will exit without selecting";
+        }
+        else if (cut) {
+            sbItem.text = "Cut to character ...";
+            sbItem.tooltip = "'Return' will exit without cutting";
         }
         else {
             sbItem.text = "Go to character ...";
@@ -27,16 +32,18 @@ export class ToChar {
         sbItem.show();
 
         let typeCommand = vscode.commands.registerCommand('type', args => {
+
             if (args.text === '\n') {
                 sbItem.dispose();
                 typeCommand.dispose();
                 return;
             }
+
             const document = editor.document;
             editor.selections = editor.selections.map((selection) => {
                 const newPosition = ToChar.upTo(document, selection.active, args.text);
                 if (newPosition !== undefined) {
-                    if (select) {
+                    if (select || cut) {
                         return (new vscode.Selection(editor.selection.anchor, newPosition));
                     }
                     else {
@@ -45,8 +52,13 @@ export class ToChar {
                 }
                 return selection;
             });
+
             sbItem.dispose();
             typeCommand.dispose();
+
+            if (cut) {
+                vscode.commands.executeCommand<void>("editor.action.clipboardCutAction");
+            }
         });
 
         Util.revealActivePosition(editor);
