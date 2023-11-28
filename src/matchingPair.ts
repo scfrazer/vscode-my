@@ -71,6 +71,7 @@ export class MatchingPair {
         const language = new Language(document.languageId);
         const quoteStr = language.getQuoteString();
         const searchRe = new RegExp(`^${quoteStr}|[^\\\\]${quoteStr}`, 'g');
+        // FIXME Go one by one instead of counting
         const quoteCount = (lineText.match(searchRe) || []).length;
         return (quoteCount % 2 === 1);
     }

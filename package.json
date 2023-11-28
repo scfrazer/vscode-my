@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.16.1",
+	"version": "0.16.3",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -229,16 +229,6 @@
 		],
 		"keybindings": [
 			{
-				"key": "ctrl+left",
-				"command": "vscode-my.wordLeft",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+right",
-				"command": "vscode-my.wordRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
 				"key": "ctrl+shift+,",
 				"command": "vscode-my.wordPartLeft",
 				"when": "myKeybindingsEnabled && editorTextFocus"
@@ -300,12 +290,12 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "alt+backspace",
+				"key": "ctrl+shift+backspace",
 				"command": "vscode-my.smartDeleteRight",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "shift+ctrl+backspace",
+				"key": "alt+backspace",
 				"command": "vscode-my.deleteWordPartLeft",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
@@ -457,28 +447,6 @@
 					"group": "navigation",
 					"command": "vscode-my.googleSelection",
 					"when": "editorHasSelection"
-				}
-			],
-			"editor/title": [
-				{
-					"command": "vscode-my.previousChange",
-					"group": "navigation@1",
-					"when": "!isInDiffEditor && gitOpenRepositoryCount >= 1 && !activeEditorIsReadonly && resourceScheme != 'untitled'"
-				},
-				{
-					"command": "vscode-my.nextChange",
-					"group": "navigation@2",
-					"when": "!isInDiffEditor && gitOpenRepositoryCount >= 1 && !activeEditorIsReadonly && resourceScheme != 'untitled'"
-				},
-				{
-					"command": "vscode-my.previousProblem",
-					"group": "navigation@3",
-					"when": "!isInDiffEditor && resourceScheme != 'untitled'"
-				},
-				{
-					"command": "vscode-my.nextProblem",
-					"group": "navigation@4",
-					"when": "!isInDiffEditor && resourceScheme != 'untitled'"
 				}
 			]
 		},
