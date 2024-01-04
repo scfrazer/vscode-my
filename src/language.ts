@@ -95,6 +95,7 @@ export class Language {
         const charCodestr = Util.escapeRegExp(String.fromCharCode(...allCharCodes));
 
         let delimiterReStr = `[${charCodestr}]`;
+
         if (this.lineCommentStart !== undefined) {
             let str = Util.escapeRegExp(this.lineCommentStart);
             delimiterReStr += `|${str}`;
@@ -104,6 +105,28 @@ export class Language {
             let endStr = Util.escapeRegExp(this.blockCommentEnd);
             delimiterReStr += `|${startStr}|${endStr}`;
         }
+
+        return delimiterReStr;
+    }
+
+    public getEdgeReString(): string {
+
+        const openers = Util.escapeRegExp(String.fromCharCode(...this._openerCharCodes));
+        const closers = Util.escapeRegExp(String.fromCharCode(...this._closerCharCodes));
+        const quotes = Util.escapeRegExp(String.fromCharCode(...this._quoteCharCodes));
+
+        let delimiterReStr = `[a-zA-Z0-9_]+|[${openers}]+|[${closers}]+|[${quotes}]+`;
+
+        if (this.lineCommentStart !== undefined) {
+            let str = Util.escapeRegExp(this.lineCommentStart);
+            delimiterReStr += `|${str}[^ ]*`;
+        }
+        if (this.blockCommentStart !== undefined && this.blockCommentEnd !== undefined) {
+            let startStr = Util.escapeRegExp(this.blockCommentStart);
+            let endStr = Util.escapeRegExp(this.blockCommentEnd);
+            delimiterReStr += `|${startStr}[^ ]*|[^ ]*${endStr}`;
+        }
+
         return delimiterReStr;
     }
 }

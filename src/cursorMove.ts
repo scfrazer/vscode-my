@@ -14,6 +14,14 @@ export class CursorMove {
         Util.updateSelections(CursorMove._wordPositionRight, false);
     }
 
+    public static async wordEdgeLeft() {
+        Util.updateSelections(CursorMove._wordEdgePositionLeft, false);
+    }
+
+    public static async wordEdgeRight() {
+        Util.updateSelections(CursorMove._wordEdgePositionRight, false);
+    }
+
     public static async wordPartLeft() {
         Util.updateSelections(CursorMove._wordPartPositionLeft, false);
     }
@@ -148,6 +156,75 @@ export class CursorMove {
         return (new vscode.Position(lineNum, 0));
     }
 
+    private static _wordEdgePositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+
+        const lineNum = startPosition.line;
+
+        if (startPosition.character === 0) {
+            if (lineNum > 0) {
+                return (document.lineAt(lineNum - 1).range.end);
+            }
+            return undefined;
+        }
+
+        const language = new Language(document.languageId);
+        const edgeReStr = language.getEdgeReString();
+        const edgeRe = new RegExp(edgeReStr, 'g');
+
+        const lineText = document.lineAt(lineNum).text.substring(0, startPosition.character);
+        const matches = [...lineText.matchAll(edgeRe)];
+
+        if (matches.length === 0) {
+            return (new vscode.Position(lineNum, 0));
+        }
+
+        const match = matches[matches.length - 1];
+        if (match.index === undefined) {
+            return undefined;
+        }
+
+        let colNum = match.index + match[0].length;
+        if (startPosition.character === colNum) {
+            colNum = match.index;
+        }
+        return (new vscode.Position(lineNum, colNum));
+    }
+
+    private static _wordEdgePositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+
+        const lineNum = startPosition.line;
+        let lineText = document.lineAt(lineNum).text;
+        const lineEndCol = lineText.length;
+
+        if (startPosition.character === lineEndCol) {
+            if (lineNum === (document.lineCount - 1)) {
+                return undefined;
+            }
+            return (new vscode.Position(lineNum + 1, 0));
+        }
+
+        const language = new Language(document.languageId);
+        const edgeReStr = language.getEdgeReString();
+        const edgeRe = new RegExp(edgeReStr);
+
+        lineText = lineText.substring(startPosition.character);
+        const match = lineText.match(edgeRe);
+
+        if (match === null) {
+            return (new vscode.Position(lineNum, lineEndCol));
+        }
+
+        if (match.index === undefined) {
+            return undefined;
+        }
+
+        let colNum = match.index;
+        if (colNum === 0) {
+            colNum = match.index + match[0].length;
+        }
+        return (new vscode.Position(lineNum, startPosition.character + colNum));
+    }
+
     private static _wordPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
         const lineNum = startPosition.line;
@@ -215,7 +292,7 @@ export class CursorMove {
         }
 
         return (new vscode.Position(lineNum, colNum + 1));
-        }
+    }
 
     private static _wordPartPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
 
