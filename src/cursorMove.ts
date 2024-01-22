@@ -273,8 +273,8 @@ export class CursorMove {
             charCode = lineText.charCodeAt(colNum);
         }
 
-        // Lowercase
-        while (charCode >= 0x61 && charCode <= 0x7a) {
+        // Lowercase or number
+        while ((charCode >= 0x61 && charCode <= 0x7a) || (charCode >= 0x30 && charCode <= 0x39)) {
             colNum -= 1;
             if (colNum === 0) {
                 return new vscode.Position(lineNum, 0);
@@ -311,8 +311,8 @@ export class CursorMove {
             charCode = lineText.charCodeAt(colNum);
         }
 
-        // Lowercase
-        while (charCode >= 0x61 && charCode <= 0x7a) {
+        // Lowercase or number
+        while ((charCode >= 0x61 && charCode <= 0x7a) || (charCode >= 0x30 && charCode <= 0x39)) {
             colNum += 1;
             if (colNum === lineText.length) {
                 return undefined;
