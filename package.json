@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.17.0",
+	"version": "0.17.1",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -376,12 +376,12 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "shift+space",
+				"key": "ctrl+i",
 				"command": "editor.action.inlineSuggest.trigger",
 				"when": "myKeybindingsEnabled && editorTextFocus && !inlineSuggestionVisible"
 			},
 			{
-				"key": "shift+space",
+				"key": "ctrl+i",
 				"command": "editor.action.inlineSuggest.showNext",
 				"when": "myKeybindingsEnabled && editorTextFocus && inlineSuggestionVisible"
 			},
