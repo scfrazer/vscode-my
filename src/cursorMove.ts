@@ -30,6 +30,14 @@ export class CursorMove {
         Util.updateSelections(CursorMove._wordPartPositionRight, false);
     }
 
+    public static async selectWordPartLeft() {
+        Util.updateSelections(CursorMove._wordPartPositionLeft, true);
+    }
+
+    public static async selectWordPartRight() {
+        Util.updateSelections(CursorMove._wordPartPositionRight, true);
+    }
+
     public static async deleteWordPartLeft() {
         Util.deleteToPosition(CursorMove._wordPartPositionLeft);
     }
@@ -258,40 +266,45 @@ export class CursorMove {
         const lineNum = startPosition.line;
         const lineText = document.lineAt(lineNum).text;
 
-        let colNum = startPosition.character - 1;
+        let colNum = startPosition.character;
         if (colNum === 0) {
-            return new vscode.Position(lineNum, 0);
+            return CursorMove._wordEdgePositionLeft(document, startPosition);
         }
+        colNum -= 1;
         let charCode = lineText.charCodeAt(colNum);
 
         // Underscore
         while (charCode === 0x5f) {
-            colNum -= 1;
             if (colNum === 0) {
                 return new vscode.Position(lineNum, 0);
             }
+            colNum -= 1;
             charCode = lineText.charCodeAt(colNum);
         }
 
         // Lowercase or number
         while ((charCode >= 0x61 && charCode <= 0x7a) || (charCode >= 0x30 && charCode <= 0x39)) {
-            colNum -= 1;
             if (colNum === 0) {
                 return new vscode.Position(lineNum, 0);
             }
+            colNum -= 1;
             charCode = lineText.charCodeAt(colNum);
         }
 
         // Uppercase
         while (charCode >= 0x41 && charCode <= 0x5a) {
-            colNum -= 1;
             if (colNum === 0) {
                 return new vscode.Position(lineNum, 0);
             }
+            colNum -= 1;
             charCode = lineText.charCodeAt(colNum);
         }
 
-        return (new vscode.Position(lineNum, colNum + 1));
+        const newPosition = new vscode.Position(lineNum, colNum + 1);
+        if (newPosition.isEqual(startPosition)) {
+            return CursorMove._wordEdgePositionLeft(document, startPosition);
+        }
+        return newPosition;
     }
 
     private static _wordPartPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
@@ -300,13 +313,17 @@ export class CursorMove {
         const lineText = document.lineAt(lineNum).text;
 
         let colNum = startPosition.character;
+
+        if (colNum === lineText.length) {
+            return CursorMove._wordEdgePositionRight(document, startPosition);
+        }
         let charCode = lineText.charCodeAt(colNum);
 
         // Uppercase
         while (charCode >= 0x41 && charCode <= 0x5a) {
             colNum += 1;
             if (colNum === lineText.length) {
-                return undefined;
+                return (new vscode.Position(lineNum, colNum));
             }
             charCode = lineText.charCodeAt(colNum);
         }
@@ -315,7 +332,7 @@ export class CursorMove {
         while ((charCode >= 0x61 && charCode <= 0x7a) || (charCode >= 0x30 && charCode <= 0x39)) {
             colNum += 1;
             if (colNum === lineText.length) {
-                return undefined;
+                return (new vscode.Position(lineNum, colNum));
             }
             charCode = lineText.charCodeAt(colNum);
         }
@@ -324,12 +341,16 @@ export class CursorMove {
         while (charCode === 0x5f) {
             colNum += 1;
             if (colNum === lineText.length) {
-                return undefined;
+                return (new vscode.Position(lineNum, colNum));
             }
             charCode = lineText.charCodeAt(colNum);
         }
 
-        return (new vscode.Position(lineNum, colNum));
+        const newPosition = new vscode.Position(lineNum, colNum);
+        if (newPosition.isEqual(startPosition)) {
+            return CursorMove._wordEdgePositionRight(document, startPosition);
+        }
+        return (newPosition);
     }
 
     private static _expressionPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
