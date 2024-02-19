@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.18.0",
+	"version": "0.18.1",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -161,6 +161,11 @@
 				"command": "vscode-my.pasteSelectedAtLastEditLocation",
 				"category": "My",
 				"title": "Paste selected text at last edit location"
+			},
+			{
+				"command": "vscode-my.swapSelectionAndClipboard",
+				"category": "My",
+				"title": "Swap selected text with clipboard"
 			},
 			{
 				"command": "vscode-my.deletePairRight",
@@ -418,6 +423,11 @@
 			{
 				"key": "ctrl+shift+v",
 				"command": "vscode-my.pasteSelectedAtLastEditLocation",
+				"when": "myKeybindingsEnabled && editorTextFocus"
+			},
+			{
+				"key": "ctrl+alt+v",
+				"command": "vscode-my.swapSelectionAndClipboard",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{

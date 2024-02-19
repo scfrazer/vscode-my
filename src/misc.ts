@@ -98,6 +98,19 @@ export class Misc {
         await vscode.commands.executeCommand<void>("editor.action.clipboardPasteAction");
     }
 
+    public static async swapSelectionAndClipboard() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        if (editor.selections.length !== 1 || editor.selection.isEmpty) {
+            return;
+        }
+        const currentSelectionText = editor.document.getText(editor.selection);
+        await vscode.commands.executeCommand<void>("editor.action.clipboardPasteAction");
+        await vscode.env.clipboard.writeText(currentSelectionText);
+    }
+
     public static deletePairRight() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
