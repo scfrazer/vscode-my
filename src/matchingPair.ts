@@ -42,7 +42,7 @@ export class MatchingPair {
         });
     }
 
-    public static async selectInsideAny() {
+    public static async selectInsideQuotesOrBrackets() {
 
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -76,6 +76,76 @@ export class MatchingPair {
         return (quoteCount % 2 === 1);
     }
 
+    public static async selectByIndentation() {
+
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        if (!editor.selection.isEmpty) {
+            return;
+        }
+
+        const document = editor.document;
+        if (document.lineAt(editor.selection.start).isEmptyOrWhitespace) {
+            return;
+        }
+
+        let startingLine = editor.selection.start.line;
+        let endingLine = startingLine;
+        const indent = document.lineAt(editor.selection.start).firstNonWhitespaceCharacterIndex;
+
+        let currentLine = startingLine;
+        while (1) {
+            currentLine -= 1;
+            if (currentLine < 0) {
+                break;
+            }
+            if (document.lineAt(currentLine).isEmptyOrWhitespace || document.lineAt(currentLine).firstNonWhitespaceCharacterIndex >= indent) {
+                startingLine = currentLine;
+                continue;
+            }
+            break;
+        }
+        const startPosition = new vscode.Position(startingLine, 0);
+
+        currentLine = endingLine;
+        while (1) {
+            currentLine += 1;
+            if (currentLine === document.lineCount) {
+                break;
+            }
+            if (document.lineAt(currentLine).isEmptyOrWhitespace || document.lineAt(currentLine).firstNonWhitespaceCharacterIndex >= indent) {
+                endingLine = currentLine;
+                continue;
+            }
+            break;
+        }
+        let endPosition;
+        if (currentLine === document.lineCount) {
+            endPosition = new vscode.Position(endingLine, document.lineAt(endingLine).text.length);
+        }
+        else {
+            endPosition = new vscode.Position(currentLine, 0);
+        }
+
+        editor.selection = new vscode.Selection(startPosition, endPosition);
+    }
+
+    public static async smartSelect() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const document = editor.document;
+        const indent = document.lineAt(editor.selection.start).firstNonWhitespaceCharacterIndex;
+        if (editor.selection.start.character <= indent) {
+            MatchingPair.selectByIndentation();
+        }
+        else {
+            MatchingPair.selectInsideQuotesOrBrackets();
+        }
+    }
 
     public static matchPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
         if (startPosition.character === 0) {

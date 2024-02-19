@@ -36,9 +36,11 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand('home', function (args) { CursorMove.home(args); });
     registerMyCommand('smartDeleteLeft', function (_args) { SmartDelete.deleteLeft(); });
     registerMyCommand('smartDeleteRight', function (_args) { SmartDelete.deleteRight(); });
-    registerMyCommand('selectInsideBrackets', function (_args) { MatchingPair.selectInsideBrackets(); });
     registerMyCommand('selectInsideQuotes', function (_args) { MatchingPair.selectInsideQuotes(); });
-    registerMyCommand('selectInsideAny', function (_args) { MatchingPair.selectInsideAny(); });
+    registerMyCommand('selectInsideBrackets', function (_args) { MatchingPair.selectInsideBrackets(); });
+    registerMyCommand('selectInsideQuotesOrBrackets', function (_args) { MatchingPair.selectInsideQuotesOrBrackets(); });
+    registerMyCommand('selectByIndentation', function (_args) { MatchingPair.selectByIndentation(); });
+    registerMyCommand('smartSelect', function (_args) { MatchingPair.smartSelect(); });
     registerMyCommand('gotoChar', function (args) { ToChar.goto(args); });
     registerMyCommand('deleteToChar', function (_args) { ToChar.delete(); });
     registerMyCommand('addCursorsToLineStarts', function (_args) { Misc.addCursorsToLineStarts(); });

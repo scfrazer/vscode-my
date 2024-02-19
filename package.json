@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.18.1",
+	"version": "0.18.2",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -128,9 +128,19 @@
 				"title": "Select inside nearest quotes"
 			},
 			{
-				"command": "vscode-my.selectInsideAny",
+				"command": "vscode-my.selectInsideQuotesOrBrackets",
 				"category": "My",
 				"title": "Select inside nearest quotes or brackets"
+			},
+			{
+				"command": "vscode-my.selectByIndentation",
+				"category": "My",
+				"title": "Select by same or greater indentation"
+			},
+			{
+				"command": "vscode-my.smartSelect",
+				"category": "My",
+				"title": "Select by indentation or inside brackets or inside quotes"
 			},
 			{
 				"command": "vscode-my.gotoChar",
@@ -360,18 +370,8 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "ctrl+r",
-				"command": "vscode-my.selectInsideBrackets",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "alt+e",
-				"command": "vscode-my.selectInsideQuotes",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
 				"key": "ctrl+e",
-				"command": "vscode-my.selectInsideAny",
+				"command": "vscode-my.smartSelect",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
@@ -426,7 +426,7 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "ctrl+alt+v",
+				"key": "ctrl+shift+x",
 				"command": "vscode-my.swapSelectionAndClipboard",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
