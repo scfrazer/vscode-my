@@ -355,7 +355,7 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "shift+alt+backspace",
+				"key": "alt+shift+backspace",
 				"command": "vscode-my.deleteWordPartRight",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
@@ -365,7 +365,7 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "shift+ctrl+delete",
+				"key": "alt+delete",
 				"command": "vscode-my.deleteWordPartRight",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
@@ -421,18 +421,13 @@
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "ctrl+shift+v",
+				"key": "ctrl+r",
 				"command": "vscode-my.pasteSelectedAtLastEditLocation",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
-				"key": "ctrl+shift+x",
+				"key": "ctrl+shift+v",
 				"command": "vscode-my.swapSelectionAndClipboard",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+k -",
-				"command": "vscode-my.deletePairRight",
 				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
