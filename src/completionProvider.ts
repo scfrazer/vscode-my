@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export class InlineCompletionItemProvider implements vscode.InlineCompletionItemProvider {
     provideInlineCompletionItems(
@@ -7,8 +7,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
         context: vscode.InlineCompletionContext,
         _token: vscode.CancellationToken
     ): vscode.ProviderResult<vscode.InlineCompletionItem[] | vscode.InlineCompletionList> {
-
-        const automaticallyTriggered: boolean = (context.triggerKind === vscode.InlineCompletionTriggerKind.Automatic);
+        const automaticallyTriggered: boolean = context.triggerKind === vscode.InlineCompletionTriggerKind.Automatic;
         let results: Array<vscode.InlineCompletionItem> | undefined = [];
 
         let prefix = _wordBeforePosition(document, position);
@@ -21,8 +20,7 @@ export class InlineCompletionItemProvider implements vscode.InlineCompletionItem
         }
         if (suffix === undefined) {
             suffix = "";
-        }
-        else if (automaticallyTriggered) {
+        } else if (automaticallyTriggered) {
             return;
         }
 
@@ -39,18 +37,18 @@ function _getCompletionResults(
     document: vscode.TextDocument,
     position: vscode.Position,
     context: vscode.InlineCompletionContext,
-    prefix: string, suffix: string
+    prefix: string,
+    suffix: string
 ): Array<vscode.InlineCompletionItem> | undefined {
-
-    const automaticallyTriggered: boolean = (context.triggerKind === vscode.InlineCompletionTriggerKind.Automatic);
+    const automaticallyTriggered: boolean = context.triggerKind === vscode.InlineCompletionTriggerKind.Automatic;
     const results: Array<vscode.InlineCompletionItem> = [];
-    const previousCompletions = new Map<string, boolean>;
+    const previousCompletions = new Map<string, boolean>();
     const numLinesToSearch = 1000;
 
     let searchRe;
     let range: vscode.Range;
 
-    searchRe = new RegExp(`\\b(${prefix}[a-zA-Z0-9_]*)${suffix}\\b`, 'g');
+    searchRe = new RegExp(`\\b(${prefix}[a-zA-Z0-9_]*)${suffix}\\b`, "g");
     const prefixLength = prefix.length;
     range = new vscode.Range(position.translate(0, -1 * prefixLength), position);
 
@@ -59,7 +57,7 @@ function _getCompletionResults(
     if (colNum < 0) {
         colNum = 0;
     }
-    let targetLineNum = (numLinesToSearch >= (lineNum + 1)) ? 0 : (lineNum - numLinesToSearch + 1);
+    let targetLineNum = numLinesToSearch >= lineNum + 1 ? 0 : lineNum - numLinesToSearch + 1;
     while (lineNum > targetLineNum) {
         let text = document.lineAt(lineNum).text;
         if (colNum > 0) {
@@ -91,7 +89,7 @@ function _getCompletionResults(
     lineNum = position.line;
     colNum = position.character + 1;
     const lastLineNum = document.lineCount;
-    targetLineNum = ((lineNum + numLinesToSearch) >= lastLineNum) ? lastLineNum : (lineNum + numLinesToSearch);
+    targetLineNum = lineNum + numLinesToSearch >= lastLineNum ? lastLineNum : lineNum + numLinesToSearch;
     while (lineNum < targetLineNum) {
         let text = document.lineAt(lineNum).text;
         if (colNum > 0) {

@@ -1,7 +1,6 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export class EditorNavigation {
-
     public static previousChange() {
         vscode.commands.executeCommand("workbench.action.editor.previousChange");
     }
@@ -17,5 +16,4 @@ export class EditorNavigation {
     public static nextProblem() {
         vscode.commands.executeCommand("editor.action.marker.next");
     }
-
 }

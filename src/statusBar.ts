@@ -1,12 +1,10 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export class StatusBar {
-
     private static _statusBarMatchesItem: vscode.StatusBarItem;
     private static _statusBarLineCountItem: vscode.StatusBarItem;
 
     public static subscribeToChanges(context: vscode.ExtensionContext): void {
-
         StatusBar._statusBarMatchesItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 102);
         StatusBar._statusBarMatchesItem.text = "Matches: N/A";
         StatusBar._statusBarMatchesItem.show();
@@ -50,10 +48,10 @@ export class StatusBar {
     private static _update(editor: vscode.TextEditor): void {
         let matchStr = "N/A";
         const text = editor.document.getText(editor.selection);
-        if (text.length !== 0 && text.indexOf('\n') === -1) {
-            const escapedText = text.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
+        if (text.length !== 0 && text.indexOf("\n") === -1) {
+            const escapedText = text.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
             const matches = editor.document.getText().match(new RegExp(escapedText, "g"));
-            matchStr = (matches !== null && matches.length > 0) ? `${matches.length}` : "N/A";
+            matchStr = matches !== null && matches.length > 0 ? `${matches.length}` : "N/A";
         }
         StatusBar._statusBarMatchesItem.text = `Matches: ${matchStr}`;
         StatusBar._statusBarMatchesItem.show();

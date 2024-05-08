@@ -1,14 +1,12 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export class Reselect {
-
     private static _prevFilePath: string;
     private static _prevStartPosition: vscode.Position | undefined;
 
     public static async paste() {
-
         const editor = vscode.window.activeTextEditor;
-        const onlyOneSelection = (editor && editor.selections.length === 1);
+        const onlyOneSelection = editor && editor.selections.length === 1;
 
         if (onlyOneSelection) {
             if (editor.selection.isEmpty) {

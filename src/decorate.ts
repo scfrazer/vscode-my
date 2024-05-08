@@ -1,7 +1,6 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export class Decorate {
-
     private static _timeout: NodeJS.Timer | undefined = undefined;
     private static _activeEditor: vscode.TextEditor | undefined = undefined;
     private static _decorationDelay: number = 200;
@@ -11,7 +10,7 @@ export class Decorate {
         backgroundColor: "#af0000",
         borderRadius: "2px",
         overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#af0000"
+        overviewRulerColor: "#af0000",
     });
 
     private static _todoDecorationType = vscode.window.createTextEditorDecorationType({
@@ -19,7 +18,7 @@ export class Decorate {
         backgroundColor: "#eeee00",
         borderRadius: "2px",
         overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#eeee00"
+        overviewRulerColor: "#eeee00",
     });
 
     private static _noteDecorationType = vscode.window.createTextEditorDecorationType({
@@ -27,7 +26,7 @@ export class Decorate {
         backgroundColor: "#27408b",
         borderRadius: "2px",
         overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#27408b"
+        overviewRulerColor: "#27408b",
     });
 
     private static _debugDecorationType = vscode.window.createTextEditorDecorationType({
@@ -35,11 +34,10 @@ export class Decorate {
         backgroundColor: "#ffa500",
         borderRadius: "2px",
         overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#ffa500"
+        overviewRulerColor: "#ffa500",
     });
 
     public static subscribeToChanges(context: vscode.ExtensionContext): void {
-
         Decorate._activeEditor = vscode.window.activeTextEditor;
 
         context.subscriptions.push(
@@ -65,7 +63,7 @@ export class Decorate {
     }
 
     public static setDecorationDelay() {
-        const delay = vscode.workspace.getConfiguration().get<number>('todoDecorationDelay');
+        const delay = vscode.workspace.getConfiguration().get<number>("todoDecorationDelay");
         if (delay) {
             Decorate._decorationDelay = delay;
         }
@@ -78,14 +76,12 @@ export class Decorate {
         }
         if (throttle) {
             Decorate._timeout = setTimeout(Decorate._update, Decorate._decorationDelay);
-        }
-        else {
+        } else {
             Decorate._update();
         }
     }
 
     private static _update(): void {
-
         if (!Decorate._activeEditor) {
             return;
         }
@@ -105,14 +101,11 @@ export class Decorate {
             const decoration = { range: new vscode.Range(startPosition, endPosition) };
             if (match[0] === "FIXME") {
                 fixmes.push(decoration);
-            }
-            else if (match[0] === "TODO") {
+            } else if (match[0] === "TODO") {
                 todos.push(decoration);
-            }
-            else if (match[0] === "NOTE") {
+            } else if (match[0] === "NOTE") {
                 notes.push(decoration);
-            }
-            else if (match[0] === "DEBUG") {
+            } else if (match[0] === "DEBUG") {
                 debugs.push(decoration);
             }
         }

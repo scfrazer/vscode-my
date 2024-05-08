@@ -1,11 +1,10 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-import { Language } from './language';
-import { MatchingPair } from './matchingPair';
-import { Util } from './util';
+import { Language } from "./language";
+import { MatchingPair } from "./matchingPair";
+import { Util } from "./util";
 
 export class Misc {
-
     public static addCursorsToLineStarts() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -29,23 +28,25 @@ export class Misc {
             return;
         }
         const document = editor.document;
-        editor.edit((editBuilder) => {
-            editor.selections.map((selection) => {
-                let range = document.lineAt(selection.active).range;
-                editBuilder.insert(range.end, ";");
-            });
-        }).then((success) => {
-            if (!success) {
-                return;
-            }
-            editor.selections = editor.selections.map((selection) => {
-                if (selection.active.isEqual(document.lineAt(selection.active).range.end)) {
-                    let newPosition = selection.active.translate(0, -1);
-                    return (new vscode.Selection(newPosition, newPosition));
+        editor
+            .edit((editBuilder) => {
+                editor.selections.map((selection) => {
+                    let range = document.lineAt(selection.active).range;
+                    editBuilder.insert(range.end, ";");
+                });
+            })
+            .then((success) => {
+                if (!success) {
+                    return;
                 }
-                return selection;
+                editor.selections = editor.selections.map((selection) => {
+                    if (selection.active.isEqual(document.lineAt(selection.active).range.end)) {
+                        let newPosition = selection.active.translate(0, -1);
+                        return new vscode.Selection(newPosition, newPosition);
+                    }
+                    return selection;
+                });
             });
-        });
     }
 
     public static justOneSpace() {
@@ -121,7 +122,10 @@ export class Misc {
         editor.edit((editBuilder) => {
             editor.selections.map((selection) => {
                 const lineText = document.lineAt(selection.active).text;
-                if (!language.isOpener(lineText.charCodeAt(selection.active.character)) && !language.isQuotes(lineText.charCodeAt(selection.active.character))) {
+                if (
+                    !language.isOpener(lineText.charCodeAt(selection.active.character)) &&
+                    !language.isQuotes(lineText.charCodeAt(selection.active.character))
+                ) {
                     return;
                 }
                 const matchPosition = MatchingPair.matchPositionRight(document, selection.active);
@@ -142,7 +146,7 @@ export class Misc {
             return;
         }
         const document = editor.document;
-        vscode.window.showInputBox({ title: "Go to line number" }).then(input => {
+        vscode.window.showInputBox({ title: "Go to line number" }).then((input) => {
             if (input === undefined) {
                 return;
             }
@@ -152,8 +156,7 @@ export class Misc {
             }
             if (lineNum < 1) {
                 lineNum = 1;
-            }
-            else if (lineNum > document.lineCount) {
+            } else if (lineNum > document.lineCount) {
                 lineNum = document.lineCount;
             }
             const position = new vscode.Position(lineNum - 1, 0);
@@ -173,12 +176,10 @@ export class Misc {
             const selection = Misc._maybeTabOutSelection(document, editor.selection, language);
             if (selection !== undefined) {
                 editor.selection = selection;
-            }
-            else {
+            } else {
                 vscode.commands.executeCommand<void>("tab");
             }
-        }
-        else {
+        } else {
             editor.selections = editor.selections.map((selection) => {
                 const newSelection = Misc._maybeTabOutSelection(document, selection, language);
                 if (newSelection !== undefined) {
@@ -189,12 +190,16 @@ export class Misc {
         }
     }
 
-    private static _maybeTabOutSelection(document: vscode.TextDocument, selection: vscode.Selection, language: Language): vscode.Selection | undefined {
+    private static _maybeTabOutSelection(
+        document: vscode.TextDocument,
+        selection: vscode.Selection,
+        language: Language
+    ): vscode.Selection | undefined {
         const lineText = document.lineAt(selection.active).text;
         const charCode = lineText.charCodeAt(selection.active.character);
         if (selection.active.character > 0 && (language.isCloser(charCode) || language.isQuotes(charCode))) {
             let newPosition = selection.active.translate(0, 1);
-            return (new vscode.Selection(newPosition, newPosition));
+            return new vscode.Selection(newPosition, newPosition);
         }
         return undefined;
     }
@@ -219,7 +224,7 @@ export class Misc {
         }
         vscode.commands.executeCommand("revealLine", {
             lineNumber: editor.selection.active.line,
-            at: "center"
+            at: "center",
         });
     }
 
@@ -248,7 +253,7 @@ export class Misc {
         const indent = document.lineAt(range.start).firstNonWhitespaceCharacterIndex;
 
         const args = document.getText(range);
-        editor.edit(editBuilder => {
+        editor.edit((editBuilder) => {
             // Use negative lookahead to find "," outside <>{}()[]
             let newArgs = args.replace(/,\s*(?!([^<\{()\[]*[>\})\]](?!;)))/g, ",\n" + " ".repeat(indent + 4));
             newArgs = "\n" + " ".repeat(indent + 4) + newArgs + "\n" + " ".repeat(indent);
@@ -289,7 +294,7 @@ export class Misc {
         const dialogOptions: vscode.OpenDialogOptions = {
             defaultUri: editor.document.uri,
             canSelectMany: false,
-            title: "Open Alternative File"
+            title: "Open Alternative File",
         };
         await vscode.window.showOpenDialog(dialogOptions).then((uris) => {
             if (uris === undefined) {

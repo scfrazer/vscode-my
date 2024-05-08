@@ -1,7 +1,6 @@
-import { Util } from './util';
+import { Util } from "./util";
 
 export class Language {
-
     private _wordCharCodeRanges: Array<Array<number>>;
     private _openerCharCodes: Array<number>;
     private _closerCharCodes: Array<number>;
@@ -11,12 +10,11 @@ export class Language {
     public blockCommentEnd: string | undefined;
 
     public constructor(language: string) {
-
         this._wordCharCodeRanges = [];
         this._wordCharCodeRanges.push([97, 122]); // a-z
-        this._wordCharCodeRanges.push([65, 90]);  // A-Z
-        this._wordCharCodeRanges.push([48, 57]);  // 0-9
-        this._wordCharCodeRanges.push([95, 95]);  // underscore
+        this._wordCharCodeRanges.push([65, 90]); // A-Z
+        this._wordCharCodeRanges.push([48, 57]); // 0-9
+        this._wordCharCodeRanges.push([95, 95]); // underscore
 
         this._openerCharCodes = [40, 91, 123]; // Open paren/bracket/brace
         this._closerCharCodes = [41, 93, 125]; // Close paren/bracket/brace
@@ -49,11 +47,11 @@ export class Language {
             case "shellscript":
             case "typescript":
             case "yaml":
-                this._quoteCharCodes = [34, 39];  // Double/single quotes
+                this._quoteCharCodes = [34, 39]; // Double/single quotes
                 break;
 
             default:
-                this._quoteCharCodes = [34];  // Double quotes
+                this._quoteCharCodes = [34]; // Double quotes
         }
     }
 
@@ -90,7 +88,6 @@ export class Language {
     }
 
     public getDelimiterReString(): string {
-
         const allCharCodes = this._openerCharCodes.concat(this._closerCharCodes).concat(this._quoteCharCodes);
         const charCodestr = Util.escapeRegExp(String.fromCharCode(...allCharCodes));
 
@@ -110,7 +107,6 @@ export class Language {
     }
 
     public getEdgeReString(): string {
-
         const openers = Util.escapeRegExp(String.fromCharCode(...this._openerCharCodes));
         const closers = Util.escapeRegExp(String.fromCharCode(...this._closerCharCodes));
         const quotes = Util.escapeRegExp(String.fromCharCode(...this._quoteCharCodes));

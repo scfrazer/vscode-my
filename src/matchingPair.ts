@@ -1,6 +1,6 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-import { Language } from './language';
+import { Language } from "./language";
 
 interface IMatchPositionArgs {
     document: vscode.TextDocument;
@@ -11,7 +11,6 @@ interface IMatchPositionArgs {
 }
 
 export class MatchingPair {
-
     public static async selectInsideBrackets() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -23,7 +22,7 @@ export class MatchingPair {
             if (newRange === undefined) {
                 return selection;
             }
-            return (new vscode.Selection(newRange.start, newRange.end));
+            return new vscode.Selection(newRange.start, newRange.end);
         });
     }
 
@@ -38,12 +37,11 @@ export class MatchingPair {
             if (newRange === undefined) {
                 return selection;
             }
-            return (new vscode.Selection(newRange.start, newRange.end));
+            return new vscode.Selection(newRange.start, newRange.end);
         });
     }
 
     public static async selectInsideQuotesOrBrackets() {
-
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -56,13 +54,13 @@ export class MatchingPair {
                 if (newRange === undefined) {
                     return selection;
                 }
-                return (new vscode.Selection(newRange.start, newRange.end));
+                return new vscode.Selection(newRange.start, newRange.end);
             }
             newRange = MatchingPair.insideBracketsRange(document, selection.active);
             if (newRange === undefined) {
                 return selection;
             }
-            return (new vscode.Selection(newRange.start, newRange.end));
+            return new vscode.Selection(newRange.start, newRange.end);
         });
     }
 
@@ -70,14 +68,13 @@ export class MatchingPair {
         const lineText = document.lineAt(startPosition).text.substring(0, startPosition.character);
         const language = new Language(document.languageId);
         const quoteStr = language.getQuoteString();
-        const searchRe = new RegExp(`^${quoteStr}|[^\\\\]${quoteStr}`, 'g');
+        const searchRe = new RegExp(`^${quoteStr}|[^\\\\]${quoteStr}`, "g");
         // FIXME Go one by one instead of counting
         const quoteCount = (lineText.match(searchRe) || []).length;
-        return (quoteCount % 2 === 1);
+        return quoteCount % 2 === 1;
     }
 
     public static async selectByIndentation() {
-
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -101,7 +98,10 @@ export class MatchingPair {
             if (currentLine < 0) {
                 break;
             }
-            if (document.lineAt(currentLine).isEmptyOrWhitespace || document.lineAt(currentLine).firstNonWhitespaceCharacterIndex >= indent) {
+            if (
+                document.lineAt(currentLine).isEmptyOrWhitespace ||
+                document.lineAt(currentLine).firstNonWhitespaceCharacterIndex >= indent
+            ) {
                 startingLine = currentLine;
                 continue;
             }
@@ -115,7 +115,10 @@ export class MatchingPair {
             if (currentLine === document.lineCount) {
                 break;
             }
-            if (document.lineAt(currentLine).isEmptyOrWhitespace || document.lineAt(currentLine).firstNonWhitespaceCharacterIndex >= indent) {
+            if (
+                document.lineAt(currentLine).isEmptyOrWhitespace ||
+                document.lineAt(currentLine).firstNonWhitespaceCharacterIndex >= indent
+            ) {
                 endingLine = currentLine;
                 continue;
             }
@@ -124,8 +127,7 @@ export class MatchingPair {
         let endPosition;
         if (currentLine === document.lineCount) {
             endPosition = new vscode.Position(endingLine, document.lineAt(endingLine).text.length);
-        }
-        else {
+        } else {
             endPosition = new vscode.Position(currentLine, 0);
         }
 
@@ -141,13 +143,15 @@ export class MatchingPair {
         const indent = document.lineAt(editor.selection.start).firstNonWhitespaceCharacterIndex;
         if (editor.selection.start.character <= indent) {
             MatchingPair.selectByIndentation();
-        }
-        else {
+        } else {
             MatchingPair.selectInsideQuotesOrBrackets();
         }
     }
 
-    public static matchPositionLeft(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+    public static matchPositionLeft(
+        document: vscode.TextDocument,
+        startPosition: vscode.Position
+    ): vscode.Position | undefined {
         if (startPosition.character === 0) {
             return undefined;
         }
@@ -159,11 +163,14 @@ export class MatchingPair {
             startPosition: startPosition,
             lookingForQuotes: lookingForQuotes,
             goingRight: false,
-            goingUp: false
+            goingUp: false,
         });
     }
 
-    public static matchPositionRight(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Position | undefined {
+    public static matchPositionRight(
+        document: vscode.TextDocument,
+        startPosition: vscode.Position
+    ): vscode.Position | undefined {
         const language = new Language(document.languageId);
         const lineText = document.lineAt(startPosition.line).text;
         const lookingForQuotes = language.isQuotes(lineText.charCodeAt(startPosition.character));
@@ -172,24 +179,25 @@ export class MatchingPair {
             startPosition: startPosition,
             lookingForQuotes: lookingForQuotes,
             goingRight: true,
-            goingUp: false
+            goingUp: false,
         });
     }
 
     private static _matchPosition(args: IMatchPositionArgs): vscode.Position | undefined {
-
         const language = new Language(args.document.languageId);
-        const lastLineNum = (args.goingRight) ? args.document.lineCount - 1 : 0;
-        const searchRe = new RegExp((args.lookingForQuotes ? language.getQuoteString() : language.getBracketString()), 'g');
+        const lastLineNum = args.goingRight ? args.document.lineCount - 1 : 0;
+        const searchRe = new RegExp(
+            args.lookingForQuotes ? language.getQuoteString() : language.getBracketString(),
+            "g"
+        );
 
         let lineNum = args.startPosition.line;
         let colNum = 0;
         let firstIteration = true;
-        let currentQuoteStr = '';
+        let currentQuoteStr = "";
         let stackDepth = 0;
         let found = false;
         while (!found) {
-
             // Get matches and remove irrelevant ones
             const lineText = args.document.lineAt(lineNum).text;
             const unfilteredMatches = lineText.matchAll(searchRe);
@@ -203,8 +211,7 @@ export class MatchingPair {
                         if (match.index < args.startPosition.character) {
                             continue;
                         }
-                    }
-                    else if (match.index > args.startPosition.character - 1) {
+                    } else if (match.index > args.startPosition.character - 1) {
                         continue;
                     }
                 }
@@ -220,7 +227,6 @@ export class MatchingPair {
 
             // Iterate over matches
             for (const match of matches) {
-
                 if (match?.index === undefined) {
                     continue;
                 }
@@ -251,10 +257,9 @@ export class MatchingPair {
                     if (args.goingRight) {
                         stackDepth += 1;
                         continue;
-                    }
-                    else {
+                    } else {
                         stackDepth -= 1;
-                        found = (stackDepth === ((args.goingUp) ? -1 : 0));
+                        found = stackDepth === (args.goingUp ? -1 : 0);
                         if (found) {
                             break;
                         }
@@ -264,7 +269,7 @@ export class MatchingPair {
 
                 if (args.goingRight) {
                     stackDepth -= 1;
-                    found = (stackDepth === ((args.goingUp) ? -1 : 0));
+                    found = stackDepth === (args.goingUp ? -1 : 0);
                     if (found) {
                         break;
                     }
@@ -273,10 +278,10 @@ export class MatchingPair {
                 stackDepth += 1;
             }
 
-            if (found || (lineNum === lastLineNum)) {
+            if (found || lineNum === lastLineNum) {
                 break;
             }
-            lineNum += (args.goingRight) ? 1 : -1;
+            lineNum += args.goingRight ? 1 : -1;
         }
 
         if (found) {
@@ -285,13 +290,16 @@ export class MatchingPair {
         return undefined;
     }
 
-    public static insideBracketsRange(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Range | undefined {
+    public static insideBracketsRange(
+        document: vscode.TextDocument,
+        startPosition: vscode.Position
+    ): vscode.Range | undefined {
         const leftPosition = MatchingPair._matchPosition({
             document: document,
             startPosition: startPosition,
             lookingForQuotes: false,
             goingRight: false,
-            goingUp: true
+            goingUp: true,
         });
         if (leftPosition === undefined) {
             return undefined;
@@ -303,13 +311,16 @@ export class MatchingPair {
         return new vscode.Range(leftPosition.translate(0, 1), rightPosition);
     }
 
-    private static _insideQuotesRange(document: vscode.TextDocument, startPosition: vscode.Position): vscode.Range | undefined {
+    private static _insideQuotesRange(
+        document: vscode.TextDocument,
+        startPosition: vscode.Position
+    ): vscode.Range | undefined {
         const leftPosition = MatchingPair._matchPosition({
             document: document,
             startPosition: startPosition,
             lookingForQuotes: true,
             goingRight: false,
-            goingUp: true
+            goingUp: true,
         });
         if (leftPosition === undefined) {
             return undefined;
@@ -324,12 +335,12 @@ export class MatchingPair {
     private static _charIsEscaped(startingCol: number, str: string): boolean {
         let numBackslashes = 0;
         for (let pos = startingCol - 1; pos >= 0; pos -= 1) {
-            if (str[pos] === '\\') {
+            if (str[pos] === "\\") {
                 numBackslashes += 1;
                 continue;
             }
             break;
         }
-        return (numBackslashes % 2 === 1);
+        return numBackslashes % 2 === 1;
     }
 }

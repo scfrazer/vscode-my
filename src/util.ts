@@ -1,13 +1,18 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export class Util {
-
     public static revealActivePosition(editor: vscode.TextEditor) {
         const selection = new vscode.Selection(editor.selection.active, editor.selection.active);
         editor.revealRange(selection, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
     }
 
-    public static updateSelections(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined, select: boolean) {
+    public static updateSelections(
+        positionFunction: (
+            document: vscode.TextDocument,
+            startPosition: vscode.Position
+        ) => vscode.Position | undefined,
+        select: boolean
+    ) {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -18,12 +23,14 @@ export class Util {
             if (newPosition === undefined) {
                 return selection;
             }
-            return (new vscode.Selection((select || !selection.isEmpty) ? selection.anchor : newPosition, newPosition));
+            return new vscode.Selection(select || !selection.isEmpty ? selection.anchor : newPosition, newPosition);
         });
         Util.revealActivePosition(editor);
     }
 
-    public static deleteToPosition(positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined) {
+    public static deleteToPosition(
+        positionFunction: (document: vscode.TextDocument, startPosition: vscode.Position) => vscode.Position | undefined
+    ) {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
@@ -42,10 +49,10 @@ export class Util {
     }
 
     public static isWhitespace(charCode: number): boolean {
-        return (charCode === 32) || (charCode === 9);
+        return charCode === 32 || charCode === 9;
     }
 
     public static escapeRegExp(str: string): string {
-        return str.replace(/[.*+?^${}()|[\]\/\\]/g, '\\$&'); // $& means the whole matched string
+        return str.replace(/[.*+?^${}()|[\]\/\\]/g, "\\$&"); // $& means the whole matched string
     }
 }
