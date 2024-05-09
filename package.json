@@ -2,7 +2,7 @@
 	"name": "vscode-my",
 	"displayName": "My Personal Commands",
 	"description": "My personal commands",
-	"version": "0.18.2",
+	"version": "0.18.3",
 	"publisher": "scfrazer",
 	"repository": {
 		"url": "https://github.com/scfrazer/vscode-my"
@@ -226,6 +226,11 @@
 				"command": "vscode-my.openAlternativeFile",
 				"category": "My",
 				"title": "Open alternative file"
+			},
+			{
+				"command": "vscode-my.highlightedCopy",
+				"category": "My",
+				"title": "Highlighted copy"
 			},
 			{
 				"command": "vscode-my.reselectablePaste",
@@ -469,6 +474,11 @@
 				"key": "alt+o",
 				"command": "vscode-my.openAlternativeFile",
 				"when": "myKeybindingsEnabled"
+			},
+			{
+				"key": "ctrl+c",
+				"command": "vscode-my.highlightedCopy",
+				"when": "myKeybindingsEnabled && editorTextFocus"
 			},
 			{
 				"key": "ctrl+v",

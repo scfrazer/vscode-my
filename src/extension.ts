@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 
+import { InlineCompletionItemProvider } from "./completionProvider";
 import { CursorMove } from "./cursorMove";
 import { Decorate } from "./decorate";
+import { Edit } from "./edit";
 import { EditorNavigation } from "./editorNavigation";
-import { InlineCompletionItemProvider } from "./completionProvider";
 import { MatchingPair } from "./matchingPair";
 import { Misc } from "./misc";
-import { Reselect } from "./reselect";
 import { SmartDelete } from "./smartDelete";
 import { StatusBar } from "./statusBar";
 import { ToChar } from "./toChar";
@@ -103,12 +103,6 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand("justOneSpace", function (_args) {
         Misc.justOneSpace();
     });
-    registerMyCommand("pasteSelectedAtLastEditLocation", function (_args) {
-        Misc.pasteSelectedAtLastEditLocation();
-    });
-    registerMyCommand("swapSelectionAndClipboard", function (_args) {
-        Misc.swapSelectionAndClipboard();
-    });
     registerMyCommand("deletePairRight", function (_args) {
         Misc.deletePairRight();
     });
@@ -139,11 +133,20 @@ export function activate(context: vscode.ExtensionContext) {
     registerMyCommand("openAlternativeFile", function (_args) {
         Misc.openAlternativeFile();
     });
+    registerMyCommand("highlightedCopy", function (_args) {
+        Edit.copy();
+    });
     registerMyCommand("reselectablePaste", function (_args) {
-        Reselect.paste();
+        Edit.paste();
     });
     registerMyCommand("reselectPreviousPaste", function (_args) {
-        Reselect.previousPaste();
+        Edit.previousPaste();
+    });
+    registerMyCommand("pasteSelectedAtLastEditLocation", function (_args) {
+        Edit.pasteSelectedAtLastEditLocation();
+    });
+    registerMyCommand("swapSelectionAndClipboard", function (_args) {
+        Edit.swapSelectionAndClipboard();
     });
     registerMyCommand("previousChange", function (_args) {
         EditorNavigation.previousChange();

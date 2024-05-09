@@ -89,29 +89,6 @@ export class Misc {
         });
     }
 
-    public static async pasteSelectedAtLastEditLocation() {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        await vscode.commands.executeCommand<void>("editor.action.clipboardCopyAction");
-        await vscode.commands.executeCommand<void>("workbench.action.navigateToLastEditLocation");
-        await vscode.commands.executeCommand<void>("editor.action.clipboardPasteAction");
-    }
-
-    public static async swapSelectionAndClipboard() {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        if (editor.selections.length !== 1 || editor.selection.isEmpty) {
-            return;
-        }
-        const currentSelectionText = editor.document.getText(editor.selection);
-        await vscode.commands.executeCommand<void>("editor.action.clipboardPasteAction");
-        await vscode.env.clipboard.writeText(currentSelectionText);
-    }
-
     public static deletePairRight() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
