@@ -11,9 +11,11 @@ export class Edit {
         }
         await vscode.commands.executeCommand<void>("editor.action.clipboardCopyAction");
 
+        // TODO: Make this configurable
+
         const copyDecorationType = vscode.window.createTextEditorDecorationType({
             color: "white",
-            backgroundColor: "#008700",
+            backgroundColor: "#005f87",
             borderRadius: "2px",
         });
 
@@ -27,9 +29,11 @@ export class Edit {
         }
         editor.setDecorations(copyDecorationType, ranges);
 
+        // TODO: Make this configurable
+
         setTimeout(() => {
             copyDecorationType.dispose();
-        }, 350);
+        }, 400);
     }
 
     public static async paste() {

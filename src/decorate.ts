@@ -5,11 +5,13 @@ export class Decorate {
     private static _activeEditor: vscode.TextEditor | undefined = undefined;
     private static _decorationDelay: number = 200;
 
+    // TODO: Turn ruler lanes on/off based on configuration
+
     private static _fixmeDecorationType = vscode.window.createTextEditorDecorationType({
         color: "white",
         backgroundColor: "#af0000",
         borderRadius: "2px",
-        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        // overviewRulerLane: vscode.OverviewRulerLane.Center,
         overviewRulerColor: "#af0000",
     });
 
@@ -17,7 +19,7 @@ export class Decorate {
         color: "black",
         backgroundColor: "#eeee00",
         borderRadius: "2px",
-        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        // overviewRulerLane: vscode.OverviewRulerLane.Center,
         overviewRulerColor: "#eeee00",
     });
 
@@ -25,7 +27,7 @@ export class Decorate {
         color: "white",
         backgroundColor: "#27408b",
         borderRadius: "2px",
-        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        // overviewRulerLane: vscode.OverviewRulerLane.Center,
         overviewRulerColor: "#27408b",
     });
 
@@ -33,7 +35,7 @@ export class Decorate {
         color: "black",
         backgroundColor: "#ffa500",
         borderRadius: "2px",
-        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        // overviewRulerLane: vscode.OverviewRulerLane.Center,
         overviewRulerColor: "#ffa500",
     });
 
