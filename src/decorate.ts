@@ -11,32 +11,32 @@ export class Decorate {
         color: "white",
         backgroundColor: "#af0000",
         borderRadius: "2px",
-        // overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#af0000",
+        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        overviewRulerColor: "#b75bf1",
     });
 
     private static _todoDecorationType = vscode.window.createTextEditorDecorationType({
         color: "black",
         backgroundColor: "#eeee00",
         borderRadius: "2px",
-        // overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#eeee00",
+        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        overviewRulerColor: "#b75bf1",
     });
 
     private static _noteDecorationType = vscode.window.createTextEditorDecorationType({
         color: "white",
         backgroundColor: "#27408b",
         borderRadius: "2px",
-        // overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#27408b",
+        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        overviewRulerColor: "#b75bf1",
     });
 
     private static _debugDecorationType = vscode.window.createTextEditorDecorationType({
         color: "black",
         backgroundColor: "#ffa500",
         borderRadius: "2px",
-        // overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#ffa500",
+        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        overviewRulerColor: "#b75bf1",
     });
 
     public static subscribeToChanges(context: vscode.ExtensionContext): void {
