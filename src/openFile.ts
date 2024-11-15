@@ -11,10 +11,10 @@ export class OpenFile {
         const position = editor.selection.active;
         const lineText = document.lineAt(position.line).text;
 
-        // TODO: Capture and expand $(FOO) or ${FOO} or $FOO or $ENV{FOO} from env vars
+        // TODO: Capture and expand $(FOO) or ${FOO} or $FOO or $ENV{FOO} from env variables
 
         const beforeRegex = /([-a-zA-Z0-9_./]+)$/;
-        const afterRegex = /^([-a-zA-Z0-9_./]+)(?:[:,@;]\s*(\d+))?/;
+        const afterRegex = /^([-a-zA-Z0-9_./]+)(?:[:,@;{([]\s*(\d+))?/;
         let filename = "";
         let lineNumber = 0;
 
@@ -39,7 +39,8 @@ export class OpenFile {
                 await vscode.workspace.fs.stat(fullPath);
                 await OpenFile.openUriAtLine(fullPath, lineNumber);
             } catch (error) {
-                vscode.window.showErrorMessage(`File not found: ${filename}`);
+                // vscode.window.showErrorMessage(`File not found: ${filename}`);
+                vscode.window.showErrorMessage(`Error: ${error}`);
             }
         } else {
             vscode.window.showInformationMessage("No filename found under cursor.");
