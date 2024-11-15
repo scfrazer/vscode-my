@@ -289,5 +289,4 @@ export class Misc {
 
     // TODO: Filter lines -- Highlight filter text, add links to original file?
     // TODO: Remove extra blank lines and trailing whitespace
-    // TODO: Open file at cursor or selection
 }
