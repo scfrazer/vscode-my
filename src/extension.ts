@@ -1,12 +1,13 @@
 import * as vscode from "vscode";
 
-import { InlineCompletionItemProvider } from "./completionProvider";
 import { CursorMove } from "./cursorMove";
 import { Decorate } from "./decorate";
 import { Edit } from "./edit";
 import { EditorNavigation } from "./editorNavigation";
+import { InlineCompletionItemProvider } from "./completionProvider";
 import { MatchingPair } from "./matchingPair";
 import { Misc } from "./misc";
+import { OpenFile } from "./openFile";
 import { SmartDelete } from "./smartDelete";
 import { StatusBar } from "./statusBar";
 import { ToChar } from "./toChar";
@@ -159,6 +160,9 @@ export function activate(context: vscode.ExtensionContext) {
     });
     registerMyCommand("nextProblem", function (_args) {
         EditorNavigation.nextProblem();
+    });
+    registerMyCommand("openFileUnderCursor", function (_args) {
+        OpenFile.underCursor();
     });
 
     StatusBar.subscribeToChanges(context);

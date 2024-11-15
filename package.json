@@ -1,601 +1,610 @@
 {
-	"name": "vscode-my",
-	"displayName": "My Personal Commands",
-	"description": "My personal commands",
-	"version": "0.18.6",
-	"publisher": "scfrazer",
-	"repository": {
-		"url": "https://github.com/scfrazer/vscode-my"
-	},
-	"engines": {
-		"vscode": "^1.90.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"extensionKind": [
-		"ui"
-	],
-	"activationEvents": [
-		"onStartupFinished"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "vscode-my.wordLeft",
-				"category": "My",
-				"title": "Move cursor a word left"
-			},
-			{
-				"command": "vscode-my.wordRight",
-				"category": "My",
-				"title": "Move cursor a word right"
-			},
-			{
-				"command": "vscode-my.wordEdgeLeft",
-				"category": "My",
-				"title": "Move cursor left to next interesting edge"
-			},
-			{
-				"command": "vscode-my.wordEdgeRight",
-				"category": "My",
-				"title": "Move cursor right to next interesting edge"
-			},
-			{
-				"command": "vscode-my.wordPartLeft",
-				"category": "My",
-				"title": "Move cursor part of a word left"
-			},
-			{
-				"command": "vscode-my.wordPartRight",
-				"category": "My",
-				"title": "Move cursor part of a word right"
-			},
-			{
-				"command": "vscode-my.selectWordPartLeft",
-				"category": "My",
-				"title": "Select part of a word left"
-			},
-			{
-				"command": "vscode-my.selectWordPartRight",
-				"category": "My",
-				"title": "Select part of a word right"
-			},
-			{
-				"command": "vscode-my.deleteWordPartLeft",
-				"category": "My",
-				"title": "Delete part of a word left"
-			},
-			{
-				"command": "vscode-my.deleteWordPartRight",
-				"category": "My",
-				"title": "Delete part of a word right"
-			},
-			{
-				"command": "vscode-my.expressionLeft",
-				"category": "My",
-				"title": "Move cursor an expression left"
-			},
-			{
-				"command": "vscode-my.expressionRight",
-				"category": "My",
-				"title": "Move cursor an expression right"
-			},
-			{
-				"command": "vscode-my.selectExpressionLeft",
-				"category": "My",
-				"title": "Select expression left"
-			},
-			{
-				"command": "vscode-my.selectExpressionRight",
-				"category": "My",
-				"title": "Select expression right"
-			},
-			{
-				"command": "vscode-my.previousParagraph",
-				"category": "My",
-				"title": "Previous paragraph"
-			},
-			{
-				"command": "vscode-my.nextParagraph",
-				"category": "My",
-				"title": "Next paragraph"
-			},
-			{
-				"command": "vscode-my.home",
-				"category": "My",
-				"title": "Home"
-			},
-			{
-				"command": "vscode-my.smartDeleteLeft",
-				"category": "My",
-				"title": "Smart delete left"
-			},
-			{
-				"command": "vscode-my.smartDeleteRight",
-				"category": "My",
-				"title": "Smart delete right"
-			},
-			{
-				"command": "vscode-my.selectInsideBrackets",
-				"category": "My",
-				"title": "Select inside nearest brackets"
-			},
-			{
-				"command": "vscode-my.selectInsideQuotes",
-				"category": "My",
-				"title": "Select inside nearest quotes"
-			},
-			{
-				"command": "vscode-my.selectInsideQuotesOrBrackets",
-				"category": "My",
-				"title": "Select inside nearest quotes or brackets"
-			},
-			{
-				"command": "vscode-my.selectByIndentation",
-				"category": "My",
-				"title": "Select by same or greater indentation"
-			},
-			{
-				"command": "vscode-my.smartSelect",
-				"category": "My",
-				"title": "Select by indentation or inside brackets or inside quotes"
-			},
-			{
-				"command": "vscode-my.gotoChar",
-				"category": "My",
-				"title": "Select to char"
-			},
-			{
-				"command": "vscode-my.deleteToChar",
-				"category": "My",
-				"title": "Select to char"
-			},
-			{
-				"command": "vscode-my.addCursorsToLineStarts",
-				"category": "My",
-				"title": "Add cursors to line starts"
-			},
-			{
-				"command": "vscode-my.addSemicolonToEndOfLine",
-				"category": "My",
-				"title": "Add a semicolon to end of line"
-			},
-			{
-				"command": "vscode-my.justOneSpace",
-				"category": "My",
-				"title": "Change multiple spaces to just one"
-			},
-			{
-				"command": "vscode-my.pasteSelectedAtLastEditLocation",
-				"category": "My",
-				"title": "Paste selected text at last edit location"
-			},
-			{
-				"command": "vscode-my.swapSelectionAndClipboard",
-				"category": "My",
-				"title": "Swap selected text with clipboard"
-			},
-			{
-				"command": "vscode-my.deletePairRight",
-				"category": "My",
-				"title": "Delete matching pair rightward"
-			},
-			{
-				"command": "vscode-my.gotoLine",
-				"category": "My",
-				"title": "Go to line"
-			},
-			{
-				"command": "vscode-my.smartTab",
-				"category": "My",
-				"title": "Smart tab"
-			},
-			{
-				"command": "vscode-my.findInCurrentFile",
-				"category": "My",
-				"title": "Find in current file"
-			},
-			{
-				"command": "vscode-my.centerCursorLine",
-				"category": "My",
-				"title": "Center line cursor is on"
-			},
-			{
-				"command": "vscode-my.googleSelection",
-				"category": "My",
-				"title": "Google Current Selection"
-			},
-			{
-				"command": "vscode-my.oneArgumentPerLine",
-				"category": "My",
-				"title": "Reformat arguments to be one per line"
-			},
-			{
-				"command": "vscode-my.gotoFirstMatch",
-				"category": "My",
-				"title": "Go to the first match"
-			},
-			{
-				"command": "vscode-my.gotoLastMatch",
-				"category": "My",
-				"title": "Go to the last match"
-			},
-			{
-				"command": "vscode-my.openAlternativeFile",
-				"category": "My",
-				"title": "Open alternative file"
-			},
-			{
-				"command": "vscode-my.highlightedCopy",
-				"category": "My",
-				"title": "Highlighted copy"
-			},
-			{
-				"command": "vscode-my.reselectablePaste",
-				"category": "My",
-				"title": "Reselectable paste"
-			},
-			{
-				"command": "vscode-my.reselectPreviousPaste",
-				"category": "My",
-				"title": "Reselect previous paste"
-			},
-			{
-				"command": "vscode-my.previousChange",
-				"category": "My",
-				"icon": "$(arrow-up)",
-				"title": "Goto previous change in file"
-			},
-			{
-				"command": "vscode-my.nextChange",
-				"category": "My",
-				"icon": "$(arrow-down)",
-				"title": "Goto next change in file"
-			},
-			{
-				"command": "vscode-my.previousProblem",
-				"category": "My",
-				"icon": "$(arrow-circle-up)",
-				"title": "Goto previous problem in file"
-			},
-			{
-				"command": "vscode-my.nextProblem",
-				"category": "My",
-				"icon": "$(arrow-circle-down)",
-				"title": "Goto next problem in file"
-			}
-		],
-		"keybindings": [
-			{
-				"key": "ctrl+left",
-				"command": "vscode-my.wordEdgeLeft",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+right",
-				"command": "vscode-my.wordEdgeRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "alt+left",
-				"command": "vscode-my.wordPartLeft",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "alt+right",
-				"command": "vscode-my.wordPartRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "alt+shift+left",
-				"command": "vscode-my.selectWordPartLeft",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "alt+shift+right",
-				"command": "vscode-my.selectWordPartRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+alt+left",
-				"command": "vscode-my.expressionLeft",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+alt+right",
-				"command": "vscode-my.expressionRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+shift+left",
-				"command": "vscode-my.selectExpressionLeft",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+shift+right",
-				"command": "vscode-my.selectExpressionRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+up",
-				"command": "vscode-my.previousParagraph",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+shift+up",
-				"command": "vscode-my.previousParagraph",
-				"args": {
-					"select": true
-				},
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+down",
-				"command": "vscode-my.nextParagraph",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+shift+down",
-				"command": "vscode-my.nextParagraph",
-				"args": {
-					"select": true
-				},
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+backspace",
-				"command": "vscode-my.smartDeleteLeft",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+shift+backspace",
-				"command": "vscode-my.smartDeleteRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "alt+backspace",
-				"command": "vscode-my.deleteWordPartLeft",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "alt+shift+backspace",
-				"command": "vscode-my.deleteWordPartRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+delete",
-				"command": "vscode-my.smartDeleteRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "alt+delete",
-				"command": "vscode-my.deleteWordPartRight",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+e",
-				"command": "vscode-my.smartSelect",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+m",
-				"command": "vscode-my.gotoChar",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+shift+m",
-				"command": "vscode-my.gotoChar",
-				"args": {
-					"select": true
-				},
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+alt+m",
-				"command": "vscode-my.gotoChar",
-				"args": {
-					"cut": true
-				},
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "alt+m",
-				"command": "vscode-my.deleteToChar",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+i",
-				"command": "editor.action.inlineSuggest.trigger",
-				"when": "myKeybindingsEnabled && editorTextFocus && !inlineSuggestionVisible"
-			},
-			{
-				"key": "ctrl+i",
-				"command": "editor.action.inlineSuggest.showNext",
-				"when": "myKeybindingsEnabled && editorTextFocus && inlineSuggestionVisible"
-			},
-			{
-				"key": "alt+shift+i",
-				"command": "vscode-my.addCursorsToLineStarts",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+k space",
-				"command": "vscode-my.justOneSpace",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+r",
-				"command": "vscode-my.pasteSelectedAtLastEditLocation",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+shift+v",
-				"command": "vscode-my.swapSelectionAndClipboard",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+g",
-				"command": "vscode-my.gotoLine",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "tab",
-				"command": "vscode-my.smartTab",
-				"when": "myKeybindingsEnabled && editorTextFocus && !inSnippetMode && !hasSnippetCompletions && !suggestWidgetVisible && !inlineSuggestionVisible"
-			},
-			{
-				"key": "ctrl+=",
-				"command": "vscode-my.centerCursorLine",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+k ,",
-				"command": "vscode-my.oneArgumentPerLine",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+home",
-				"command": "vscode-my.gotoFirstMatch",
-				"when": "editorFocus && findInputFocussed"
-			},
-			{
-				"key": "ctrl+end",
-				"command": "vscode-my.gotoLastMatch",
-				"when": "editorFocus && findInputFocussed"
-			},
-			{
-				"key": "alt+o",
-				"command": "vscode-my.openAlternativeFile",
-				"when": "myKeybindingsEnabled"
-			},
-			{
-				"key": "ctrl+c",
-				"command": "vscode-my.highlightedCopy",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+v",
-				"command": "vscode-my.reselectablePaste",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			},
-			{
-				"key": "ctrl+k ctrl+k",
-				"command": "vscode-my.reselectPreviousPaste",
-				"when": "myKeybindingsEnabled && editorTextFocus"
-			}
-		],
-		"menus": {
-			"editor/context": [
-				{
-					"group": "navigation",
-					"command": "vscode-my.googleSelection",
-					"when": "editorHasSelection"
-				}
-			]
-		},
-		"configuration": {
-			"title": "My",
-			"properties": {
-				"my.enableKeybindings": {
-					"type": "boolean",
-					"default": true,
-					"description": "Enable keybindings"
-				},
-				"my.todoDecorationDelay": {
-					"type": "integer",
-					"default": 300,
-					"description": "Delay in milliseconds before decorating TODOs"
-				}
-			}
-		},
-		"colors": [
-			{
-				"id": "vscodeMy.fixmeBackground",
-				"description": "Background color for FIXME",
-				"defaults": {
-					"light": "#af0000",
-					"dark": "#af0000"
-				}
-			},
-			{
-				"id": "vscodeMy.fixmeForeground",
-				"description": "Foreground color for FIXME",
-				"defaults": {
-					"light": "#ffffff",
-					"dark": "#ffffff"
-				}
-			},
-			{
-				"id": "vscodeMy.todoBackground",
-				"description": "Background color for TODO",
-				"defaults": {
-					"light": "#eeee00",
-					"dark": "#eeee00"
-				}
-			},
-			{
-				"id": "vscodeMy.todoForeground",
-				"description": "Foreground color for TODO",
-				"defaults": {
-					"light": "#000000",
-					"dark": "#000000"
-				}
-			},
-			{
-				"id": "vscodeMy.debugBackground",
-				"description": "Background color for DEBUG",
-				"defaults": {
-					"light": "#ffa500",
-					"dark": "#ffa500"
-				}
-			},
-			{
-				"id": "vscodeMy.debugForeground",
-				"description": "Foreground color for DEBUG",
-				"defaults": {
-					"light": "#000000",
-					"dark": "#000000"
-				}
-			},
-			{
-				"id": "vscodeMy.noteBackground",
-				"description": "Background color for NOTE",
-				"defaults": {
-					"light": "#27408b",
-					"dark": "#27408b"
-				}
-			},
-			{
-				"id": "vscodeMy.noteForeground",
-				"description": "Foreground color for NOTE",
-				"defaults": {
-					"light": "#ffffff",
-					"dark": "#ffffff"
-				}
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.78.0",
-		"@types/glob": "^7.1.4",
-		"@types/mocha": "^9.0.0",
-		"@types/node": "14.x",
-		"@typescript-eslint/eslint-plugin": "^5.1.0",
-		"@typescript-eslint/parser": "^5.1.0",
-		"eslint": "^8.1.0",
-		"glob": "^7.1.7",
-		"mocha": "^9.1.3",
-		"typescript": "^4.4.4",
-		"@vscode/test-electron": "^1.6.2"
-	}
+    "name": "vscode-my",
+    "displayName": "My Personal Commands",
+    "description": "My personal commands",
+    "version": "0.19.0",
+    "publisher": "scfrazer",
+    "repository": {
+        "url": "https://github.com/scfrazer/vscode-my"
+    },
+    "engines": {
+        "vscode": "^1.90.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "extensionKind": [
+        "ui"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "vscode-my.wordLeft",
+                "category": "My",
+                "title": "Move cursor a word left"
+            },
+            {
+                "command": "vscode-my.wordRight",
+                "category": "My",
+                "title": "Move cursor a word right"
+            },
+            {
+                "command": "vscode-my.wordEdgeLeft",
+                "category": "My",
+                "title": "Move cursor left to next interesting edge"
+            },
+            {
+                "command": "vscode-my.wordEdgeRight",
+                "category": "My",
+                "title": "Move cursor right to next interesting edge"
+            },
+            {
+                "command": "vscode-my.wordPartLeft",
+                "category": "My",
+                "title": "Move cursor part of a word left"
+            },
+            {
+                "command": "vscode-my.wordPartRight",
+                "category": "My",
+                "title": "Move cursor part of a word right"
+            },
+            {
+                "command": "vscode-my.selectWordPartLeft",
+                "category": "My",
+                "title": "Select part of a word left"
+            },
+            {
+                "command": "vscode-my.selectWordPartRight",
+                "category": "My",
+                "title": "Select part of a word right"
+            },
+            {
+                "command": "vscode-my.deleteWordPartLeft",
+                "category": "My",
+                "title": "Delete part of a word left"
+            },
+            {
+                "command": "vscode-my.deleteWordPartRight",
+                "category": "My",
+                "title": "Delete part of a word right"
+            },
+            {
+                "command": "vscode-my.expressionLeft",
+                "category": "My",
+                "title": "Move cursor an expression left"
+            },
+            {
+                "command": "vscode-my.expressionRight",
+                "category": "My",
+                "title": "Move cursor an expression right"
+            },
+            {
+                "command": "vscode-my.selectExpressionLeft",
+                "category": "My",
+                "title": "Select expression left"
+            },
+            {
+                "command": "vscode-my.selectExpressionRight",
+                "category": "My",
+                "title": "Select expression right"
+            },
+            {
+                "command": "vscode-my.previousParagraph",
+                "category": "My",
+                "title": "Previous paragraph"
+            },
+            {
+                "command": "vscode-my.nextParagraph",
+                "category": "My",
+                "title": "Next paragraph"
+            },
+            {
+                "command": "vscode-my.home",
+                "category": "My",
+                "title": "Home"
+            },
+            {
+                "command": "vscode-my.smartDeleteLeft",
+                "category": "My",
+                "title": "Smart delete left"
+            },
+            {
+                "command": "vscode-my.smartDeleteRight",
+                "category": "My",
+                "title": "Smart delete right"
+            },
+            {
+                "command": "vscode-my.selectInsideBrackets",
+                "category": "My",
+                "title": "Select inside nearest brackets"
+            },
+            {
+                "command": "vscode-my.selectInsideQuotes",
+                "category": "My",
+                "title": "Select inside nearest quotes"
+            },
+            {
+                "command": "vscode-my.selectInsideQuotesOrBrackets",
+                "category": "My",
+                "title": "Select inside nearest quotes or brackets"
+            },
+            {
+                "command": "vscode-my.selectByIndentation",
+                "category": "My",
+                "title": "Select by same or greater indentation"
+            },
+            {
+                "command": "vscode-my.smartSelect",
+                "category": "My",
+                "title": "Select by indentation or inside brackets or inside quotes"
+            },
+            {
+                "command": "vscode-my.gotoChar",
+                "category": "My",
+                "title": "Select to char"
+            },
+            {
+                "command": "vscode-my.deleteToChar",
+                "category": "My",
+                "title": "Select to char"
+            },
+            {
+                "command": "vscode-my.addCursorsToLineStarts",
+                "category": "My",
+                "title": "Add cursors to line starts"
+            },
+            {
+                "command": "vscode-my.addSemicolonToEndOfLine",
+                "category": "My",
+                "title": "Add a semicolon to end of line"
+            },
+            {
+                "command": "vscode-my.justOneSpace",
+                "category": "My",
+                "title": "Change multiple spaces to just one"
+            },
+            {
+                "command": "vscode-my.pasteSelectedAtLastEditLocation",
+                "category": "My",
+                "title": "Paste selected text at last edit location"
+            },
+            {
+                "command": "vscode-my.swapSelectionAndClipboard",
+                "category": "My",
+                "title": "Swap selected text with clipboard"
+            },
+            {
+                "command": "vscode-my.deletePairRight",
+                "category": "My",
+                "title": "Delete matching pair rightward"
+            },
+            {
+                "command": "vscode-my.gotoLine",
+                "category": "My",
+                "title": "Go to line"
+            },
+            {
+                "command": "vscode-my.smartTab",
+                "category": "My",
+                "title": "Smart tab"
+            },
+            {
+                "command": "vscode-my.findInCurrentFile",
+                "category": "My",
+                "title": "Find in current file"
+            },
+            {
+                "command": "vscode-my.centerCursorLine",
+                "category": "My",
+                "title": "Center line cursor is on"
+            },
+            {
+                "command": "vscode-my.googleSelection",
+                "category": "My",
+                "title": "Google Current Selection"
+            },
+            {
+                "command": "vscode-my.oneArgumentPerLine",
+                "category": "My",
+                "title": "Reformat arguments to be one per line"
+            },
+            {
+                "command": "vscode-my.gotoFirstMatch",
+                "category": "My",
+                "title": "Go to the first match"
+            },
+            {
+                "command": "vscode-my.gotoLastMatch",
+                "category": "My",
+                "title": "Go to the last match"
+            },
+            {
+                "command": "vscode-my.openAlternativeFile",
+                "category": "My",
+                "title": "Open alternative file"
+            },
+            {
+                "command": "vscode-my.highlightedCopy",
+                "category": "My",
+                "title": "Highlighted copy"
+            },
+            {
+                "command": "vscode-my.reselectablePaste",
+                "category": "My",
+                "title": "Reselectable paste"
+            },
+            {
+                "command": "vscode-my.reselectPreviousPaste",
+                "category": "My",
+                "title": "Reselect previous paste"
+            },
+            {
+                "command": "vscode-my.previousChange",
+                "category": "My",
+                "icon": "$(arrow-up)",
+                "title": "Goto previous change in file"
+            },
+            {
+                "command": "vscode-my.nextChange",
+                "category": "My",
+                "icon": "$(arrow-down)",
+                "title": "Goto next change in file"
+            },
+            {
+                "command": "vscode-my.previousProblem",
+                "category": "My",
+                "icon": "$(arrow-circle-up)",
+                "title": "Goto previous problem in file"
+            },
+            {
+                "command": "vscode-my.nextProblem",
+                "category": "My",
+                "icon": "$(arrow-circle-down)",
+                "title": "Goto next problem in file"
+            },
+            {
+                "command": "vscode-my.openFileUnderCursor",
+                "category": "My",
+                "title": "Open file under cursor"
+            }
+        ],
+        "keybindings": [
+            {
+                "key": "ctrl+left",
+                "command": "vscode-my.wordEdgeLeft",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+right",
+                "command": "vscode-my.wordEdgeRight",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "alt+left",
+                "command": "vscode-my.wordPartLeft",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "alt+right",
+                "command": "vscode-my.wordPartRight",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "alt+shift+left",
+                "command": "vscode-my.selectWordPartLeft",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "alt+shift+right",
+                "command": "vscode-my.selectWordPartRight",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+alt+left",
+                "command": "vscode-my.expressionLeft",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+alt+right",
+                "command": "vscode-my.expressionRight",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+shift+left",
+                "command": "vscode-my.selectExpressionLeft",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+shift+right",
+                "command": "vscode-my.selectExpressionRight",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+up",
+                "command": "vscode-my.previousParagraph",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+shift+up",
+                "command": "vscode-my.previousParagraph",
+                "args": {
+                    "select": true
+                },
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+down",
+                "command": "vscode-my.nextParagraph",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+shift+down",
+                "command": "vscode-my.nextParagraph",
+                "args": {
+                    "select": true
+                },
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+backspace",
+                "command": "vscode-my.smartDeleteLeft",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+shift+backspace",
+                "command": "vscode-my.smartDeleteRight",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "alt+backspace",
+                "command": "vscode-my.deleteWordPartLeft",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "alt+shift+backspace",
+                "command": "vscode-my.deleteWordPartRight",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+delete",
+                "command": "vscode-my.smartDeleteRight",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "alt+delete",
+                "command": "vscode-my.deleteWordPartRight",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+e",
+                "command": "vscode-my.smartSelect",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+m",
+                "command": "vscode-my.gotoChar",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+shift+m",
+                "command": "vscode-my.gotoChar",
+                "args": {
+                    "select": true
+                },
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+alt+m",
+                "command": "vscode-my.gotoChar",
+                "args": {
+                    "cut": true
+                },
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "alt+m",
+                "command": "vscode-my.deleteToChar",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+i",
+                "command": "editor.action.inlineSuggest.trigger",
+                "when": "myKeybindingsEnabled && editorTextFocus && !inlineSuggestionVisible"
+            },
+            {
+                "key": "ctrl+i",
+                "command": "editor.action.inlineSuggest.showNext",
+                "when": "myKeybindingsEnabled && editorTextFocus && inlineSuggestionVisible"
+            },
+            {
+                "key": "alt+shift+i",
+                "command": "vscode-my.addCursorsToLineStarts",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+k space",
+                "command": "vscode-my.justOneSpace",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+r",
+                "command": "vscode-my.pasteSelectedAtLastEditLocation",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+shift+v",
+                "command": "vscode-my.swapSelectionAndClipboard",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+g",
+                "command": "vscode-my.gotoLine",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "tab",
+                "command": "vscode-my.smartTab",
+                "when": "myKeybindingsEnabled && editorTextFocus && !inSnippetMode && !hasSnippetCompletions && !suggestWidgetVisible && !inlineSuggestionVisible"
+            },
+            {
+                "key": "ctrl+=",
+                "command": "vscode-my.centerCursorLine",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+k ,",
+                "command": "vscode-my.oneArgumentPerLine",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+home",
+                "command": "vscode-my.gotoFirstMatch",
+                "when": "editorFocus && findInputFocussed"
+            },
+            {
+                "key": "ctrl+end",
+                "command": "vscode-my.gotoLastMatch",
+                "when": "editorFocus && findInputFocussed"
+            },
+            {
+                "key": "alt+o",
+                "command": "vscode-my.openAlternativeFile",
+                "when": "myKeybindingsEnabled"
+            },
+            {
+                "key": "ctrl+c",
+                "command": "vscode-my.highlightedCopy",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+v",
+                "command": "vscode-my.reselectablePaste",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            },
+            {
+                "key": "ctrl+k ctrl+k",
+                "command": "vscode-my.reselectPreviousPaste",
+                "when": "myKeybindingsEnabled && editorTextFocus"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "group": "navigation",
+                    "command": "vscode-my.googleSelection",
+                    "when": "editorHasSelection"
+                },
+                {
+                    "group": "navigation",
+                    "command": "vscode-my.openFileUnderCursor"
+                }
+            ]
+        },
+        "configuration": {
+            "title": "My",
+            "properties": {
+                "my.enableKeybindings": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable keybindings"
+                },
+                "my.todoDecorationDelay": {
+                    "type": "integer",
+                    "default": 300,
+                    "description": "Delay in milliseconds before decorating TODOs"
+                }
+            }
+        },
+        "colors": [
+            {
+                "id": "vscodeMy.fixmeBackground",
+                "description": "Background color for FIXME",
+                "defaults": {
+                    "light": "#af0000",
+                    "dark": "#af0000"
+                }
+            },
+            {
+                "id": "vscodeMy.fixmeForeground",
+                "description": "Foreground color for FIXME",
+                "defaults": {
+                    "light": "#ffffff",
+                    "dark": "#ffffff"
+                }
+            },
+            {
+                "id": "vscodeMy.todoBackground",
+                "description": "Background color for TODO",
+                "defaults": {
+                    "light": "#eeee00",
+                    "dark": "#eeee00"
+                }
+            },
+            {
+                "id": "vscodeMy.todoForeground",
+                "description": "Foreground color for TODO",
+                "defaults": {
+                    "light": "#000000",
+                    "dark": "#000000"
+                }
+            },
+            {
+                "id": "vscodeMy.debugBackground",
+                "description": "Background color for DEBUG",
+                "defaults": {
+                    "light": "#ffa500",
+                    "dark": "#ffa500"
+                }
+            },
+            {
+                "id": "vscodeMy.debugForeground",
+                "description": "Foreground color for DEBUG",
+                "defaults": {
+                    "light": "#000000",
+                    "dark": "#000000"
+                }
+            },
+            {
+                "id": "vscodeMy.noteBackground",
+                "description": "Background color for NOTE",
+                "defaults": {
+                    "light": "#27408b",
+                    "dark": "#27408b"
+                }
+            },
+            {
+                "id": "vscodeMy.noteForeground",
+                "description": "Foreground color for NOTE",
+                "defaults": {
+                    "light": "#ffffff",
+                    "dark": "#ffffff"
+                }
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.78.0",
+        "@types/glob": "^7.1.4",
+        "@types/mocha": "^9.0.0",
+        "@types/node": "14.x",
+        "@typescript-eslint/eslint-plugin": "^5.1.0",
+        "@typescript-eslint/parser": "^5.1.0",
+        "eslint": "^8.1.0",
+        "glob": "^7.1.7",
+        "mocha": "^9.1.3",
+        "typescript": "^4.4.4",
+        "@vscode/test-electron": "^1.6.2"
+    }
 }
