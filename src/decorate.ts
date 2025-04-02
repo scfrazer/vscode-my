@@ -12,7 +12,7 @@ export class Decorate {
         backgroundColor: "#af0000",
         borderRadius: "2px",
         overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#b75bf1",
+        overviewRulerColor: "#f09c2f",
     });
 
     private static _todoDecorationType = vscode.window.createTextEditorDecorationType({
@@ -20,7 +20,7 @@ export class Decorate {
         backgroundColor: "#eeee00",
         borderRadius: "2px",
         overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#b75bf1",
+        overviewRulerColor: "#f09c2f",
     });
 
     private static _noteDecorationType = vscode.window.createTextEditorDecorationType({
@@ -28,7 +28,7 @@ export class Decorate {
         backgroundColor: "#27408b",
         borderRadius: "2px",
         overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#b75bf1",
+        overviewRulerColor: "#f09c2f",
     });
 
     private static _debugDecorationType = vscode.window.createTextEditorDecorationType({
@@ -36,7 +36,7 @@ export class Decorate {
         backgroundColor: "#ffa500",
         borderRadius: "2px",
         overviewRulerLane: vscode.OverviewRulerLane.Center,
-        overviewRulerColor: "#b75bf1",
+        overviewRulerColor: "#f09c2f",
     });
 
     public static subscribeToChanges(context: vscode.ExtensionContext): void {

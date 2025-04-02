@@ -8,6 +8,8 @@ import { InlineCompletionItemProvider } from "./completionProvider";
 import { MatchingPair } from "./matchingPair";
 import { Misc } from "./misc";
 import { OpenFile } from "./openFile";
+// FIXME
+// import { ReferenceProvider } from "./referenceProvider";
 import { SmartDelete } from "./smartDelete";
 import { StatusBar } from "./statusBar";
 import { ToChar } from "./toChar";
@@ -187,6 +189,11 @@ export function activate(context: vscode.ExtensionContext) {
             Decorate.setDecorationDelay();
         }
     });
+
+    // FIXME
+    // context.subscriptions.push(
+    //     vscode.languages.registerReferenceProvider({ language: "sim-log" }, new ReferenceProvider())
+    // );
 
     // Keep editors in MRU order
     // vscode.window.onDidChangeActiveTextEditor((e) => {

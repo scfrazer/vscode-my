@@ -1,5 +1,35 @@
 import * as vscode from "vscode";
 
+// FIXME
+// export class ReferenceProvider implements vscode.ReferenceProvider {
+//     public provideReferences(
+//         document: vscode.TextDocument,
+//         position: vscode.Position,
+//         _context: vscode.ReferenceContext,
+//         _token: vscode.CancellationToken
+//     ): vscode.ProviderResult<vscode.Location[]> {
+//         const symbolAtPos = Util.symbolAtPosition(document, position);
+//         if (symbolAtPos === undefined) {
+//             return undefined;
+//         }
+//         if (symbolAtPos.match(/^root_id=\d+$/) === null) {
+//             return undefined;
+//         }
+
+//         const references: Array<vscode.Location> = [];
+//         const symbolRe = new RegExp("\\b" + symbolAtPos + "\\b");
+//         const lineCount = document.lineCount;
+//         for (let lineNum = 0; lineNum < lineCount; lineNum++) {
+//             const lineText = document.lineAt(lineNum).text;
+//             const match = lineText.match(symbolRe);
+//             if (match !== null) {
+//                 references.push(new vscode.Location(document.uri, document.lineAt(lineNum).range));
+//             }
+//         }
+//         return references;
+//     }
+// }
+
 export class OpenFile {
     public static async underCursor() {
         const editor = vscode.window.activeTextEditor;
@@ -57,9 +87,11 @@ export class OpenFile {
         } else {
             fullPath = vscode.Uri.file(normalizedPath);
         }
+        const relativePath = vscode.workspace.asRelativePath(fullPath);
+        const documentUri = vscode.Uri.file(relativePath);
 
         try {
-            await vscode.workspace.fs.stat(fullPath);
+            await vscode.workspace.fs.stat(documentUri);
             await OpenFile.openUriAtLine(fullPath, lineNumber);
         } catch (error) {
             vscode.window.showErrorMessage(`Error opening file: ${error}`);
@@ -74,3 +106,5 @@ export class OpenFile {
         editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenter);
     }
 }
+
+// C:\Users\scfrazer\Documents\VSCode\vscode-my\src\extension.ts
