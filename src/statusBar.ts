@@ -16,11 +16,11 @@ export class StatusBar {
 
         StatusBar._statusBarCopilotItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 101);
         StatusBar._statusBarCopilotItem.command = "github.copilot.completions.toggle";
-        StatusBar._updateCopilotStatusBarItem();
-        StatusBar._statusBarCopilotItem.show();
+        StatusBar._updateCopilotStatusBarItem(vscode.window.activeTextEditor);
 
         context.subscriptions.push(StatusBar._statusBarMatchesItem);
         context.subscriptions.push(StatusBar._statusBarLineCountItem);
+        context.subscriptions.push(StatusBar._statusBarCopilotItem);
 
         if (vscode.window.activeTextEditor) {
             StatusBar._update(vscode.window.activeTextEditor);
@@ -30,6 +30,7 @@ export class StatusBar {
             vscode.window.onDidChangeActiveTextEditor((editor) => {
                 if (editor) {
                     StatusBar._update(editor);
+                    StatusBar._updateCopilotStatusBarItem(editor);
                 }
             })
         );
@@ -46,26 +47,26 @@ export class StatusBar {
             vscode.window.onDidChangeTextEditorSelection(() => {
                 if (vscode.window.activeTextEditor) {
                     StatusBar._update(vscode.window.activeTextEditor);
-                    StatusBar._updateCopilotStatusBarItem();
                 }
             })
         );
 
-        vscode.workspace.onDidChangeConfiguration((event) => {
-            if (event.affectsConfiguration("github.copilot.enable")) {
-                StatusBar._updateCopilotStatusBarItem();
-            }
-        });
+        context.subscriptions.push(
+            vscode.workspace.onDidChangeConfiguration((event) => {
+                if (event.affectsConfiguration("github.copilot.enable")) {
+                    StatusBar._updateCopilotStatusBarItem(vscode.window.activeTextEditor);
+                }
+            })
+        );
     }
 
-    private static _getCopilotEnabled(): boolean {
+    private static _getCopilotEnabled(editor: vscode.TextEditor | undefined): boolean {
         const config = vscode.workspace.getConfiguration("github.copilot.enable");
         if (!config) {
             return false;
         }
 
         let languageId: string = "*";
-        const editor = vscode.window.activeTextEditor;
         if (editor) {
             if (editor.document.languageId in config) {
                 languageId = editor.document.languageId;
@@ -74,8 +75,11 @@ export class StatusBar {
         return config[languageId];
     }
 
-    private static _updateCopilotStatusBarItem(): void {
-        StatusBar._statusBarCopilotItem.text = StatusBar._getCopilotEnabled() ? "$(copilot)" : "$(copilot-blocked)";
+    private static _updateCopilotStatusBarItem(editor: vscode.TextEditor | undefined): void {
+        const enabled = StatusBar._getCopilotEnabled(editor);
+        StatusBar._statusBarCopilotItem.text = enabled ? "$(copilot)" : "$(copilot-blocked)";
+        StatusBar._statusBarCopilotItem.tooltip = enabled ? "Copilot enabled" : "Copilot disabled";
+        StatusBar._statusBarCopilotItem.show();
     }
 
     private static _update(editor: vscode.TextEditor): void {
