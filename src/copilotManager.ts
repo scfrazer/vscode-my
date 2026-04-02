@@ -4,7 +4,9 @@ export class CopilotManager {
     private static _enabled: boolean = vscode.workspace
         .getConfiguration("my")
         .get<boolean>("enableCopilotManager", true);
-    private static _completionsEnabled: boolean = true;
+    private static _completionsEnabled: boolean = vscode.workspace
+        .getConfiguration("github.copilot")
+        .get<boolean>("inlineSuggest.enable", true);
 
     public static subscribeToChanges(context: vscode.ExtensionContext): void {
         context.subscriptions.push(
@@ -13,10 +15,6 @@ export class CopilotManager {
                     CopilotManager._enabled = vscode.workspace
                         .getConfiguration("my")
                         .get<boolean>("enableCopilotManager", true);
-                }
-                if (!CopilotManager._completionsEnabled) {
-                    vscode.commands.executeCommand("github.copilot.chat.completions.enable");
-                    CopilotManager._completionsEnabled = true;
                 }
             }),
         );
