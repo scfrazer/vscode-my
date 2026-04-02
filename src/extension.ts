@@ -190,11 +190,6 @@ export function activate(context: vscode.ExtensionContext) {
             // TODO Get colors from config
             Decorate.setDecorationDelay();
         }
-        if (event.affectsConfiguration("my.enableCopilotManager")) {
-            if (!vscode.workspace.getConfiguration("my").get<boolean>("enableCopilotManager", true)) {
-                CopilotManager.restoreAllCopilotSettings();
-            }
-        }
     });
 
     // FIXME
