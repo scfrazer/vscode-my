@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 
+import { CopilotManager } from "./copilotManager";
 import { CursorMove } from "./cursorMove";
 import { Decorate } from "./decorate";
 import { Edit } from "./edit";
@@ -169,12 +170,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     StatusBar.subscribeToChanges(context);
     Decorate.subscribeToChanges(context);
+    CopilotManager.subscribeToChanges(context);
 
     context.subscriptions.push(
         vscode.languages.registerInlineCompletionItemProvider(
             { pattern: "**/*.{txt,md,sh,ts,js,py,sv,svh,c,h,cpp,hpp,cc,hh}" },
-            new InlineCompletionItemProvider()
-        )
+            new InlineCompletionItemProvider(),
+        ),
     );
 
     setKeybindingsEnabled();
@@ -187,6 +189,11 @@ export function activate(context: vscode.ExtensionContext) {
         if (event.affectsConfiguration("my.todoDecorationDelay")) {
             // TODO Get colors from config
             Decorate.setDecorationDelay();
+        }
+        if (event.affectsConfiguration("my.enableCopilotManager")) {
+            if (!vscode.workspace.getConfiguration("my").get<boolean>("enableCopilotManager", true)) {
+                CopilotManager.restoreAllCopilotSettings();
+            }
         }
     });
 
