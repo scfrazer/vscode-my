@@ -2,7 +2,7 @@
     "name": "vscode-my",
     "displayName": "My Personal Commands",
     "description": "My personal commands",
-    "version": "0.22.3",
+    "version": "0.22.4",
     "publisher": "scfrazer",
     "repository": {
         "url": "https://github.com/scfrazer/vscode-my"
@@ -511,6 +511,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Enable Copilot manager (disables Copilot after save until the file is modified)"
+                },
+                "my.copilotManagerTimeout": {
+                    "type": "integer",
+                    "default": 1500,
+                    "description": "Delay in milliseconds before enabling Copilot completions after document changes"
                 },
                 "my.enableKeybindings": {
                     "type": "boolean",
