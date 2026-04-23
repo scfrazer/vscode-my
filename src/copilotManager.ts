@@ -7,10 +7,10 @@ export class CopilotManager {
     private static _completionsEnabled: boolean = vscode.workspace
         .getConfiguration("github.copilot")
         .get<boolean>("inlineSuggest.enable", true);
-    private static _timeout: number = vscode.workspace
-        .getConfiguration("my")
-        .get<number>("copilotManagerTimeout", 1500);
-    private static _debounceTimer: NodeJS.Timeout | undefined;
+    // private static _timeout: number = vscode.workspace
+    //     .getConfiguration("my")
+    //     .get<number>("copilotManagerTimeout", 1500);
+    // private static _debounceTimer: NodeJS.Timeout | undefined;
 
     public static subscribeToChanges(context: vscode.ExtensionContext): void {
         context.subscriptions.push(
@@ -19,13 +19,14 @@ export class CopilotManager {
                     CopilotManager._enabled = vscode.workspace
                         .getConfiguration("my")
                         .get<boolean>("enableCopilotManager", true);
-                    CopilotManager._clearDebounceTimeout();
+                    // CopilotManager._clearDebounceTimeout();
                 }
-                if (event.affectsConfiguration("my.copilotManagerTimeout")) {
-                    CopilotManager._timeout = vscode.workspace
-                        .getConfiguration("my")
-                        .get<number>("copilotManagerTimeout", 1500);
-                }
+                // if (event.affectsConfiguration("my.copilotManagerTimeout")) {
+                //     CopilotManager._timeout = vscode.workspace
+                //         .getConfiguration("my")
+                //         .get<number>("copilotManagerTimeout", 1500);
+                // }
+                CopilotManager._enable();
             }),
         );
 
@@ -34,7 +35,7 @@ export class CopilotManager {
                 if (!CopilotManager._enabled) {
                     return;
                 }
-                CopilotManager._clearDebounceTimeout();
+                // CopilotManager._clearDebounceTimeout();
                 CopilotManager._disable();
             }),
         );
@@ -44,12 +45,13 @@ export class CopilotManager {
                 if (!CopilotManager._enabled) {
                     return;
                 }
-                CopilotManager._clearDebounceTimeout();
-                CopilotManager._disable();
-                CopilotManager._debounceTimer = setTimeout(
-                    CopilotManager._onDebounceTimeout,
-                    CopilotManager._timeout,
-                );
+                // CopilotManager._clearDebounceTimeout();
+                // CopilotManager._disable();
+                // CopilotManager._debounceTimer = setTimeout(
+                //     CopilotManager._onDebounceTimeout,
+                //     CopilotManager._timeout,
+                // );
+                CopilotManager._enable();
             }),
         );
 
@@ -58,7 +60,7 @@ export class CopilotManager {
                 if (!CopilotManager._enabled) {
                     return;
                 }
-                CopilotManager._clearDebounceTimeout();
+                // CopilotManager._clearDebounceTimeout();
                 if (!editor) {
                     return;
                 }
@@ -71,19 +73,19 @@ export class CopilotManager {
         );
     }
 
-    private static _clearDebounceTimeout(): void {
-        if (CopilotManager._debounceTimer) {
-            clearTimeout(CopilotManager._debounceTimer);
-            CopilotManager._debounceTimer = undefined;
-        }
-    }
+    // private static _clearDebounceTimeout(): void {
+    //     if (CopilotManager._debounceTimer) {
+    //         clearTimeout(CopilotManager._debounceTimer);
+    //         CopilotManager._debounceTimer = undefined;
+    //     }
+    // }
 
-    private static _onDebounceTimeout(): void {
-        const editor = vscode.window.activeTextEditor;
-        if (editor && editor.document.isDirty) {
-            CopilotManager._enable();
-        }
-    }
+    // private static _onDebounceTimeout(): void {
+    //     const editor = vscode.window.activeTextEditor;
+    //     if (editor && editor.document.isDirty) {
+    //         CopilotManager._enable();
+    //     }
+    // }
 
     private static _enable(): void {
         if (!CopilotManager._completionsEnabled) {
@@ -95,8 +97,8 @@ export class CopilotManager {
     private static _disable(): void {
         if (CopilotManager._completionsEnabled) {
             CopilotManager._completionsEnabled = false;
-            vscode.commands.executeCommand("github.copilot.chat.completions.disable");
             vscode.commands.executeCommand("editor.action.inlineSuggest.hide");
+            vscode.commands.executeCommand("github.copilot.chat.completions.disable");
         }
     }
 }
